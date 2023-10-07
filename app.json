@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "deltaconnect-mobile",
-    "slug": "deltaconnect-mobile",
+    "name": "DeltaConnect",
+    "slug": "deltaconnect",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#219653"
     },
     "assetBundlePatterns": [
       "**/*"
