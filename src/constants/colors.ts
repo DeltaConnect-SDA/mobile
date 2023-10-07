@@ -1,0 +1,9 @@
+export enum Colors {
+    PRIMARY_GREEN='#219653',
+    SECONDARY_GREEN='#CCEBDB',
+    GRAY='#7D7D7D',
+    LINE_STROKE='#E4E4E4',
+    TEXT='#2E2E2E',
+    LIGHT_GRAY='#F2F3F5',
+    RED="#ED4747"
+}
