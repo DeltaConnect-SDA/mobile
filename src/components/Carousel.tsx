@@ -86,8 +86,6 @@ const Carousel = () => {
         data={ENTRIES1}
         renderItem={renderItem}
         hasParallaxImages={true}
-        loop={true}
-        loopClonesPerSide={2}
         containerCustomStyle={{ gap: 0 }}
         autoplay={true}
         autoplayDelay={500}
