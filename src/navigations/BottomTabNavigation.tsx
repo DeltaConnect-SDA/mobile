@@ -125,7 +125,7 @@ export class BottomTabNavigation extends Component {
           name="Notifikasi"
           options={{
             tabBarBadge: 3,
-            tabBarBadgeStyle: { backgroundColor: Colors.RED, fontSize: 12 },
+            tabBarBadgeStyle: { backgroundColor: Colors.PRIMARY_RED, fontSize: 12 },
           }}
           component={Notifications}
         />

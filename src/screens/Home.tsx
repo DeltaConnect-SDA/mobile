@@ -45,9 +45,20 @@ export class Home extends Component<HomeProps> {
         {/* User report count card */}
         <View style={{ paddingHorizontal: 20, marginBottom: 20 }}>
           <View style={styles.userReportCountCard}>
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 8,
+              }}>
               <AlertFilled />
-              <Text style={{ fontFamily: 'Poppins-Medium', color: Colors.GRAY, fontSize: 13 }}>
+              <Text
+                style={{
+                  fontFamily: 'Poppins-Medium',
+                  color: Colors.GRAY,
+                  fontSize: 13,
+                }}>
                 {Dimensions.get('window').width > 360
                   ? 'Jumlah Laporan Hari Ini'
                   : 'Laporan Hari Ini'}

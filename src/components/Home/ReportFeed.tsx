@@ -3,6 +3,7 @@ import React from 'react';
 import { Colors } from '@/constants/colors';
 import FeedHeader from './FeedHeader';
 import ReportCard from '../Card/Report';
+import { useNavigation } from '@react-navigation/native';
 
 const data = [
   {
@@ -23,7 +24,7 @@ const data = [
     category: 'Pohon',
     burHash: 'LkF~XF%NMxbH?wx]RPofbxt7j[t7',
     time: '2023-10-08T11:20:09.319Z',
-    status: 'DIPROSES',
+    status: 'Proses',
     statusColor: 'TOSCA',
     place: 'Wage',
   },
@@ -34,7 +35,7 @@ const data = [
     category: 'Lampu Jalan',
     burHash: 'LWJ]0^-nE0J6_N?FD%Ip^+V=bJog',
     time: '2023-10-08T11:17:09.319Z',
-    status: 'DIPROSES',
+    status: 'Proses',
     statusColor: 'TOSCA',
     place: 'Kletek',
   },
@@ -53,6 +54,7 @@ const ReportFeed = () => {
       <View style={styles.cardContainer}>
         {data.map((item) => (
           <ReportCard
+            id={item.id}
             title={item.title}
             category={item.category}
             cover={item.cover}

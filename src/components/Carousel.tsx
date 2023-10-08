@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Platform, Dimensions } from 'react-native';
 import React, { useState } from 'react';
 import SnapCarousel, { Pagination, ParallaxImage } from 'react-native-snap-carousel';
 
-const screenWidth = Dimensions.get('window').width;
+const { width: screenWidth } = Dimensions.get('window');
 
 const ENTRIES1 = [
   {

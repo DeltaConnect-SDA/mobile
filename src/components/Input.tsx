@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     errorText: {
         fontFamily: 'Poppins-Medium',
         fontSize: 12,
-        color: Colors.RED,
+        color: Colors.PRIMARY_RED,
         marginVertical: 5
     }
 });

@@ -3,8 +3,11 @@ import React from 'react';
 import { Colors } from '@/constants/colors';
 import { Image } from 'expo-image';
 import TimeAgo from 'javascript-time-ago';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 
 type ReportCardProps = {
+  id: number;
   title: string;
   cover: string;
   category: string;
@@ -16,6 +19,7 @@ type ReportCardProps = {
 };
 
 const ReportCard: React.FC<ReportCardProps> = ({
+  id,
   title,
   category,
   time,
@@ -26,8 +30,11 @@ const ReportCard: React.FC<ReportCardProps> = ({
   place,
 }) => {
   const timeAgo = new TimeAgo('id');
+  const navigation = useNavigation<NativeStackNavigationProp<any, any>>();
   return (
-    <TouchableOpacity style={styles().container}>
+    <TouchableOpacity
+      onPress={() => navigation.navigate('ComplaintDetail', { complaintId: id })}
+      style={styles().container}>
       <Image
         style={styles().image}
         source={{
@@ -88,7 +95,7 @@ const styles = (props?: any) =>
       display: 'flex',
       justifyContent: 'space-between',
       flex: 1,
-      gap: 5,
+      gap: 2,
     },
     titleContainer: {
       display: 'flex',

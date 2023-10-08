@@ -5,5 +5,17 @@ import MainMenu from './MainMenu';
 import InfoFeed from './Home/InfoFeed';
 import FeedCard from './Card/Feed';
 import ReportCard from './Card/Report';
+import ComplaintPhotos from './ComplaintDetail/ComplaintPhotos';
+import ProgressStep from './ProgressStep';
 
-export { Input, TopNav, Carousel, MainMenu, InfoFeed, FeedCard, ReportCard };
+export {
+  Input,
+  TopNav,
+  Carousel,
+  MainMenu,
+  InfoFeed,
+  FeedCard,
+  ReportCard,
+  ComplaintPhotos,
+  ProgressStep,
+};
