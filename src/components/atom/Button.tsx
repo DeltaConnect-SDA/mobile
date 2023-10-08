@@ -38,7 +38,7 @@ export class Button extends Component<PropTypes> {
                                 width: '100%',
                                 paddingVertical: 14,
                                 backgroundColor: Colors.PRIMARY_GREEN
-                            }]
+                            }, this.props.style]
                         }
                         onPress={this.props.onPress}>
                         <Text style={styles.text}>
@@ -54,7 +54,7 @@ export class Button extends Component<PropTypes> {
                                 paddingVertical: 12,
                                 paddingHorizontal: 24,
                                 backgroundColor: Colors.PRIMARY_GREEN,
-                            }]
+                            }, this.props.style]
                         }
                         onPress={this.props.onPress}>
                         <Text style={styles.text}>
@@ -70,7 +70,7 @@ export class Button extends Component<PropTypes> {
                                 paddingVertical: 8,
                                 paddingHorizontal: 12,
                                 backgroundColor: Colors.PRIMARY_GREEN,
-                            }]
+                            }, this.props.style]
                         }
                         onPress={this.props.onPress}>
                         <Text style={[styles.text, { fontSize: 12 }]}>
@@ -89,7 +89,7 @@ export class Button extends Component<PropTypes> {
                                 width: '100%',
                                 paddingVertical: 14,
                                 backgroundColor: Colors.SECONDARY_GREEN,
-                            }]
+                            }, this.props.style]
                         }
                         onPress={this.props.onPress}>
                         <Text style={[styles.text, { color: Colors.PRIMARY_GREEN }]}>
@@ -105,7 +105,7 @@ export class Button extends Component<PropTypes> {
                                 paddingVertical: 12,
                                 paddingHorizontal: 24,
                                 backgroundColor: Colors.SECONDARY_GREEN,
-                            }]
+                            }, this.props.style]
                         }
                         onPress={this.props.onPress}>
                         <Text style={[styles.text, { color: Colors.PRIMARY_GREEN }]}>
@@ -121,7 +121,7 @@ export class Button extends Component<PropTypes> {
                                 paddingVertical: 8,
                                 paddingHorizontal: 12,
                                 backgroundColor: Colors.SECONDARY_GREEN,
-                            }]
+                            }, this.props.style]
                         }
                         onPress={this.props.onPress}>
                         <Text style={[[styles.text, { color: Colors.PRIMARY_GREEN }], { fontSize: 12 }]}>
@@ -141,7 +141,7 @@ export class Button extends Component<PropTypes> {
                                 paddingVertical: 14,
                                 borderColor: Colors.PRIMARY_GREEN,
                                 borderWidth: 1
-                            }]
+                            }, this.props.style]
                         }
                         onPress={this.props.onPress}>
                         <Text style={[styles.text, { color: Colors.PRIMARY_GREEN }]}>
@@ -158,7 +158,7 @@ export class Button extends Component<PropTypes> {
                                 paddingHorizontal: 24,
                                 borderColor: Colors.PRIMARY_GREEN,
                                 borderWidth: 1
-                            }]
+                            }, this.props.style]
                         }
                         onPress={this.props.onPress}>
                         <Text style={[styles.text, { color: Colors.PRIMARY_GREEN }]}>
@@ -175,7 +175,7 @@ export class Button extends Component<PropTypes> {
                                 paddingHorizontal: 12,
                                 borderColor: Colors.PRIMARY_GREEN,
                                 borderWidth: 1
-                            }]
+                            }, this.props.style]
                         }
                         onPress={this.props.onPress}>
                         <Text style={[[styles.text, { color: Colors.PRIMARY_GREEN }], { fontSize: 12 }]}>
@@ -192,7 +192,7 @@ export class Button extends Component<PropTypes> {
                                 width: '100%',
                                 paddingVertical: 14,
                                 backgroundColor: Colors.LINE_STROKE
-                            }]
+                            }, this.props.style]
                         }
                     >
                         <Text style={[styles.text, { color: Colors.GRAY }]}>
@@ -206,7 +206,7 @@ export class Button extends Component<PropTypes> {
                                 paddingVertical: 12,
                                 paddingHorizontal: 24,
                                 backgroundColor: Colors.LINE_STROKE
-                            }]
+                            }, this.props.style]
                         }
                     >
                         <Text style={[styles.text, { color: Colors.GRAY }]}>
@@ -220,7 +220,7 @@ export class Button extends Component<PropTypes> {
                                 paddingVertical: 8,
                                 paddingHorizontal: 12,
                                 backgroundColor: Colors.LINE_STROKE
-                            }]
+                            }, this.props.style]
                         }
                     >
                         <Text style={[[styles.text, { color: Colors.GRAY }], { fontSize: 12 }]}>
@@ -235,7 +235,7 @@ export class Button extends Component<PropTypes> {
                         style={
                             ({ pressed }) => [pressed
                                 ? { opacity: .4 }
-                                : {}, {}
+                                : {}, this.props.style
                             ]
                         }
                     >
@@ -248,7 +248,7 @@ export class Button extends Component<PropTypes> {
                         style={
                             ({ pressed }) => [pressed
                                 ? { opacity: .4 }
-                                : {}, {}
+                                : {}, this.props.style
                             ]
                         }
                     >
