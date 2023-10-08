@@ -1,6 +1,6 @@
 import { StyleSheet, View, Dimensions } from 'react-native';
-import React from 'react';
-import Carousel from 'react-native-snap-carousel';
+import React, { useState } from 'react';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { Image } from 'expo-image';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -31,8 +31,9 @@ const renderItem = ({ item }) => {
 };
 
 const ComplaintPhotos = ({ photos }: ComplaintPhotosProps) => {
+  const [activeSlide, setActiveSlide] = useState<number>(0);
   return (
-    <View>
+    <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Carousel
         layout="default"
         data={photos}
@@ -44,6 +45,29 @@ const ComplaintPhotos = ({ photos }: ComplaintPhotosProps) => {
         bouncesZoom={false}
         zoomScale={0}
         autoplay={false}
+        onSnapToItem={(index) => setActiveSlide(index)}
+      />
+      <Pagination
+        containerStyle={{ position: 'absolute', bottom: 0, marginHorizontal: 'auto' }}
+        dotsLength={photos.length}
+        activeDotIndex={activeSlide}
+        dotStyle={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          width: 10,
+          height: 10,
+          borderRadius: 5,
+          marginHorizontal: -4,
+          backgroundColor: 'white',
+        }}
+        inactiveDotStyle={{
+          width: 8,
+          height: 8,
+          borderRadius: 5,
+        }}
+        inactiveDotOpacity={0.6}
+        inactiveDotScale={0.9}
       />
     </View>
   );
