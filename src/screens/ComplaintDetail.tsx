@@ -199,7 +199,15 @@ const ComplaintDetail = ({ route, navigation }) => {
         <View style={styles().descriptionSection}>
           <Text style={styles().heading}>Detail Laporan</Text>
           <View>
-            <Text numberOfLines={!readMore ? 5 : undefined}>{complaint.description}</Text>
+            <Text
+              numberOfLines={!readMore ? 5 : undefined}
+              style={{
+                fontFamily: 'Poppins-Regular',
+                fontSize: 14,
+                color: Colors.TEXT,
+              }}>
+              {complaint.description}
+            </Text>
             <Button
               onPress={() => setReadMore(!readMore)}
               type="Text"
