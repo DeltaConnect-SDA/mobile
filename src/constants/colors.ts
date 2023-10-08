@@ -12,6 +12,7 @@ export enum Colors {
     TEXT = '#2E2E2E',
     LIGHT_GRAY = '#F2F3F5',
     DARK_GRAY = '#606060',
-    RED = "#ED4747",
+    PRIMARY_RED = "#ED4747",
+    SECONDARY_RED = "#fbdada",
     BACKGROUND = "#FAFAFA"
 }

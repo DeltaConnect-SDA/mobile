@@ -22,6 +22,9 @@ import Laporan from 'assets/icons/Laporan.svg';
 import Usulan from 'assets/icons/Usulan.svg';
 import Informasi from 'assets/icons/Informasi.svg';
 import Saved from 'assets/icons/Saved.svg';
+import Done from 'assets/icons/Done.svg';
+import Waiting from 'assets/icons/Waiting.svg';
+import Process from 'assets/icons/Process.svg';
 
 export {
     Back,
@@ -47,5 +50,8 @@ export {
     Laporan,
     Usulan,
     Informasi,
-    Saved
+    Saved,
+    Done,
+    Waiting,
+    Process
 };
