@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import React, { useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { ComplaintPhotos, ProgressStep } from '@/components';
 import { Colors } from '@/constants/colors';
 import { Button } from '@/components/atom';
@@ -15,6 +15,10 @@ const data = [
       },
       {
         url: 'https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/1696769817201%20(1).jpg',
+        blurHash: 'LcKd_5t7xuRj~qazt7WUM|ayofay',
+      },
+      {
+        url: 'https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/report2.jpg',
         blurHash: 'LcKd_5t7xuRj~qazt7WUM|ayofay',
       },
     ],
@@ -98,142 +102,157 @@ const data = [
 const ComplaintDetail = ({ route, navigation }) => {
   const { complaintId, otherParam } = route.params;
   const [readMore, setReadMore] = useState<Boolean>(false);
+  const [complaint, setComplaint] = useState<any>({});
+  const [isLoading, setIsLoading] = useState(true);
 
-  const complaint = data[complaintId - 1];
+  useEffect(() => {
+    const fetchData = async () => {
+      setComplaint(data[complaintId - 1]);
+      setIsLoading(false);
+    };
 
-  return (
-    <ScrollView style={{ backgroundColor: 'white' }}>
-      <ComplaintPhotos photos={complaint.photos} />
-      <View style={styles().container}>
-        {/* Title Section */}
-        <View style={styles().titleSection}>
-          <View style={styles(complaint.statusColor).statusContainer}>
-            <Text style={styles(complaint.statusColor).status}>{complaint.status}</Text>
-          </View>
-          <Text numberOfLines={3} style={styles().title}>
-            {complaint.title}
-          </Text>
-        </View>
+    fetchData();
+  }, [complaintId]);
 
-        {/* Detail Section */}
-        <View style={styles().detailsSection}>
-          <Text style={styles().heading}>Detail Laporan</Text>
-          <View style={styles().detailContent}>
-            {/* Kategori */}
-            <View style={styles().row}>
-              <View style={styles().cell}>
-                <Text style={{ color: Colors.GRAY, fontFamily: 'Poppins-Medium', fontSize: 13 }}>
-                  Kategori
-                </Text>
-              </View>
-              <View style={styles().cellValue}>
-                <View style={styles().categoryContainer}>
-                  <Text style={styles().category}>{complaint.category}</Text>
-                </View>
-              </View>
+  if (isLoading || !complaint) {
+    return (
+      <ActivityIndicator style={{ marginTop: 100 }} size={'large'} color={Colors.PRIMARY_GREEN} />
+    );
+  } else {
+    return (
+      <ScrollView style={{ backgroundColor: 'white' }}>
+        <ComplaintPhotos photos={complaint.photos} />
+        <View style={styles().container}>
+          {/* Title Section */}
+          <View style={styles().titleSection}>
+            <View style={styles(complaint.statusColor).statusContainer}>
+              <Text style={styles(complaint.statusColor).status}>{complaint.status}</Text>
             </View>
-
-            {/* Tanggal */}
-            <View style={styles().row}>
-              <View style={styles().cell}>
-                <Text style={{ color: Colors.GRAY, fontFamily: 'Poppins-Medium', fontSize: 13 }}>
-                  Tanggal
-                </Text>
-              </View>
-              <View style={styles().cellValue}>
-                <View>
-                  <Text style={styles().detailValueText}>
-                    {new Date(complaint.time).toLocaleDateString('id')}
-                  </Text>
-                </View>
-              </View>
-            </View>
-
-            {/* Nomor referensi */}
-            <View style={styles().row}>
-              <View style={styles().cell}>
-                <Text style={{ color: Colors.GRAY, fontFamily: 'Poppins-Medium', fontSize: 13 }}>
-                  Nomor
-                </Text>
-              </View>
-              <View style={styles().cellValue}>
-                <View>
-                  <Text style={styles().detailValueText}>{complaint.refId}</Text>
-                </View>
-              </View>
-            </View>
-
-            {/* Skala prioritas */}
-            <View style={styles().row}>
-              <View style={styles().cell}>
-                <Text style={{ color: Colors.GRAY, fontFamily: 'Poppins-Medium', fontSize: 13 }}>
-                  Skala Prioritas
-                </Text>
-              </View>
-              <View style={styles().cellValue}>
-                <View style={styles(complaint.priority.color).priorityContainer}>
-                  <Text style={styles(complaint.priority.color).priority}>
-                    {complaint.priority.title}
-                  </Text>
-                </View>
-              </View>
-            </View>
-
-            {/* Lokasi */}
-            <View style={styles().row}>
-              <View style={styles().cell}>
-                <Text style={{ color: Colors.GRAY, fontFamily: 'Poppins-Medium', fontSize: 13 }}>
-                  Lokasi
-                </Text>
-              </View>
-              <View style={styles().cellValue}>
-                <View>
-                  <Text style={styles().detailValueText}>{complaint.detail_location}</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-
-        {/* Description Section */}
-        <View style={styles().descriptionSection}>
-          <Text style={styles().heading}>Detail Laporan</Text>
-          <View>
-            <Text
-              numberOfLines={!readMore ? 5 : undefined}
-              style={{
-                fontFamily: 'Poppins-Regular',
-                fontSize: 14,
-                color: Colors.TEXT,
-              }}>
-              {complaint.description}
+            <Text numberOfLines={3} style={styles().title}>
+              {complaint.title}
             </Text>
-            <Button
-              onPress={() => setReadMore(!readMore)}
-              type="Text"
-              size="Lg"
-              style={{ marginTop: 5 }}
-              title={!readMore ? 'Baca selengkapnya' : 'Lebih sedikit'}
-            />
           </View>
-        </View>
 
-        {/* Status Section */}
-        <View style={styles().descriptionSection}>
-          <Text style={styles().heading}>Status Laporan</Text>
-          <View style={{ gap: 38, marginTop: 18 }}>
-            <ProgressStep status={complaint.status} />
-            <Button
-              type="Outline"
-              size="Lg"
-              title="Lihat Detail Status"
-              onPress={() => navigation.navigate('Beranda')}
-            />
+          {/* Detail Section */}
+          <View style={styles().detailsSection}>
+            <Text style={styles().heading}>Detail Laporan</Text>
+            <View style={styles().detailContent}>
+              {/* Kategori */}
+              <View style={styles().row}>
+                <View style={styles().cell}>
+                  <Text style={{ color: Colors.GRAY, fontFamily: 'Poppins-Medium', fontSize: 13 }}>
+                    Kategori
+                  </Text>
+                </View>
+                <View style={styles().cellValue}>
+                  <View style={styles().categoryContainer}>
+                    <Text style={styles().category}>{complaint.category}</Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Tanggal */}
+              <View style={styles().row}>
+                <View style={styles().cell}>
+                  <Text style={{ color: Colors.GRAY, fontFamily: 'Poppins-Medium', fontSize: 13 }}>
+                    Tanggal
+                  </Text>
+                </View>
+                <View style={styles().cellValue}>
+                  <View>
+                    <Text style={styles().detailValueText}>
+                      {new Date(complaint.time).toLocaleDateString('id')}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Nomor referensi */}
+              <View style={styles().row}>
+                <View style={styles().cell}>
+                  <Text style={{ color: Colors.GRAY, fontFamily: 'Poppins-Medium', fontSize: 13 }}>
+                    Nomor
+                  </Text>
+                </View>
+                <View style={styles().cellValue}>
+                  <View>
+                    <Text style={styles().detailValueText}>{complaint.refId}</Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Skala prioritas */}
+              <View style={styles().row}>
+                <View style={styles().cell}>
+                  <Text style={{ color: Colors.GRAY, fontFamily: 'Poppins-Medium', fontSize: 13 }}>
+                    Skala Prioritas
+                  </Text>
+                </View>
+                <View style={styles().cellValue}>
+                  <View style={styles(complaint.priority.color).priorityContainer}>
+                    <Text style={styles(complaint.priority.color).priority}>
+                      {complaint.priority.title}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Lokasi */}
+              <View style={styles().row}>
+                <View style={styles().cell}>
+                  <Text style={{ color: Colors.GRAY, fontFamily: 'Poppins-Medium', fontSize: 13 }}>
+                    Lokasi
+                  </Text>
+                </View>
+                <View style={styles().cellValue}>
+                  <View>
+                    <Text style={styles().detailValueText}>{complaint.detail_location}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Description Section */}
+          <View style={styles().descriptionSection}>
+            <Text style={styles().heading}>Detail Laporan</Text>
+            <View>
+              <Text
+                numberOfLines={!readMore ? 5 : undefined}
+                style={{
+                  fontFamily: 'Poppins-Regular',
+                  fontSize: 14,
+                  color: Colors.TEXT,
+                }}>
+                {complaint.description}
+              </Text>
+              <Button
+                onPress={() => setReadMore(!readMore)}
+                type="Text"
+                size="Lg"
+                style={{ marginTop: 5 }}
+                title={!readMore ? 'Baca selengkapnya' : 'Lebih sedikit'}
+              />
+            </View>
+          </View>
+
+          {/* Status Section */}
+          <View style={styles().descriptionSection}>
+            <Text style={styles().heading}>Status Laporan</Text>
+            <View style={{ gap: 38, marginTop: 18 }}>
+              <ProgressStep status={complaint.status} />
+              <Button
+                type="Outline"
+                size="Lg"
+                title="Lihat Detail Status"
+                onPress={() => navigation.navigate('Beranda')}
+              />
+            </View>
           </View>
         </View>
-      </View>
-    </ScrollView>
-  );
+      </ScrollView>
+    );
+  }
 };
 
 export default ComplaintDetail;

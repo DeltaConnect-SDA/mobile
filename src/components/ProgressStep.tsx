@@ -32,7 +32,7 @@ const ProgressStep = (props: ProgressStepProps) => {
         </View>
         <View
           style={{
-            width: screenWidth / 4,
+            width: screenWidth / 3.8,
             height: 5,
             backgroundColor:
               status == 'Proses' || status == 'Selesai'
@@ -69,7 +69,7 @@ const ProgressStep = (props: ProgressStepProps) => {
         </View>
         <View
           style={{
-            width: screenWidth / 4,
+            width: screenWidth / 3.8,
             height: 5,
             backgroundColor: status === 'Selesai' ? Colors.SECONDARY_GREEN : Colors.LINE_STROKE,
           }}
