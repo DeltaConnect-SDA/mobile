@@ -18,6 +18,7 @@ import {
 import { CameraFilled, CameraFlip, FlashFilled, FlashOutline, Torch } from '@/constants/icons';
 import { Colors } from '@/constants/colors';
 import { Pictures } from '@/constants/illustrations';
+import { StatusBar } from 'expo-status-bar';
 
 type Props = {};
 
@@ -57,6 +58,7 @@ export class Camera extends Component<Props, State> {
       if (!this.state.granted) {
         return (
           <View style={styles.emptyState}>
+            <StatusBar style="light" />
             <Pictures />
             <Text style={styles.emptyStateHeading}>Akses Kamera Tidak Diizinkan</Text>
             <Text style={styles.emptyStateText}>
@@ -67,6 +69,7 @@ export class Camera extends Component<Props, State> {
       } else {
         return (
           <View style={styles.container}>
+            <StatusBar style="light" />
             <ExpoCamera
               style={styles.camera}
               type={this.state.type}
@@ -155,7 +158,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    backgroundColor: '#000000B2',
+    backgroundColor: '#000000',
     paddingBottom: Dimensions.get('window').height < 800 ? 50 : 0,
     paddingHorizontal: 20,
     height: '100%',

@@ -14,5 +14,6 @@ export enum Colors {
     DARK_GRAY = '#606060',
     PRIMARY_RED = "#ED4747",
     SECONDARY_RED = "#fbdada",
-    BACKGROUND = "#FAFAFA"
+    BACKGROUND = "#FAFAFA",
+    DARK = "#1D1819"
 }

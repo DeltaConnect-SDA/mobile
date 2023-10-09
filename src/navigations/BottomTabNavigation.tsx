@@ -96,7 +96,7 @@ export class BottomTabNavigation extends Component {
             },
             tabBarItemStyle: { marginHorizontal: 15 },
             tabBarStyle: { display: 'none' },
-            headerStyle: { backgroundColor: '#000000B2' },
+            headerStyle: { backgroundColor: '#000000' },
             headerShadowVisible: false,
             headerTintColor: '#fff',
             unmountOnBlur: true,
