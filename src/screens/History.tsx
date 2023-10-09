@@ -28,6 +28,7 @@ export const EmptyState = (props: EmptyStateProps) => {
         style={{
           fontFamily: 'Poppins-SemiBold',
           fontSize: 20,
+          color: Colors.TEXT,
         }}>
         {props.title}
       </Text>

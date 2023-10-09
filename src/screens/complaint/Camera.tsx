@@ -17,6 +17,7 @@ import {
 } from 'expo-camera';
 import { CameraFilled, CameraFlip, FlashFilled, FlashOutline, Torch } from '@/constants/icons';
 import { Colors } from '@/constants/colors';
+import { Pictures } from '@/constants/illustrations';
 
 type Props = {};
 
@@ -54,7 +55,15 @@ export class Camera extends Component<Props, State> {
   render() {
     if (!this.state.isLoading) {
       if (!this.state.granted) {
-        return <Text>wah parah</Text>;
+        return (
+          <View style={styles.emptyState}>
+            <Pictures />
+            <Text style={styles.emptyStateHeading}>Akses Kamera Tidak Diizinkan</Text>
+            <Text style={styles.emptyStateText}>
+              Mohon maaf, kami tidak memiliki izin untuk mengakses kamera ponsel anda!
+            </Text>
+          </View>
+        );
       } else {
         return (
           <View style={styles.container}>
@@ -150,5 +159,27 @@ const styles = StyleSheet.create({
     paddingBottom: Dimensions.get('window').height < 800 ? 50 : 0,
     paddingHorizontal: 20,
     height: '100%',
+  },
+  emptyState: {
+    display: 'flex',
+    height: '100%',
+    maxHeight: '100%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 32,
+    paddingBottom: 100,
+  },
+  emptyStateHeading: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 20,
+    color: Colors.TEXT,
+  },
+  emptyStateText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 13,
+    color: Colors.GRAY,
+    textAlign: 'center',
+    maxWidth: 300,
   },
 });
