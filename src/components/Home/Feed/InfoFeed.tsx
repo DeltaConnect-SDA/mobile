@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import FeedHeader from './FeedHeader';
 import { Colors } from '@/constants/colors';
-import FeedCard from '../Card/Feed';
+import FeedCard from '../../Card/Feed';
 
 const data = [
   {

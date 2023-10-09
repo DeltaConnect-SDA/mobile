@@ -12,7 +12,7 @@ import UserAvatar from '@muhzi/react-native-user-avatar';
 import { Colors } from '@/constants/colors';
 import { AlertFilled, Verified } from '@/constants/icons';
 import { Carousel, InfoFeed, MainMenu } from '@/components';
-import ReportFeed from '@/components/Home/ReportFeed';
+import ReportFeed from '@/components/Home/Feed/ReportFeed';
 
 type HomeProps = {};
 
@@ -54,6 +54,7 @@ export class Home extends Component<HomeProps> {
               }}>
               <AlertFilled />
               <Text
+                allowFontScaling={false}
                 style={{
                   fontFamily: 'Poppins-Medium',
                   color: Colors.GRAY,
@@ -74,6 +75,7 @@ export class Home extends Component<HomeProps> {
                 backgroundColor: Colors.SECONDARY_ORANGE,
               }}>
               <Text
+                allowFontScaling={false}
                 style={{
                   color: Colors.PRIMARY_ORANGE,
                   fontFamily: 'Poppins-SemiBold',

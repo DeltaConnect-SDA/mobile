@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { Colors } from '@/constants/colors';
 import FeedHeader from './FeedHeader';
-import ReportCard from '../Card/Report';
+import ReportCard from '../../Card/Report';
 import { useNavigation } from '@react-navigation/native';
 
 const data = [

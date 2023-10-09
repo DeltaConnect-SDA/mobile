@@ -77,6 +77,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({ title, icon, color, route })
       </View>
       <View>
         <Text
+          allowFontScaling={false}
           style={{
             fontFamily: 'Poppins-Medium',
             fontSize: 12,

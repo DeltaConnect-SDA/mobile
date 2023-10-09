@@ -9,7 +9,7 @@ import {
 import React, { Component } from 'react';
 import TopNav from '@/components/TopNav';
 import { Colors } from '@/constants/colors';
-import Input from '@/components/Input';
+import { Input } from '@/components/atom/';
 import { Button } from '@/components/atom';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';

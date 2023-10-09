@@ -1,1 +1,4 @@
-export { Button } from './Button';
+import Input from './Input';
+import { Button } from './Button';
+
+export { Input, Button };

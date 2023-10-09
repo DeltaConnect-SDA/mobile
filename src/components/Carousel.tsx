@@ -23,7 +23,7 @@ const renderItem: any = ({ item, index }, parallaxProps) => {
   return (
     <View
       style={{
-        width: screenWidth - 40,
+        width: screenWidth - 60,
         aspectRatio: 1.82 / 1,
       }}>
       <ParallaxImage
@@ -39,9 +39,9 @@ const renderItem: any = ({ item, index }, parallaxProps) => {
           resizeMode: 'contain',
         }}
         dimensions={{
-          width: screenWidth - 40,
+          width: screenWidth - 60,
         }}
-        parallaxFactor={0.1}
+        parallaxFactor={0.4}
         {...parallaxProps}
       />
     </View>
@@ -82,7 +82,7 @@ const Carousel = () => {
       <SnapCarousel
         sliderWidth={screenWidth}
         sliderHeight={screenWidth}
-        itemWidth={screenWidth - 40}
+        itemWidth={screenWidth - 60}
         data={ENTRIES1}
         renderItem={renderItem}
         hasParallaxImages={true}

@@ -15,7 +15,7 @@ import {
 } from '@/constants/icons';
 import { Colors } from '@/constants/colors';
 import { History, Home, Notifications, Profile } from '@/screens';
-import Camera from '@/screens/Camera';
+import Camera from '@/screens/complaint/Camera';
 import { useNavigation } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
