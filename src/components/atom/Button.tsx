@@ -1,4 +1,13 @@
-import { GestureResponderEvent, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  GestureResponderEvent,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextStyle,
+  ViewStyle,
+} from 'react-native';
 import React, { Component } from 'react';
 import { Colors } from '@/constants/colors';
 
@@ -11,7 +20,10 @@ interface PropTypes {
   type: ButtonType;
   size: ButtonSize;
   onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
-  style?: object;
+  style?: StyleProp<ViewStyle>;
+  titleStyle?: StyleProp<TextStyle>;
+  icon?: any;
+  isLoading?: false | boolean;
 }
 
 export class Button extends Component<PropTypes> {
@@ -19,267 +31,129 @@ export class Button extends Component<PropTypes> {
     super(props);
   }
   render() {
-    if (this.props.type === 'Primary') {
-      switch (this.props.size) {
-        case 'Lg':
-          return (
-            <Pressable
-              style={({ pressed }) => [
-                styles.container,
-                pressed ? { opacity: 0.9 } : {},
-                {
-                  width: '100%',
-                  paddingVertical: 14,
-                  backgroundColor: Colors.PRIMARY_GREEN,
-                },
-                this.props.style,
-              ]}
-              onPress={this.props.onPress}>
-              <Text style={styles.text}>{this.props.title}</Text>
-            </Pressable>
-          );
-        case 'Md':
-          return (
-            <Pressable
-              style={({ pressed }) => [
-                styles.container,
-                pressed ? { opacity: 0.9 } : {},
-                {
-                  paddingVertical: 12,
-                  paddingHorizontal: 24,
-                  backgroundColor: Colors.PRIMARY_GREEN,
-                },
-                this.props.style,
-              ]}
-              onPress={this.props.onPress}>
-              <Text style={styles.text}>{this.props.title}</Text>
-            </Pressable>
-          );
-        case 'Sm':
-          return (
-            <Pressable
-              style={({ pressed }) => [
-                styles.container,
-                pressed ? { opacity: 0.9 } : {},
-                {
-                  paddingVertical: 8,
-                  paddingHorizontal: 12,
-                  backgroundColor: Colors.PRIMARY_GREEN,
-                },
-                this.props.style,
-              ]}
-              onPress={this.props.onPress}>
-              <Text style={[styles.text, { fontSize: 12 }]}>{this.props.title}</Text>
-            </Pressable>
-          );
-      }
-    } else if (this.props.type === 'Secondary') {
-      switch (this.props.size) {
-        case 'Lg':
-          return (
-            <Pressable
-              style={({ pressed }) => [
-                styles.container,
-                pressed ? { opacity: 0.4 } : {},
-                {
-                  width: '100%',
-                  paddingVertical: 14,
-                  backgroundColor: Colors.SECONDARY_GREEN,
-                },
-                this.props.style,
-              ]}
-              onPress={this.props.onPress}>
-              <Text style={[styles.text, { color: Colors.PRIMARY_GREEN }]}>{this.props.title}</Text>
-            </Pressable>
-          );
-        case 'Md':
-          return (
-            <Pressable
-              style={({ pressed }) => [
-                styles.container,
-                pressed ? { opacity: 0.4 } : {},
-                {
-                  paddingVertical: 12,
-                  paddingHorizontal: 24,
-                  backgroundColor: Colors.SECONDARY_GREEN,
-                },
-                this.props.style,
-              ]}
-              onPress={this.props.onPress}>
-              <Text style={[styles.text, { color: Colors.PRIMARY_GREEN }]}>{this.props.title}</Text>
-            </Pressable>
-          );
-        case 'Sm':
-          return (
-            <Pressable
-              style={({ pressed }) => [
-                styles.container,
-                pressed ? { opacity: 0.4 } : {},
-                {
-                  paddingVertical: 8,
-                  paddingHorizontal: 12,
-                  backgroundColor: Colors.SECONDARY_GREEN,
-                },
-                this.props.style,
-              ]}
-              onPress={this.props.onPress}>
-              <Text style={[[styles.text, { color: Colors.PRIMARY_GREEN }], { fontSize: 12 }]}>
-                {this.props.title}
-              </Text>
-            </Pressable>
-          );
-      }
-    } else if (this.props.type === 'Outline') {
-      switch (this.props.size) {
-        case 'Lg':
-          return (
-            <Pressable
-              style={({ pressed }) => [
-                styles.container,
-                pressed ? { opacity: 0.4 } : {},
-                {
-                  width: '100%',
-                  paddingVertical: 14,
-                  borderColor: Colors.PRIMARY_GREEN,
-                  borderWidth: 1,
-                },
-                this.props.style,
-              ]}
-              onPress={this.props.onPress}>
-              <Text style={[styles.text, { color: Colors.PRIMARY_GREEN }]}>{this.props.title}</Text>
-            </Pressable>
-          );
-        case 'Md':
-          return (
-            <Pressable
-              style={({ pressed }) => [
-                styles.container,
-                pressed ? { opacity: 0.4 } : {},
-                {
-                  paddingVertical: 12,
-                  paddingHorizontal: 24,
-                  borderColor: Colors.PRIMARY_GREEN,
-                  borderWidth: 1,
-                },
-                this.props.style,
-              ]}
-              onPress={this.props.onPress}>
-              <Text style={[styles.text, { color: Colors.PRIMARY_GREEN }]}>{this.props.title}</Text>
-            </Pressable>
-          );
-        case 'Sm':
-          return (
-            <Pressable
-              style={({ pressed }) => [
-                styles.container,
-                pressed ? { opacity: 0.4 } : {},
-                {
-                  paddingVertical: 8,
-                  paddingHorizontal: 12,
-                  borderColor: Colors.PRIMARY_GREEN,
-                  borderWidth: 1,
-                },
-                this.props.style,
-              ]}
-              onPress={this.props.onPress}>
-              <Text style={[[styles.text, { color: Colors.PRIMARY_GREEN }], { fontSize: 12 }]}>
-                {this.props.title}
-              </Text>
-            </Pressable>
-          );
-      }
-    } else if (this.props.type === 'Disabled') {
-      switch (this.props.size) {
-        case 'Lg':
-          return (
-            <Pressable
-              style={[
-                styles.container,
-                {
-                  width: '100%',
-                  paddingVertical: 14,
-                  backgroundColor: Colors.LINE_STROKE,
-                },
-                this.props.style,
-              ]}>
-              <Text style={[styles.text, { color: Colors.GRAY }]}>{this.props.title}</Text>
-            </Pressable>
-          );
-        case 'Md':
-          return (
-            <Pressable
-              style={[
-                styles.container,
-                {
-                  paddingVertical: 12,
-                  paddingHorizontal: 24,
-                  backgroundColor: Colors.LINE_STROKE,
-                },
-                this.props.style,
-              ]}>
-              <Text style={[styles.text, { color: Colors.GRAY }]}>{this.props.title}</Text>
-            </Pressable>
-          );
-        case 'Sm':
-          return (
-            <Pressable
-              style={[
-                styles.container,
-                {
-                  paddingVertical: 8,
-                  paddingHorizontal: 12,
-                  backgroundColor: Colors.LINE_STROKE,
-                },
-                this.props.style,
-              ]}>
-              <Text style={[[styles.text, { color: Colors.GRAY }], { fontSize: 12 }]}>
-                {this.props.title}
-              </Text>
-            </Pressable>
-          );
-      }
-    } else if (this.props.type === 'Text') {
-      switch (this.props.size) {
-        case 'Lg':
-          return (
-            <Pressable
-              style={({ pressed }) => [pressed ? { opacity: 0.4 } : {}, this.props.style]}
-              onPress={this.props.onPress}>
-              <Text style={[styles.text, { color: Colors.PRIMARY_GREEN }, this.props.style]}>
-                {this.props.title}
-              </Text>
-            </Pressable>
-          );
-        case 'Md':
-          return (
-            <Pressable
-              style={({ pressed }) => [pressed ? { opacity: 0.4 } : {}, this.props.style]}
-              onPress={this.props.onPress}>
-              <Text
-                style={[
-                  { color: Colors.PRIMARY_GREEN, fontFamily: 'Poppins-Medium', fontSize: 13 },
-                  this.props.style,
-                ]}>
-                {this.props.title}
-              </Text>
-            </Pressable>
-          );
-      }
+    const { type, size, icon, style, onPress, isLoading, titleStyle } = this.props;
+    const buttonStyles: any = [styles.container];
+    const textStyles: any = [styles.text];
+
+    if (type === 'Primary') {
+      buttonStyles.push(styles.primary);
+      textStyles.push(styles.primaryText);
+    } else if (type === 'Secondary') {
+      buttonStyles.push(styles.secondary);
+      textStyles.push(styles.secondaryText);
+    } else if (type === 'Outline') {
+      buttonStyles.push(styles.outline);
+      textStyles.push(styles.outlineText);
+    } else if (type === 'Disabled') {
+      buttonStyles.push(styles.disabled);
+      textStyles.push(styles.disabledText);
+    } else if (type === 'Text') {
+      buttonStyles.push(styles.textButton);
+      textStyles.push(styles.textButtonText);
     }
+
+    if (size === 'Lg') {
+      buttonStyles.push(styles.large);
+      textStyles.push(styles.textLarge);
+    } else if (size === 'Md') {
+      buttonStyles.push(styles.medium);
+      textStyles.push(styles.textMedium);
+    } else if (size === 'Sm') {
+      buttonStyles.push(styles.small);
+      textStyles.push(styles.textSmall);
+    }
+    return (
+      <Pressable
+        style={({ pressed }) => [
+          type !== 'Text' && buttonStyles,
+          style,
+          pressed && { opacity: 0.6 },
+          isLoading && { opacity: 0.8 },
+        ]}
+        onPress={onPress}
+        disabled={type === 'Disabled' || isLoading}>
+        {isLoading && (
+          <ActivityIndicator
+            size={'small'}
+            color={type === 'Primary' ? 'white' : Colors.PRIMARY_GREEN}
+          />
+        )}
+        {icon}
+        <Text style={[textStyles, titleStyle]}>{this.props.title}</Text>
+      </Pressable>
+    );
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 8,
     textAlign: 'center',
+    gap: 10,
   },
-  text: {
+  text: {},
+  primary: {
+    backgroundColor: Colors.PRIMARY_GREEN,
+  },
+  primaryText: {
     color: 'white',
     fontFamily: 'Poppins-SemiBold',
     fontSize: 14,
+  },
+  secondary: {
+    backgroundColor: '#CCEBDB',
+  },
+  secondaryText: {
+    color: Colors.PRIMARY_GREEN,
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 14,
+  },
+  outline: {
+    borderColor: Colors.PRIMARY_GREEN,
+    borderWidth: 1,
+  },
+  outlineText: {
+    color: Colors.PRIMARY_GREEN,
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 14,
+  },
+  disabled: {
+    backgroundColor: Colors.LINE_STROKE,
+  },
+  disabledText: {
+    color: Colors.GRAY,
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 14,
+  },
+  textButton: {},
+  textButtonText: {
+    color: Colors.PRIMARY_GREEN,
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 14,
+  },
+  large: {
+    width: '100%',
+    paddingVertical: 14,
+  },
+  textLarge: {
+    fontSize: 14,
+  },
+  medium: {
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+  },
+  textMedium: {
+    fontSize: 14,
+  },
+  small: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+  },
+  textSmall: {
+    fontSize: 12,
   },
 });
 
