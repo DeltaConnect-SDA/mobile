@@ -95,7 +95,7 @@ interface InputProps extends TextInputProps {
   title: string;
   error?: undefined | string;
   placeholder: string;
-  type: 'Text' | 'Password';
+  type: 'Text' | 'Password' | 'Phone';
   enterKeyHint?: undefined | EnterKeyHintTypeOptions;
   onSubmitEditing?: () => void;
 }
@@ -105,8 +105,10 @@ export class Input extends Component<InputProps> {
     super(props);
   }
   render() {
+    const inputStyles: any = [styles.TextInput];
     let error;
     if (this.props.error) {
+      inputStyles.push(styles.inputError);
       error = <Error title={this.props.error} />;
     }
 
@@ -124,7 +126,7 @@ export class Input extends Component<InputProps> {
           {...this.props}
           onSubmitEditing={this.props.onSubmitEditing}
           enterKeyHint={this.props.enterKeyHint}
-          style={styles.TextInput}
+          style={inputStyles}
           placeholder={this.props.placeholder}
         />
       );
@@ -161,6 +163,10 @@ const styles = StyleSheet.create({
     fontSize: scale(11),
     color: Colors.PRIMARY_RED,
     marginVertical: 5,
+  },
+  inputError: {
+    borderWidth: 1,
+    borderColor: Colors.PRIMARY_RED,
   },
 });
 
