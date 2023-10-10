@@ -120,6 +120,7 @@ const ComplaintDetail = ({ route, navigation }) => {
       <ActivityIndicator style={{ marginTop: 100 }} size={'large'} color={Colors.PRIMARY_GREEN} />
     );
   } else {
+    const numberOfLines = complaint.description.split('\n').length;
     return (
       <ScrollView style={{ backgroundColor: 'white' }}>
         <ComplaintPhotos photos={complaint.photos} />
@@ -228,13 +229,15 @@ const ComplaintDetail = ({ route, navigation }) => {
                 }}>
                 {complaint.description}
               </Text>
-              <Button
-                onPress={() => setReadMore(!readMore)}
-                type="Text"
-                size="Md"
-                style={{ marginTop: 5 }}
-                title={!readMore ? 'Baca selengkapnya' : 'Lebih sedikit'}
-              />
+              {numberOfLines >= 5 && (
+                <Button
+                  onPress={() => setReadMore(!readMore)}
+                  type="Text"
+                  size="Md"
+                  style={{ marginTop: 5 }}
+                  title={!readMore ? 'Baca selengkapnya' : 'Lebih sedikit'}
+                />
+              )}
             </View>
           </View>
 
