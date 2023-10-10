@@ -1,11 +1,4 @@
-import {
-  StatusBar as RNStatusBar,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-} from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import React, { Component } from 'react';
 import TopNav from '@/components/TopNav';
 import { Colors } from '@/constants/colors';
@@ -13,6 +6,7 @@ import { Input } from '@/components/atom/';
 import { Button } from '@/components/atom';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { scale } from 'react-native-size-matters';
 
 const Login = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -48,8 +42,10 @@ const Login = () => {
         size="Lg"
       />
       <View style={[styles.bottomText, { marginBottom: 100 }]}>
-        <Text>Belum punya akun? </Text>
-        <Button title="Daftar Sekarang!" type="Text" size="Lg" />
+        <Text style={{ fontFamily: 'Poppins-Regular', fontSize: scale(11.5) }}>
+          Belum punya akun?{' '}
+        </Text>
+        <Button title="Daftar Sekarang!" type="Text" size="Md" />
       </View>
     </ScrollView>
   );
@@ -57,7 +53,7 @@ const Login = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: (Platform.OS === 'android' ? RNStatusBar.currentHeight : 0) + 32,
+    paddingTop: 32,
     paddingHorizontal: 20,
     backgroundColor: 'white',
     display: 'flex',
@@ -67,13 +63,13 @@ const styles = StyleSheet.create({
   heading: {
     color: Colors.TEXT,
     fontFamily: 'Poppins-Bold',
-    fontSize: 24,
+    fontSize: scale(21.5),
     marginTop: 52,
   },
   textBody: {
     color: Colors.GRAY,
     fontFamily: 'Poppins-Regular',
-    fontSize: 15,
+    fontSize: scale(13.5),
     marginBottom: 20,
   },
   InputWrapper: {

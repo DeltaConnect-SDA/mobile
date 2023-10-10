@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import React, { useState } from 'react';
 import { Colors } from '@/constants/colors';
-import { Done, Process, Waiting } from '@/constants/icons';
+import { Cancel, Done, Process, Waiting } from '@/constants/icons';
+import { scale } from 'react-native-size-matters';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -24,7 +25,7 @@ const ProgressStep = (props: ProgressStepProps) => {
               bottom: -25,
               textAlign: 'center',
               fontFamily: 'Poppins-Medium',
-              fontSize: 13,
+              fontSize: scale(11.5),
               color: Colors.PRIMARY_GREEN,
             }}>
             Menunggu
@@ -35,7 +36,7 @@ const ProgressStep = (props: ProgressStepProps) => {
             width: screenWidth / 3.8,
             height: 5,
             backgroundColor:
-              status == 'Proses' || status == 'Selesai'
+              status == 'Proses' || status == 'Selesai' || status == 'Dibatalkan'
                 ? Colors.SECONDARY_GREEN
                 : Colors.LINE_STROKE,
           }}
@@ -45,13 +46,17 @@ const ProgressStep = (props: ProgressStepProps) => {
             styles.iconContainer,
             {
               backgroundColor:
-                status === 'Proses' || status === 'Selesai'
+                status === 'Proses' || status === 'Selesai' || status == 'Dibatalkan'
                   ? Colors.SECONDARY_GREEN
                   : Colors.LINE_STROKE,
             },
           ]}>
           <Process
-            color={status === 'Proses' || status === 'Selesai' ? Colors.PRIMARY_GREEN : Colors.GRAY}
+            color={
+              status === 'Proses' || status === 'Selesai' || status == 'Dibatalkan'
+                ? Colors.PRIMARY_GREEN
+                : Colors.GRAY
+            }
           />
           <Text
             style={{
@@ -60,9 +65,11 @@ const ProgressStep = (props: ProgressStepProps) => {
               bottom: -25,
               textAlign: 'center',
               fontFamily: 'Poppins-Medium',
-              fontSize: 13,
+              fontSize: scale(11.5),
               color:
-                status === 'Proses' || status === 'Selesai' ? Colors.PRIMARY_GREEN : Colors.GRAY,
+                status === 'Proses' || status === 'Selesai' || status == 'Dibatalkan'
+                  ? Colors.PRIMARY_GREEN
+                  : Colors.GRAY,
             }}>
             Proses
           </Text>
@@ -71,15 +78,31 @@ const ProgressStep = (props: ProgressStepProps) => {
           style={{
             width: screenWidth / 3.8,
             height: 5,
-            backgroundColor: status === 'Selesai' ? Colors.SECONDARY_GREEN : Colors.LINE_STROKE,
+            backgroundColor:
+              status === 'Selesai'
+                ? Colors.SECONDARY_GREEN
+                : status === 'Dibatalkan'
+                ? Colors.SECONDARY_RED
+                : Colors.LINE_STROKE,
           }}
         />
         <View
           style={[
             styles.iconContainer,
-            { backgroundColor: status === 'Selesai' ? Colors.SECONDARY_GREEN : Colors.LINE_STROKE },
+            {
+              backgroundColor:
+                status === 'Selesai'
+                  ? Colors.SECONDARY_GREEN
+                  : status === 'Dibatalkan'
+                  ? Colors.SECONDARY_RED
+                  : Colors.LINE_STROKE,
+            },
           ]}>
-          <Done color={status === 'Selesai' ? Colors.PRIMARY_GREEN : Colors.GRAY} />
+          {status === 'Dibatalkan' ? (
+            <Cancel color={Colors.PRIMARY_RED} />
+          ) : (
+            <Done color={status === 'Selesai' ? Colors.PRIMARY_GREEN : Colors.GRAY} />
+          )}
           <Text
             style={{
               position: 'absolute',
@@ -87,10 +110,15 @@ const ProgressStep = (props: ProgressStepProps) => {
               bottom: -25,
               textAlign: 'center',
               fontFamily: 'Poppins-Medium',
-              fontSize: 13,
-              color: status === 'Selesai' ? Colors.PRIMARY_GREEN : Colors.GRAY,
+              fontSize: scale(11.5),
+              color:
+                status === 'Selesai'
+                  ? Colors.PRIMARY_GREEN
+                  : status === 'Dibatalkan'
+                  ? Colors.PRIMARY_RED
+                  : Colors.GRAY,
             }}>
-            Selesai
+            {status === 'Dibatalkan' ? 'Dibatalkan' : 'Selesai'}
           </Text>
         </View>
       </View>

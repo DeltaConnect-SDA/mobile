@@ -25,6 +25,7 @@ import Saved from 'assets/icons/Saved.svg';
 import Done from 'assets/icons/Done.svg';
 import Waiting from 'assets/icons/Waiting.svg';
 import Process from 'assets/icons/Process.svg';
+import Cancel from 'assets/icons/Cancel.svg';
 
 export {
     Back,
@@ -53,5 +54,6 @@ export {
     Saved,
     Done,
     Waiting,
-    Process
+    Process,
+    Cancel
 };

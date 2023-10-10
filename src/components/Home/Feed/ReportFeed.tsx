@@ -24,8 +24,8 @@ const data = [
     category: 'Pohon',
     burHash: 'LkF~XF%NMxbH?wx]RPofbxt7j[t7',
     time: '2023-10-08T11:20:09.319Z',
-    status: 'Proses',
-    statusColor: 'TOSCA',
+    status: 'Dibatalkan',
+    statusColor: 'RED',
     place: 'Wage',
   },
   {

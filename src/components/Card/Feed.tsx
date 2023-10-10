@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { Colors } from '@/constants/colors';
 import { Image } from 'expo-image';
+import { scale } from 'react-native-size-matters';
 
 type FeedCardProps = {
   title: string;
@@ -58,8 +59,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   image: {
-    width: 120,
-    height: 120,
+    width: scale(105),
+    aspectRatio: 1 / 1,
     backgroundColor: '#0553',
     borderRadius: 12,
   },
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Poppins-Medium',
     color: Colors.TEXT,
-    fontSize: 14,
+    fontSize: scale(12.5),
     flexWrap: 'wrap',
   },
   footerContainer: {
@@ -96,12 +97,12 @@ const styles = StyleSheet.create({
   category: {
     color: Colors.PRIMARY_PURPLE,
     fontFamily: 'Poppins-Medium',
-    fontSize: 12,
+    fontSize: scale(10.5),
     textAlignVertical: 'center',
   },
   date: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 12,
+    fontSize: scale(10.5),
     color: Colors.DARK_GRAY,
   },
 });

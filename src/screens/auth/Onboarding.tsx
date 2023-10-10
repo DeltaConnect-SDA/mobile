@@ -1,11 +1,4 @@
-import {
-  StatusBar as RNStatusBar,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-} from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import React, { Component } from 'react';
 import { Colors } from '@/constants/colors';
 import TopNav from '@/components/TopNav';
@@ -13,6 +6,7 @@ import { ConnectIllustration } from '@/constants/illustrations';
 import { Button } from '@/components/atom';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { scale } from 'react-native-size-matters';
 
 const Onboarding = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -39,19 +33,19 @@ const Onboarding = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: (Platform.OS === 'android' ? RNStatusBar.currentHeight : 0) + 32,
+    paddingTop: 32,
     paddingHorizontal: 20,
     backgroundColor: 'white',
   },
   heading: {
     color: Colors.TEXT,
     fontFamily: 'Poppins-Bold',
-    fontSize: 24,
+    fontSize: scale(21),
   },
   textBody: {
     color: Colors.GRAY,
     fontFamily: 'Poppins-Regular',
-    fontSize: 15,
+    fontSize: scale(13.5),
     marginBottom: 32,
   },
   buttonsContainer: {

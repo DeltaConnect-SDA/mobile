@@ -1,18 +1,11 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  StatusBar as RNStatusBar,
-  Platform,
-  ScrollView,
-  Dimensions,
-} from 'react-native';
+import { Text, View, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import React, { Component } from 'react';
 import UserAvatar from '@muhzi/react-native-user-avatar';
 import { Colors } from '@/constants/colors';
 import { AlertFilled, Verified } from '@/constants/icons';
 import { Carousel, InfoFeed, MainMenu } from '@/components';
 import ReportFeed from '@/components/Home/Feed/ReportFeed';
+import { scale, moderateScale } from 'react-native-size-matters';
 
 type HomeProps = {};
 
@@ -28,6 +21,7 @@ export class Home extends Component<HomeProps> {
             <UserAvatar
               userName="Namira Nuril Almas"
               size={48}
+              fontSize={18}
               src="https://pub-de80d0c9acec4ada87a412796cb5a13f.r2.dev/profile/7d75dbdcfca17e31cd16b5b3adda06611dec175347ca553da64c52960daa5325.jpg"
               backgroundColor={Colors.PRIMARY_GREEN}
               active
@@ -58,7 +52,7 @@ export class Home extends Component<HomeProps> {
                 style={{
                   fontFamily: 'Poppins-Medium',
                   color: Colors.GRAY,
-                  fontSize: 13,
+                  fontSize: scale(11),
                 }}>
                 {Dimensions.get('window').width > 360
                   ? 'Jumlah Laporan Hari Ini'
@@ -79,7 +73,7 @@ export class Home extends Component<HomeProps> {
                 style={{
                   color: Colors.PRIMARY_ORANGE,
                   fontFamily: 'Poppins-SemiBold',
-                  fontSize: 13,
+                  fontSize: scale(11),
                   lineHeight: 21,
                 }}>
                 38 Laporan
@@ -105,7 +99,7 @@ export class Home extends Component<HomeProps> {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 0,
+    // paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 0,
     backgroundColor: 'white',
   },
   topBarContainer: {
@@ -153,7 +147,7 @@ const styles = StyleSheet.create({
   },
   feedSection: {
     backgroundColor: Colors.BACKGROUND,
-    paddingBottom: 80,
+    paddingBottom: moderateScale(50),
   },
 });
 

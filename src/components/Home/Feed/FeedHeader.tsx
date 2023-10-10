@@ -4,6 +4,7 @@ import { Colors } from '@/constants/colors';
 import { ChevronRight } from '@/constants/icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { scale } from 'react-native-size-matters';
 
 type FeedHeaderProps = {
   title: string;
@@ -68,12 +69,12 @@ const styles = (props?: any) =>
     title: {
       color: Colors.TEXT,
       fontFamily: 'Poppins-SemiBold',
-      fontSize: 16,
+      fontSize: scale(14),
     },
     description: {
       color: Colors.GRAY,
       fontFamily: 'Poppins-Regular',
-      fontSize: 13,
+      fontSize: scale(12),
     },
     ctaContainer: {
       display: 'flex',
@@ -92,7 +93,7 @@ const styles = (props?: any) =>
     ctaTitle: {
       color: props,
       fontFamily: 'Poppins-SemiBold',
-      fontSize: 14,
+      fontSize: scale(12),
       textAlign: 'center',
       textAlignVertical: 'center',
       fontStyle: 'normal',

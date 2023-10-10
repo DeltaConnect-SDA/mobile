@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ComplaintPhotos, ProgressStep } from '@/components';
 import { Colors } from '@/constants/colors';
 import { Button } from '@/components/atom';
+import { scale } from 'react-native-size-matters';
 
 const data = [
   {
@@ -51,11 +52,11 @@ const data = [
         blurHash: 'LcKd_5t7xuRj~qazt7WUM|ayofay',
       },
     ],
-    category: 'Drainase',
+    category: 'Pohon',
     burHash: 'LPEyPa~V-ps.RMxuofW=x[NFRjWB',
     time: '2023-10-08T11:24:09.319Z',
     refId: 'DC-LP-170923-00027',
-    status: 'Proses',
+    status: 'Dibatalkan',
     statusColor: 'TOSCA',
     activity: {},
     place: 'Jemundo',
@@ -81,7 +82,7 @@ const data = [
         blurHash: 'LcKd_5t7xuRj~qazt7WUM|ayofay',
       },
     ],
-    category: 'Drainase',
+    category: 'Lampu',
     burHash: 'LPEyPa~V-ps.RMxuofW=x[NFRjWB',
     time: '2023-10-08T11:24:09.319Z',
     refId: 'DC-LP-170923-00027',
@@ -215,13 +216,14 @@ const ComplaintDetail = ({ route, navigation }) => {
 
           {/* Description Section */}
           <View style={styles().descriptionSection}>
-            <Text style={styles().heading}>Detail Laporan</Text>
+            <Text style={styles().heading}>Deskripsi Laporan</Text>
             <View>
               <Text
                 numberOfLines={!readMore ? 5 : undefined}
                 style={{
                   fontFamily: 'Poppins-Regular',
-                  fontSize: 14,
+                  fontSize: scale(12.5),
+                  lineHeight: scale(20),
                   color: Colors.TEXT,
                 }}>
                 {complaint.description}
@@ -229,7 +231,7 @@ const ComplaintDetail = ({ route, navigation }) => {
               <Button
                 onPress={() => setReadMore(!readMore)}
                 type="Text"
-                size="Lg"
+                size="Md"
                 style={{ marginTop: 5 }}
                 title={!readMore ? 'Baca selengkapnya' : 'Lebih sedikit'}
               />
@@ -239,11 +241,11 @@ const ComplaintDetail = ({ route, navigation }) => {
           {/* Status Section */}
           <View style={styles().descriptionSection}>
             <Text style={styles().heading}>Status Laporan</Text>
-            <View style={{ gap: 38, marginTop: 18 }}>
+            <View style={{ gap: 48, marginTop: 18 }}>
               <ProgressStep status={complaint.status} />
               <Button
                 type="Outline"
-                size="Lg"
+                size="Md"
                 title="Lihat Detail Status"
                 onPress={() => navigation.navigate('Beranda')}
               />
@@ -266,7 +268,7 @@ const styles = (props?: any) =>
     },
     heading: {
       fontFamily: 'Poppins-SemiBold',
-      fontSize: 16,
+      fontSize: scale(14),
       color: Colors.TEXT,
     },
     row: {
@@ -309,7 +311,7 @@ const styles = (props?: any) =>
     },
     status: {
       fontFamily: 'Poppins-Medium',
-      fontSize: 12,
+      fontSize: scale(10.5),
       color: Colors[`PRIMARY_${props}`],
     },
     categoryContainer: {
@@ -321,12 +323,12 @@ const styles = (props?: any) =>
     },
     category: {
       fontFamily: 'Poppins-Medium',
-      fontSize: 12,
+      fontSize: scale(10.5),
       color: Colors.GRAY,
     },
     title: {
       fontFamily: 'Poppins-Medium',
-      fontSize: 18,
+      fontSize: scale(16),
     },
     detailsSection: {
       // display: 'flex',
@@ -343,7 +345,7 @@ const styles = (props?: any) =>
     },
     detailValueText: {
       fontFamily: 'Poppins-Medium',
-      fontSize: 14,
+      fontSize: scale(12.5),
       color: Colors.TEXT,
     },
     priorityContainer: {
@@ -355,7 +357,7 @@ const styles = (props?: any) =>
     },
     priority: {
       fontFamily: 'Poppins-Medium',
-      fontSize: 12,
+      fontSize: scale(10.5),
       color: Colors[`PRIMARY_${props}`],
     },
     descriptionSection: {

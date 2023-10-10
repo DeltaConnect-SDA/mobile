@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import React, { Component } from 'react';
 import { Colors } from '@/constants/colors';
+import { scale } from 'react-native-size-matters';
 
 type ButtonType = 'Primary' | 'Secondary' | 'Disabled' | 'Text' | 'Outline';
 
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
   primaryText: {
     color: 'white',
     fontFamily: 'Poppins-SemiBold',
-    fontSize: 14,
+    fontSize: scale(14),
   },
   secondary: {
     backgroundColor: '#CCEBDB',
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
   secondaryText: {
     color: Colors.PRIMARY_GREEN,
     fontFamily: 'Poppins-SemiBold',
-    fontSize: 14,
+    fontSize: scale(14),
   },
   outline: {
     borderColor: Colors.PRIMARY_GREEN,
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
   outlineText: {
     color: Colors.PRIMARY_GREEN,
     fontFamily: 'Poppins-SemiBold',
-    fontSize: 14,
+    fontSize: scale(14),
   },
   disabled: {
     backgroundColor: Colors.LINE_STROKE,
@@ -126,34 +127,34 @@ const styles = StyleSheet.create({
   disabledText: {
     color: Colors.GRAY,
     fontFamily: 'Poppins-SemiBold',
-    fontSize: 14,
+    fontSize: scale(14),
   },
   textButton: {},
   textButtonText: {
     color: Colors.PRIMARY_GREEN,
     fontFamily: 'Poppins-SemiBold',
-    fontSize: 14,
+    fontSize: scale(14),
   },
   large: {
     width: '100%',
     paddingVertical: 14,
   },
   textLarge: {
-    fontSize: 14,
+    fontSize: scale(14),
   },
   medium: {
     paddingVertical: 12,
     paddingHorizontal: 24,
   },
   textMedium: {
-    fontSize: 14,
+    fontSize: scale(12),
   },
   small: {
     paddingVertical: 8,
     paddingHorizontal: 12,
   },
   textSmall: {
-    fontSize: 12,
+    fontSize: scale(12),
   },
 });
 

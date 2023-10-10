@@ -17,6 +17,7 @@ import { Colors } from '@/constants/colors';
 import { History, Home, Notifications, Profile } from '@/screens';
 import Camera from '@/screens/complaint/Camera';
 import { useNavigation } from '@react-navigation/native';
+import { scale } from 'react-native-size-matters';
 
 const Tab = createBottomTabNavigator();
 
@@ -61,7 +62,7 @@ export class BottomTabNavigation extends Component {
             shadowRadius: 10,
             elevation: 15,
           },
-          tabBarLabelStyle: { fontFamily: 'Poppins-Regular', fontSize: 12 },
+          tabBarLabelStyle: { fontFamily: 'Poppins-Regular', fontSize: scale(12) },
           headerTitleStyle: {
             fontFamily: 'Poppins-SemiBold',
             fontSize: 22,

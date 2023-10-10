@@ -4,6 +4,7 @@ import { Informasi, Laporan, Saved, Usulan } from '@/constants/icons';
 import { Colors } from '@/constants/colors';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
+import { scale } from 'react-native-size-matters';
 
 const { width } = Dimensions.get('window');
 
@@ -80,7 +81,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({ title, icon, color, route })
           allowFontScaling={false}
           style={{
             fontFamily: 'Poppins-Medium',
-            fontSize: 12,
+            fontSize: scale(11),
             textAlign: 'center',
             color: Colors.GRAY,
           }}>

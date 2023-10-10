@@ -5,6 +5,7 @@ import { Image } from 'expo-image';
 import TimeAgo from 'javascript-time-ago';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
+import { scale, verticalScale } from 'react-native-size-matters';
 
 type ReportCardProps = {
   id: number;
@@ -86,8 +87,8 @@ const styles = (props?: any) =>
       marginBottom: 8,
     },
     image: {
-      width: 120,
-      height: 120,
+      width: scale(105),
+      aspectRatio: 1 / 1,
       backgroundColor: '#0553',
       borderRadius: 12,
     },
@@ -106,7 +107,7 @@ const styles = (props?: any) =>
     title: {
       fontFamily: 'Poppins-Medium',
       color: Colors.TEXT,
-      fontSize: 14,
+      fontSize: scale(12.5),
       flexWrap: 'wrap',
     },
     footerContainer: {
@@ -124,7 +125,7 @@ const styles = (props?: any) =>
     },
     category: {
       fontFamily: 'Poppins-Medium',
-      fontSize: 12,
+      fontSize: scale(10.5),
       color: Colors.GRAY,
     },
     statusContainer: {
@@ -136,12 +137,12 @@ const styles = (props?: any) =>
     },
     status: {
       fontFamily: 'Poppins-Medium',
-      fontSize: 12,
+      fontSize: scale(10.5),
       color: Colors[`PRIMARY_${props}`],
     },
     time: {
       fontFamily: 'Poppins-Regular',
-      fontSize: 12,
+      fontSize: scale(10.5),
       color: Colors.DARK_GRAY,
     },
   });
