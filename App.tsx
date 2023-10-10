@@ -10,6 +10,7 @@ import 'react-native-gesture-handler';
 import { Colors } from '@/constants/colors';
 import TimeAgo from 'javascript-time-ago';
 import id from 'javascript-time-ago/locale/id';
+import Test from '@/components/test';
 
 TimeAgo.addDefaultLocale(id);
 
@@ -47,10 +48,11 @@ export default function App() {
   }
   return (
     <NavigationContainer theme={MyTheme}>
-      <StatusBar style="auto" />
+      <StatusBar translucent={false} backgroundColor="transparent" style="auto" />
       <Stack.Navigator initialRouteName="BottomNav">
         <Stack.Screen name="Onboarding" component={Onboarding} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="Test" component={Test} options={{ headerShown: false }} />
         <Stack.Screen
           name="ComplaintDetail"
           component={ComplaintDetail}
