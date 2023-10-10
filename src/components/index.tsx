@@ -7,6 +7,7 @@ import FeedCard from './Card/Feed';
 import ReportCard from './Card/Report';
 import ComplaintPhotos from './Complaint/Detail/ComplaintPhotos';
 import ProgressStep from './ProgressStep';
+import Loader from './atom/Loader';
 
 export {
   Input,
@@ -18,4 +19,5 @@ export {
   ReportCard,
   ComplaintPhotos,
   ProgressStep,
+  Loader,
 };
