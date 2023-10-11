@@ -30,10 +30,21 @@ interface State {
 }
 
 export class Camera extends Component<Props, State> {
+  camera: ExpoCamera;
   constructor(props: Props) {
     super(props);
     this.state = { granted: false, type: CameraType.back, flash: FlashMode.off, isLoading: true };
   }
+
+  __takePicture = () => {
+    if (this.camera) {
+      this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
+    }
+  };
+
+  onPictureSaved = (photo) => {
+    console.log(photo);
+  };
 
   async componentDidMount() {
     const { granted } = await requestCameraPermissionsAsync();
@@ -71,6 +82,9 @@ export class Camera extends Component<Props, State> {
           <View style={styles.container}>
             <StatusBar style="light" />
             <ExpoCamera
+              ref={(ref) => {
+                this.camera = ref;
+              }}
               style={styles.camera}
               type={this.state.type}
               flashMode={this.state.flash}
@@ -86,6 +100,7 @@ export class Camera extends Component<Props, State> {
                 <CameraFlip />
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={() => this.__takePicture()}
                 style={{
                   display: 'flex',
                   justifyContent: 'center',

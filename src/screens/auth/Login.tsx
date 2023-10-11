@@ -20,7 +20,7 @@ const Login = () => {
           enterKeyHint="next"
           title="Email"
           placeholder="Masukkan email anda!"
-          type="Text"
+          type="Email"
           error="Email harus diisi!"
         />
         <Input
@@ -45,7 +45,12 @@ const Login = () => {
         <Text style={{ fontFamily: 'Poppins-Regular', fontSize: scale(11.5) }}>
           Belum punya akun?{' '}
         </Text>
-        <Button title="Daftar Sekarang!" type="Text" size="Md" />
+        <Button
+          onPress={() => navigation.navigate('Register')}
+          title="Daftar Sekarang!"
+          type="Text"
+          size="Md"
+        />
       </View>
     </ScrollView>
   );

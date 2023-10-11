@@ -48,12 +48,14 @@ export class InputPassword extends Component<InputPasswordPorps, InputPasswordSt
       <View>
         <TextInput
           {...this.props}
+          autoCapitalize={'none'}
           enterKeyHint={this.props.enterKeyHint}
           secureTextEntry={!this.state.passwordVisible}
           maxLength={32}
           placeholder={this.props.placeholder}
           style={styles.TextInput}
           onSubmitEditing={this.props.onSubmitEditing}
+          multiline={false}
         />
         {eye}
       </View>
@@ -95,9 +97,10 @@ interface InputProps extends TextInputProps {
   title: string;
   error?: undefined | string;
   placeholder: string;
-  type: 'Text' | 'Password' | 'Phone';
+  type: 'Text' | 'Password' | 'Phone' | 'Email';
   enterKeyHint?: undefined | EnterKeyHintTypeOptions;
   onSubmitEditing?: () => void;
+  onChangeText?: ((text: string) => void) | undefined;
 }
 
 export class Input extends Component<InputProps> {
@@ -116,9 +119,41 @@ export class Input extends Component<InputProps> {
     if (this.props.type === 'Password') {
       input = (
         <InputPassword
+          onChangeText={(text) => this.props.onChangeText(text)}
           enterKeyHint={this.props.enterKeyHint}
           placeholder={this.props.placeholder}
         />
+      );
+    } else if (this.props.type === 'Phone') {
+      input = (
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10,
+            width: '100%',
+          }}>
+          <View
+            style={{
+              backgroundColor: Colors.LIGHT_GRAY,
+              borderRadius: 14,
+              padding: moderateScale(22),
+            }}>
+            <Text
+              style={{ color: Colors.TEXT, fontFamily: 'Poppins-Medium', fontSize: scale(11.5) }}>
+              +62
+            </Text>
+          </View>
+          <TextInput
+            {...this.props}
+            onSubmitEditing={this.props.onSubmitEditing}
+            enterKeyHint={this.props.enterKeyHint}
+            style={styles.inputPhone}
+            placeholder={this.props.placeholder}
+            keyboardType="phone-pad"
+          />
+        </View>
       );
     } else {
       input = (
@@ -128,6 +163,7 @@ export class Input extends Component<InputProps> {
           enterKeyHint={this.props.enterKeyHint}
           style={inputStyles}
           placeholder={this.props.placeholder}
+          keyboardType={this.props.type === 'Email' ? 'email-address' : 'default'}
         />
       );
     }
@@ -159,7 +195,7 @@ const styles = StyleSheet.create({
     fontSize: scale(11.5),
   },
   errorText: {
-    fontFamily: 'Poppins-Medium',
+    fontFamily: 'Poppins-SemiBold',
     fontSize: scale(11),
     color: Colors.PRIMARY_RED,
     marginVertical: 5,
@@ -167,6 +203,14 @@ const styles = StyleSheet.create({
   inputError: {
     borderWidth: 1,
     borderColor: Colors.PRIMARY_RED,
+  },
+  inputPhone: {
+    backgroundColor: Colors.LIGHT_GRAY,
+    borderRadius: 14,
+    padding: moderateScale(18),
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    flexGrow: 1,
   },
 });
 

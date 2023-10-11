@@ -25,7 +25,13 @@ const Onboarding = () => {
           size="Lg"
           title="Masuk Sekarang"
         />
-        <Button type="Outline" size="Lg" title="Buat Akun" style={{ marginBottom: 100 }} />
+        <Button
+          onPress={() => navigation.navigate('Register')}
+          type="Outline"
+          size="Lg"
+          title="Buat Akun"
+          style={{ marginBottom: 100 }}
+        />
       </View>
     </ScrollView>
   );

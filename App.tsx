@@ -4,13 +4,22 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ComplaintDetail, Login, Onboarding } from '@/screens';
+import {
+  ComplaintDetail,
+  Login,
+  Onboarding,
+  Register,
+  RegisterPasswordStep,
+  RegisterPhoneVerification,
+  RegisterSendEmail,
+} from '@/screens';
 import { BottomTabNavigation } from '@/navigations';
 import 'react-native-gesture-handler';
 import { Colors } from '@/constants/colors';
 import TimeAgo from 'javascript-time-ago';
 import id from 'javascript-time-ago/locale/id';
 import Test from '@/components/test';
+import SuccessState from '@/screens/SuccessState';
 
 TimeAgo.addDefaultLocale(id);
 
@@ -52,6 +61,23 @@ export default function App() {
       <Stack.Navigator initialRouteName="BottomNav">
         <Stack.Screen name="Onboarding" component={Onboarding} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
+        <Stack.Screen name="Success" component={SuccessState} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="RegisterSendEmail"
+          component={RegisterSendEmail}
+          options={{ headerShown: false, animation: 'slide_from_right' }}
+        />
+        <Stack.Screen
+          name="RegisterPhoneVerification"
+          component={RegisterPhoneVerification}
+          options={{ headerShown: false, animation: 'slide_from_right' }}
+        />
+        <Stack.Screen
+          name="RegisterPasswordStep"
+          component={RegisterPasswordStep}
+          options={{ headerShown: false, animation: 'slide_from_right' }}
+        />
         <Stack.Screen name="Test" component={Test} options={{ headerShown: false }} />
         <Stack.Screen
           name="ComplaintDetail"
