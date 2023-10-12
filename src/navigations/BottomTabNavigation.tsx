@@ -62,7 +62,7 @@ export class BottomTabNavigation extends Component {
             shadowRadius: 10,
             elevation: 15,
           },
-          tabBarLabelStyle: { fontFamily: 'Poppins-Regular', fontSize: scale(12) },
+          tabBarLabelStyle: { fontFamily: 'Poppins-Regular', fontSize: scale(11) },
           headerTitleStyle: {
             fontFamily: 'Poppins-SemiBold',
             fontSize: 22,
