@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Loader, TopNav } from '@/components';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import { Colors } from '@/constants/colors';
@@ -11,7 +11,7 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import { authAPI } from 'Api/backend';
-import { Error } from '@/components/atom/Input';
+import CountDownTimer from 'react-native-countdown-timer-hooks';
 
 const CELL_COUNT = 4;
 
@@ -24,7 +24,9 @@ const RegisterPhoneVerification = ({ route, navigation }) => {
     setValue,
   });
   const [loading, setLoading] = useState<boolean>();
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<string | null>();
+  const [ready, setReady] = useState<boolean>(false);
+  const refTimer = useRef<CountDownTimer>();
 
   function filterPhoneNumber(phoneNumber) {
     // Menghilangkan spasi dan karakter non-digit dari nomor telepon
@@ -48,6 +50,8 @@ const RegisterPhoneVerification = ({ route, navigation }) => {
     return phoneNumber;
   }
   const requestOTP = async () => {
+    setReady(false);
+    refTimer.current.resetTimer();
     try {
       setLoading(true);
       setError(null);
@@ -68,6 +72,9 @@ const RegisterPhoneVerification = ({ route, navigation }) => {
         'An error occurred while requesting OTP:',
         JSON.stringify(error.response.data.message)
       );
+      if (error.response.data.code === 429) {
+        setReady(true);
+      }
       setError(error.response.data.message);
     }
   };
@@ -130,13 +137,37 @@ const RegisterPhoneVerification = ({ route, navigation }) => {
               </Text>
             )}
           />
-          <Button
-            onPress={() => requestOTP()}
-            title="Kirim Ulang"
-            size="Sm"
-            type="Text"
-            style={{ marginTop: 20 }}
-          />
+          <View
+            style={{
+              display: !ready ? 'flex' : 'none',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 10,
+            }}>
+            <Text style={{ fontSize: scale(14), color: Colors.TEXT, fontWeight: '500' }}>
+              Kirim ulang dalam:
+            </Text>
+            <CountDownTimer
+              ref={refTimer}
+              timestamp={120}
+              timerCallback={(flag) => setReady(flag)}
+              textStyle={{
+                fontSize: scale(14),
+                color: Colors.PRIMARY_GREEN,
+                fontWeight: '500',
+                letterSpacing: 0.25,
+              }}
+            />
+          </View>
+          {ready && (
+            <Button
+              onPress={() => requestOTP()}
+              title="Kirim Ulang"
+              size="Sm"
+              type="Text"
+              // style={{ marginTop: 20 }}
+            />
+          )}
           <Button
             onPress={() => verifyOTP()}
             title="Lanjutkan"

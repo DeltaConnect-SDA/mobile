@@ -80,7 +80,7 @@ const RegisterPasswordStep = ({ route, navigation }) => {
       .then((res) => {
         setLoading(false);
         const result = res.data;
-        const { message, code, data, success } = result;
+        const { message, data, success } = result;
 
         if (!success) {
           console.log({ message, data }, 'error');

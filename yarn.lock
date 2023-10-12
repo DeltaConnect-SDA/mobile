@@ -5888,6 +5888,11 @@ react-native-confirmation-code-field@^7.3.1:
   resolved "https://registry.npmjs.org/react-native-confirmation-code-field/-/react-native-confirmation-code-field-7.3.1.tgz"
   integrity sha512-5vI6BclB31e4vTYg0HmV/Vy9zI5MQZfHr1EN3kYzvaZq4GMIsyr6lrSmnQW1TtWR7Z8oURrhCpwo+JsWXxCoug==
 
+react-native-countdown-timer-hooks@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/react-native-countdown-timer-hooks/-/react-native-countdown-timer-hooks-1.0.4.tgz"
+  integrity sha512-I3s0Bk4mjSltdGXXmFcMk3psLiC+dcA/ZqCW7aaJftHuWCJd6LMpCd3OOPJWu4FdSD9viCsF5EG3aeAy1cac5A==
+
 react-native-gesture-handler@~2.12.0:
   version "2.12.1"
   resolved "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.12.1.tgz"
