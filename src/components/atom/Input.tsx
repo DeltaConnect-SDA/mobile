@@ -15,6 +15,7 @@ interface InputPasswordPorps extends TextInputProps {
   placeholder: string;
   enterKeyHint?: undefined | EnterKeyHintTypeOptions;
   onSubmitEditing?: () => void;
+  error?: boolean;
 }
 
 interface InputPasswordState {
@@ -29,6 +30,10 @@ export class InputPassword extends Component<InputPasswordPorps, InputPasswordSt
   }
   render() {
     let eye;
+    const inputStyles: any = [styles.TextInput];
+    if (this.props.error) {
+      inputStyles.push(styles.inputError)
+    }
     if (this.state.passwordVisible === false) {
       eye = (
         <EyeHide
@@ -53,9 +58,11 @@ export class InputPassword extends Component<InputPasswordPorps, InputPasswordSt
           secureTextEntry={!this.state.passwordVisible}
           maxLength={32}
           placeholder={this.props.placeholder}
-          style={styles.TextInput}
+          style={inputStyles}
           onSubmitEditing={this.props.onSubmitEditing}
           multiline={false}
+          selectionColor={Colors.PRIMARY_GREEN}
+          cursorColor={Colors.PRIMARY_GREEN}
         />
         {eye}
       </View>
@@ -109,9 +116,11 @@ export class Input extends Component<InputProps> {
   }
   render() {
     const inputStyles: any = [styles.TextInput];
+    const inputPhoneStyles: any = [styles.inputPhone];
     let error;
     if (this.props.error) {
       inputStyles.push(styles.inputError);
+      inputPhoneStyles.push(styles.inputError);
       error = <Error title={this.props.error} />;
     }
 
@@ -119,6 +128,7 @@ export class Input extends Component<InputProps> {
     if (this.props.type === 'Password') {
       input = (
         <InputPassword
+        error={this.props.error && true}
           onChangeText={(text) => this.props.onChangeText(text)}
           enterKeyHint={this.props.enterKeyHint}
           placeholder={this.props.placeholder}
@@ -139,6 +149,7 @@ export class Input extends Component<InputProps> {
               backgroundColor: Colors.LIGHT_GRAY,
               borderRadius: 14,
               padding: moderateScale(22),
+              borderColor: Colors.PRIMARY_RED,
             }}>
             <Text
               style={{ color: Colors.TEXT, fontFamily: 'Poppins-Medium', fontSize: scale(11.5) }}>
@@ -149,9 +160,11 @@ export class Input extends Component<InputProps> {
             {...this.props}
             onSubmitEditing={this.props.onSubmitEditing}
             enterKeyHint={this.props.enterKeyHint}
-            style={styles.inputPhone}
+            style={inputPhoneStyles}
             placeholder={this.props.placeholder}
             keyboardType="phone-pad"
+            selectionColor={Colors.PRIMARY_GREEN}
+            cursorColor={Colors.PRIMARY_GREEN}
           />
         </View>
       );
@@ -164,6 +177,8 @@ export class Input extends Component<InputProps> {
           style={inputStyles}
           placeholder={this.props.placeholder}
           keyboardType={this.props.type === 'Email' ? 'email-address' : 'default'}
+          selectionColor={Colors.PRIMARY_GREEN}
+          cursorColor={Colors.PRIMARY_GREEN}
         />
       );
     }
