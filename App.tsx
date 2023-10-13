@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, useNavigation } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
@@ -20,6 +20,10 @@ import TimeAgo from 'javascript-time-ago';
 import id from 'javascript-time-ago/locale/id';
 import Test from '@/components/test';
 import SuccessState from '@/screens/SuccessState';
+import AddComplaintDetails from '@/screens/complaint/AddComplaintDetails';
+import Camera from '@/screens/complaint/Camera';
+import { ChevronLeft } from '@/constants/icons';
+import { Text, TouchableOpacity } from 'react-native';
 
 TimeAgo.addDefaultLocale(id);
 
@@ -63,6 +67,21 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
         <Stack.Screen name="Success" component={SuccessState} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Camera"
+          component={Camera}
+          options={{
+            headerStyle: { backgroundColor: '#000000' },
+            headerShadowVisible: false,
+            headerTintColor: '#fff',
+            animation: 'slide_from_right',
+          }}
+        />
+        <Stack.Screen
+          name="AddComplaintDetails"
+          component={AddComplaintDetails}
+          options={{ title: 'Lapor Masalah', animation: 'slide_from_right' }}
+        />
         <Stack.Screen
           name="RegisterSendEmail"
           component={RegisterSendEmail}

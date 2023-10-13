@@ -60,6 +60,8 @@ const RegisterPhoneVerification = ({ route, navigation }) => {
         email: inputs.email,
       });
 
+      console.log(response);
+
       if (response.data.success) {
         setLoading(false);
         console.log('OTP requested successfully');
@@ -68,6 +70,8 @@ const RegisterPhoneVerification = ({ route, navigation }) => {
       }
     } catch (error) {
       setLoading(false);
+      console.log(error);
+
       console.error(
         'An error occurred while requesting OTP:',
         JSON.stringify(error.response.data.message)

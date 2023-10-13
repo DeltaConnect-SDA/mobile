@@ -19,18 +19,25 @@ import { CameraFilled, CameraFlip, FlashFilled, FlashOutline, Torch } from '@/co
 import { Colors } from '@/constants/colors';
 import { Pictures } from '@/constants/illustrations';
 import { StatusBar } from 'expo-status-bar';
+import { CommonActions, useIsFocused } from '@react-navigation/native';
 
-type Props = {};
+type Props = {
+  navigation: any;
+  isFocused: any;
+  route: any;
+};
 
 interface State {
   granted: boolean;
   type: CameraType;
   flash: FlashMode;
   isLoading: boolean;
+  loaded?: boolean;
 }
 
 export class Camera extends Component<Props, State> {
   camera: ExpoCamera;
+  photos;
   constructor(props: Props) {
     super(props);
     this.state = { granted: false, type: CameraType.back, flash: FlashMode.off, isLoading: true };
@@ -43,7 +50,19 @@ export class Camera extends Component<Props, State> {
   };
 
   onPictureSaved = (photo) => {
-    console.log(photo);
+    if (this.props.route.params?.retake) {
+      this.photos = [...this.props.route.params.photos, photo];
+      console.log(this.props.route.params.photos, 'retake photo');
+      console.log(this.photos, 'retake');
+      this.props.navigation.dispatch(
+        CommonActions.navigate({
+          name: 'AddComplaintDetails',
+          params: { photo: this.photos },
+        })
+      );
+    } else {
+      this.props.navigation.navigate('AddComplaintDetails', { photo: [photo] });
+    }
   };
 
   async componentDidMount() {
@@ -65,7 +84,13 @@ export class Camera extends Component<Props, State> {
   }
 
   render() {
-    if (!this.state.isLoading) {
+    this.props.navigation.addListener('focus', () => {
+      this.setState({ loaded: true });
+    });
+    this.props.navigation.addListener('blur', () => {
+      this.setState({ loaded: false });
+    });
+    if (!this.state.isLoading && this.state.loaded) {
       if (!this.state.granted) {
         return (
           <View style={styles.emptyState}>
@@ -112,7 +137,7 @@ export class Camera extends Component<Props, State> {
                   borderWidth: 10,
                   borderColor: 'white',
                 }}>
-                <CameraFilled />
+                <CameraFilled color={'white'} />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() =>

@@ -32,7 +32,7 @@ export class InputPassword extends Component<InputPasswordPorps, InputPasswordSt
     let eye;
     const inputStyles: any = [styles.TextInput];
     if (this.props.error) {
-      inputStyles.push(styles.inputError)
+      inputStyles.push(styles.inputError);
     }
     if (this.state.passwordVisible === false) {
       eye = (
@@ -58,7 +58,7 @@ export class InputPassword extends Component<InputPasswordPorps, InputPasswordSt
           secureTextEntry={!this.state.passwordVisible}
           maxLength={32}
           placeholder={this.props.placeholder}
-          style={inputStyles}
+          style={[inputStyles, { color: Colors.TEXT }]}
           onSubmitEditing={this.props.onSubmitEditing}
           multiline={false}
           selectionColor={Colors.PRIMARY_GREEN}
@@ -108,6 +108,8 @@ interface InputProps extends TextInputProps {
   enterKeyHint?: undefined | EnterKeyHintTypeOptions;
   onSubmitEditing?: () => void;
   onChangeText?: ((text: string) => void) | undefined;
+  color?: string;
+  icon?: any;
 }
 
 export class Input extends Component<InputProps> {
@@ -128,7 +130,7 @@ export class Input extends Component<InputProps> {
     if (this.props.type === 'Password') {
       input = (
         <InputPassword
-        error={this.props.error && true}
+          error={this.props.error && true}
           onChangeText={(text) => this.props.onChangeText(text)}
           enterKeyHint={this.props.enterKeyHint}
           placeholder={this.props.placeholder}
@@ -160,7 +162,7 @@ export class Input extends Component<InputProps> {
             {...this.props}
             onSubmitEditing={this.props.onSubmitEditing}
             enterKeyHint={this.props.enterKeyHint}
-            style={inputPhoneStyles}
+            style={[inputPhoneStyles, { color: this.props.color || Colors.TEXT }]}
             placeholder={this.props.placeholder}
             keyboardType="phone-pad"
             selectionColor={Colors.PRIMARY_GREEN}
@@ -174,7 +176,7 @@ export class Input extends Component<InputProps> {
           {...this.props}
           onSubmitEditing={this.props.onSubmitEditing}
           enterKeyHint={this.props.enterKeyHint}
-          style={inputStyles}
+          style={[inputStyles, { color: this.props.color || Colors.TEXT }, this.props.style]}
           placeholder={this.props.placeholder}
           keyboardType={this.props.type === 'Email' ? 'email-address' : 'default'}
           selectionColor={Colors.PRIMARY_GREEN}
@@ -184,9 +186,23 @@ export class Input extends Component<InputProps> {
     }
 
     return (
-      <View>
+      <View style={{ maxWidth: '100%' }}>
         <InputLabel title={this.props.title} />
-        {input}
+        {this.props.icon ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              backgroundColor: Colors.LIGHT_GRAY,
+              borderRadius: 14,
+              paddingLeft: scale(20),
+            }}>
+            {this.props.icon}
+            {input}
+          </View>
+        ) : (
+          input
+        )}
         {error}
       </View>
     );
@@ -201,11 +217,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   TextInput: {
+    padding: moderateScale(18),
+    flex: 1,
     backgroundColor: Colors.LIGHT_GRAY,
     borderRadius: 14,
-    padding: moderateScale(18),
-    width: '100%',
-    color: Colors.TEXT,
+    // color: Colors.TEXT,
     fontFamily: 'Poppins-Medium',
     fontSize: scale(11.5),
   },

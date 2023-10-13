@@ -35,6 +35,12 @@
         {
           "cameraPermission": "Izinkan $(PRODUCT_NAME) untuk mengakses kamera."
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Izin $(PRODUCT_NAME) untuk mengakses lokasi anda."
+        }
       ]
     ]
   }

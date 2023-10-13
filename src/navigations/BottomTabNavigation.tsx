@@ -34,7 +34,7 @@ export class BottomTabNavigation extends Component {
             } else if (route.name === 'Riwayat') {
               iconName = focused ? <RiwayatFilled /> : <RiwayatOutline />;
             } else if (route.name === 'Laporkan') {
-              iconName = <CameraFilled width={32} />;
+              iconName = <CameraFilled width={32} color={'white'} />;
             } else if (route.name === 'Notifikasi') {
               iconName = focused ? <NotifikasiFilled /> : <NotifikasiOutline />;
             } else if (route.name === 'Profil') {

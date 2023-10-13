@@ -71,9 +71,9 @@ const RegisterPasswordStep = ({ route, navigation }) => {
   const register = () => {
     authAPI
       .post('/register', {
-        firstName: inputs.firstName,
-        lastName: inputs.lastName,
-        email: inputs.email,
+        firstName: inputs.firstName.trim(),
+        lastName: inputs.lastName.trim(),
+        email: inputs.email.trim(),
         phone: filterPhoneNumber(inputs.phone),
         password: passwords.password,
       })
