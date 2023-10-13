@@ -5898,6 +5898,11 @@ react-native-countdown-timer-hooks@^1.0.4:
   resolved "https://registry.npmjs.org/react-native-countdown-timer-hooks/-/react-native-countdown-timer-hooks-1.0.4.tgz"
   integrity sha512-I3s0Bk4mjSltdGXXmFcMk3psLiC+dcA/ZqCW7aaJftHuWCJd6LMpCd3OOPJWu4FdSD9viCsF5EG3aeAy1cac5A==
 
+react-native-dropdown-picker@^5.4.6:
+  version "5.4.6"
+  resolved "https://registry.npmjs.org/react-native-dropdown-picker/-/react-native-dropdown-picker-5.4.6.tgz"
+  integrity sha512-T1XBHbE++M6aRU3wFYw3MvcOuabhWZ29RK/Ivdls2r1ZkZ62iEBZknLUPeVLMX3x6iUxj4Zgr3X2DGlEGXeHsA==
+
 react-native-gesture-handler@~2.12.0:
   version "2.12.1"
   resolved "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.12.1.tgz"

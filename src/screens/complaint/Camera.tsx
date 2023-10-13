@@ -45,15 +45,17 @@ export class Camera extends Component<Props, State> {
 
   __takePicture = () => {
     if (this.camera) {
-      this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
+      this.camera.takePictureAsync({
+        quality: 0.3, // Adjust this value (0.0 - 1.0) for picture quality
+        skipProcessing: true, // Set to true to skip processing
+        onPictureSaved: this.onPictureSaved,
+      });
     }
   };
 
   onPictureSaved = (photo) => {
     if (this.props.route.params?.retake) {
       this.photos = [...this.props.route.params.photos, photo];
-      console.log(this.props.route.params.photos, 'retake photo');
-      console.log(this.photos, 'retake');
       this.props.navigation.dispatch(
         CommonActions.navigate({
           name: 'AddComplaintDetails',
@@ -67,7 +69,6 @@ export class Camera extends Component<Props, State> {
 
   async componentDidMount() {
     const { granted } = await requestCameraPermissionsAsync();
-    console.log(granted);
 
     if (granted === true) {
       this.setState({ granted: true });

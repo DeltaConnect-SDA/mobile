@@ -3,5 +3,6 @@ import Empty from 'assets/illustrations/Empty.svg';
 import Pictures from 'assets/illustrations/Pictures.svg';
 import Send from 'assets/illustrations/Send.svg';
 import Success from 'assets/illustrations/Success.svg';
+import Location from 'assets/illustrations/Location.svg';
 
-export { ConnectIllustration, Empty, Pictures, Send, Success };
+export { ConnectIllustration, Empty, Pictures, Send, Success, Location };
