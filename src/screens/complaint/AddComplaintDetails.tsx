@@ -222,7 +222,7 @@ export default class AddComplaintDetails extends Component<Props, State> {
               scrollEnabled={false}
               title="Deskripsi"
               type="Text"
-              style={{ height: 100 }}
+              style={{ height: 'auto' }}
               placeholder="Tambahkan deskripsi"
             />
             <Text
