@@ -30,6 +30,9 @@ import LiveLocation from 'assets/icons/LiveLocation.svg';
 import Notes from 'assets/icons/Notes.svg';
 import ChevronDown from 'assets/icons/ChevronDown.svg';
 import Close from 'assets/icons/Close.svg';
+import UserEdit from 'assets/icons/UserEdit.svg';
+import Password from 'assets/icons/Password.svg';
+import Logout from 'assets/icons/Logout.svg';
 
 export {
   Back,
@@ -64,4 +67,7 @@ export {
   Notes,
   ChevronDown,
   Close,
+  UserEdit,
+  Password,
+  Logout,
 };

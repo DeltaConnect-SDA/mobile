@@ -1,40 +1,131 @@
-import { Text, View, StyleSheet, ScrollView, Dimensions } from 'react-native';
-import React, { Component } from 'react';
+import { Text, View, StyleSheet, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
+import React, { Component, useEffect, useState } from 'react';
 import UserAvatar from '@muhzi/react-native-user-avatar';
 import { Colors } from '@/constants/colors';
 import { AlertFilled, Verified } from '@/constants/icons';
 import { Carousel, InfoFeed, MainMenu } from '@/components';
 import ReportFeed from '@/components/Home/Feed/ReportFeed';
 import { scale, moderateScale } from 'react-native-size-matters';
+import { useAuth } from '@/context/AuthProvider';
+import { authAPI } from 'Api/backend';
+import { Skeleton } from 'moti/skeleton';
+import { Button } from '@/components/atom';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 
 type HomeProps = {};
 
 type HomeState = {};
 
+export const TopBar = () => {
+  const { authState } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<any>();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
+  const getUserProfile = async () => {
+    authAPI
+      .get('profile', {
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      })
+      .then((res) => {
+        setLoading(false);
+        const result = res.data;
+        const { firstName, lastName, UserDetail } = result;
+        setData({ firstName, lastName, UserDetail });
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log(error.response.data);
+      });
+  };
+
+  useEffect(() => {
+    if (authState.token) {
+      getUserProfile();
+    } else setLoading(false);
+  }, [authState.token]);
+
+  if (authState?.authenticated) {
+    return (
+      <View style={styles.topBarContainer}>
+        <View style={styles.topBarProfile}>
+          <Skeleton colorMode="light" show={loading} radius="round">
+            <UserAvatar
+              userName={!loading ? data?.firstName + ' ' + data?.lastName : 'Guest'}
+              size={48}
+              fontSize={18}
+              // src="https://pub-de80d0c9acec4ada87a412796cb5a13f.r2.dev/profile/7d75dbdcfca17e31cd16b5b3adda06611dec175347ca553da64c52960daa5325.jpg"
+              backgroundColor={Colors.PRIMARY_GREEN}
+              active
+            />
+          </Skeleton>
+          <View style={styles.topBarText}>
+            <Skeleton colorMode="light" show={loading}>
+              <Text style={styles.topBarGreetings}>Selamat datang,</Text>
+            </Skeleton>
+            {loading && <View style={{ paddingVertical: 5 }} />}
+            <Skeleton colorMode="light" show={loading}>
+              <Text style={styles.topBarUsername}>{!loading ? data?.firstName : ''}!</Text>
+            </Skeleton>
+          </View>
+        </View>
+        {data?.userDetail?.isVerified ? (
+          <Skeleton colorMode="light" show={loading}>
+            <View style={styles.verifiedBadge}>
+              <Verified color={Colors.PRIMARY_GREEN} />
+            </View>
+          </Skeleton>
+        ) : (
+          <Skeleton colorMode="light" show={loading}>
+            <View style={[styles.verifiedBadge, { backgroundColor: Colors.SECONDARY_RED }]}>
+              <Verified color={Colors.PRIMARY_RED} />
+            </View>
+          </Skeleton>
+        )}
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.topBarContainer}>
+        <View style={styles.topBarProfile}>
+          <Skeleton colorMode="light" show={loading} radius="round">
+            <UserAvatar
+              userName="Tamu"
+              size={48}
+              fontSize={18}
+              backgroundColor={Colors.PRIMARY_GREEN}
+              active
+            />
+          </Skeleton>
+          <View style={styles.topBarText}>
+            <Skeleton colorMode="light" show={loading}>
+              <Text style={styles.topBarGreetings}>Selamat datang,</Text>
+            </Skeleton>
+            {loading && <View style={{ paddingVertical: 5 }} />}
+            <Skeleton colorMode="light" show={loading}>
+              <Text style={styles.topBarUsername}>Tamu!</Text>
+            </Skeleton>
+          </View>
+        </View>
+        <Button
+          type="Secondary"
+          size="Sm"
+          title="Masuk"
+          onPress={() => navigation.navigate('Onboarding')}
+        />
+      </View>
+    );
+  }
+};
 export class Home extends Component<HomeProps> {
   render() {
     return (
       <ScrollView style={styles.container}>
         {/* Top Bar */}
-        <View style={styles.topBarContainer}>
-          <View style={styles.topBarProfile}>
-            <UserAvatar
-              userName="Namira Nuril Almas"
-              size={48}
-              fontSize={18}
-              src="https://pub-de80d0c9acec4ada87a412796cb5a13f.r2.dev/profile/7d75dbdcfca17e31cd16b5b3adda06611dec175347ca553da64c52960daa5325.jpg"
-              backgroundColor={Colors.PRIMARY_GREEN}
-              active
-            />
-            <View style={styles.topBarText}>
-              <Text style={styles.topBarGreetings}>Selamat datang,</Text>
-              <Text style={styles.topBarUsername}>Namira!</Text>
-            </View>
-          </View>
-          <View style={styles.verifiedBadge}>
-            <Verified />
-          </View>
-        </View>
+        <TopBar />
 
         {/* User report count card */}
         <View style={{ paddingHorizontal: 20, marginBottom: 20 }}>

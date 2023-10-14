@@ -1,8 +1,6 @@
 import { Text, View, ScrollView } from 'react-native';
 import React, { Component } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import Onboarding from './auth/Onboarding';
-import Login from './auth/Login';
 import { Colors } from '@/constants/colors';
 import { Empty } from '@/constants/illustrations';
 

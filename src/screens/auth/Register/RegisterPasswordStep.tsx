@@ -5,6 +5,7 @@ import { scale } from 'react-native-size-matters';
 import { Colors } from '@/constants/colors';
 import { Button } from '@/components/atom';
 import { authAPI } from 'Api/backend';
+import { useAuth } from '@/context/AuthProvider';
 
 type PasswordsType = {
   password: string;
@@ -18,6 +19,7 @@ const RegisterPasswordStep = ({ route, navigation }) => {
     password: '',
     passwordConfirm: '',
   });
+  const { authState, authenticate } = useAuth();
 
   const [errors, setErrors] = useState<any>();
 
@@ -77,7 +79,7 @@ const RegisterPasswordStep = ({ route, navigation }) => {
         phone: filterPhoneNumber(inputs.phone),
         password: passwords.password,
       })
-      .then((res) => {
+      .then(async (res) => {
         setLoading(false);
         const result = res.data;
         const { message, data, success } = result;
@@ -85,6 +87,7 @@ const RegisterPasswordStep = ({ route, navigation }) => {
         if (!success) {
           console.log({ message, data }, 'error');
         } else {
+          await authenticate(data[1].access_token);
           navigation.navigate('RegisterPhoneVerification', { inputs });
         }
       })

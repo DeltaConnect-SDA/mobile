@@ -24,6 +24,9 @@ import AddComplaintDetails from '@/screens/complaint/AddComplaintDetails';
 import Camera from '@/screens/complaint/Camera';
 import { ChevronLeft } from '@/constants/icons';
 import { Text, TouchableOpacity } from 'react-native';
+import { AuthProvider, useAuth } from '@/context/AuthProvider';
+import 'react-native-reanimated';
+import 'react-native-gesture-handler';
 
 TimeAgo.addDefaultLocale(id);
 
@@ -60,52 +63,76 @@ export default function App() {
     return null;
   }
   return (
+    <AuthProvider>
+      <Layout />
+    </AuthProvider>
+  );
+}
+
+export const Layout = () => {
+  const { authState } = useAuth();
+  return (
     <NavigationContainer theme={MyTheme}>
       <StatusBar translucent={false} backgroundColor="transparent" style="auto" />
       <Stack.Navigator initialRouteName="BottomNav">
-        <Stack.Screen name="Onboarding" component={Onboarding} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
-        <Stack.Screen name="Success" component={SuccessState} options={{ headerShown: false }} />
-        <Stack.Screen
-          name="Camera"
-          component={Camera}
-          options={{
-            headerStyle: { backgroundColor: '#000000' },
-            headerShadowVisible: false,
-            headerTintColor: '#fff',
-            animation: 'slide_from_right',
-          }}
-        />
-        <Stack.Screen
-          name="AddComplaintDetails"
-          component={AddComplaintDetails}
-          options={{ title: 'Lapor Masalah', animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name="RegisterSendEmail"
-          component={RegisterSendEmail}
-          options={{ headerShown: false, animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name="RegisterPhoneVerification"
-          component={RegisterPhoneVerification}
-          options={{ headerShown: false, animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name="RegisterPasswordStep"
-          component={RegisterPasswordStep}
-          options={{ headerShown: false, animation: 'slide_from_right' }}
-        />
         <Stack.Screen name="Test" component={Test} options={{ headerShown: false }} />
-        <Stack.Screen
-          name="ComplaintDetail"
-          component={ComplaintDetail}
-          options={{
-            title: 'Detail Laporan',
-            animation: 'simple_push',
-          }}
-        />
+        {!authState?.authenticated ? (
+          <>
+            <Stack.Screen
+              name="Onboarding"
+              component={Onboarding}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+            <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
+            <Stack.Screen
+              name="RegisterPasswordStep"
+              component={RegisterPasswordStep}
+              options={{ headerShown: false, animation: 'slide_from_right' }}
+            />
+          </>
+        ) : (
+          <>
+            <Stack.Screen
+              name="RegisterSendEmail"
+              component={RegisterSendEmail}
+              options={{ headerShown: false, animation: 'slide_from_right' }}
+            />
+            <Stack.Screen
+              name="RegisterPhoneVerification"
+              component={RegisterPhoneVerification}
+              options={{ headerShown: false, animation: 'slide_from_right' }}
+            />
+            <Stack.Screen
+              name="Success"
+              component={SuccessState}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Camera"
+              component={Camera}
+              options={{
+                headerStyle: { backgroundColor: '#000000' },
+                headerShadowVisible: false,
+                headerTintColor: '#fff',
+                animation: 'slide_from_right',
+              }}
+            />
+            <Stack.Screen
+              name="AddComplaintDetails"
+              component={AddComplaintDetails}
+              options={{ title: 'Lapor Masalah', animation: 'slide_from_right' }}
+            />
+            <Stack.Screen
+              name="ComplaintDetail"
+              component={ComplaintDetail}
+              options={{
+                title: 'Detail Laporan',
+                animation: 'simple_push',
+              }}
+            />
+          </>
+        )}
         <Stack.Screen
           name="BottomNav"
           component={BottomTabNavigation}
@@ -114,4 +141,4 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
