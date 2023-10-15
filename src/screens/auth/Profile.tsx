@@ -1,4 +1,12 @@
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { authAPI } from 'Api/backend';
 import { useAuth } from '@/context/AuthProvider';
@@ -7,8 +15,9 @@ import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import UserAvatar from '@muhzi/react-native-user-avatar';
 import { Colors } from '@/constants/colors';
 import { Logout, Password, UserEdit, Verified } from '@/constants/icons';
+import { CommonActions, StackActions } from '@react-navigation/native';
 
-const Profile = () => {
+const Profile = ({ navigation }) => {
   const { authState, logout } = useAuth();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>();
@@ -30,7 +39,9 @@ const Profile = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchProfile} />}>
       <View style={styles.userInfoContainer}>
         <View style={styles.userBasicContainer}>
           <Skeleton colorMode="light" show={loading} radius="round">
@@ -44,12 +55,12 @@ const Profile = () => {
             />
           </Skeleton>
           <View style={styles.userNameContainer}>
-            <Skeleton colorMode="light" show={loading} radius="round">
+            <Skeleton colorMode="light" show={loading}>
               <Text style={styles.userName}>
                 {loading ? '' : data?.firstName + ' ' + data?.LastName}
               </Text>
             </Skeleton>
-            <Skeleton colorMode="light" show={loading} radius="round">
+            <Skeleton colorMode="light" show={loading}>
               <TouchableOpacity
                 style={styles.badge}
                 onPress={
@@ -75,9 +86,11 @@ const Profile = () => {
             </Skeleton>
           </View>
         </View>
-        <TouchableOpacity style={styles.editBtn}>
-          <UserEdit />
-        </TouchableOpacity>
+        <Skeleton colorMode="light" show={loading}>
+          <TouchableOpacity style={styles.editBtn}>
+            <UserEdit />
+          </TouchableOpacity>
+        </Skeleton>
       </View>
       <TouchableOpacity style={styles.menuItem}>
         <Password />
@@ -97,7 +110,10 @@ const Profile = () => {
               },
               {
                 text: 'OK',
-                onPress: async () => logout(),
+                onPress: async () => {
+                  logout();
+                  navigation.dispatch(StackActions.replace('BottomNav'));
+                },
               },
             ]
           );
@@ -105,7 +121,7 @@ const Profile = () => {
         <Logout />
         <Text style={[styles.menuText, { color: Colors.PRIMARY_RED }]}>Keluar</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 

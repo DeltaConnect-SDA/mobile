@@ -15,6 +15,7 @@ import { Linking } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { moderateScale } from 'react-native-size-matters';
 import { Error, InputLabel } from '@/components/atom/Input';
+import { createComplaint } from '@/services';
 
 type Props = {
   route: any;
@@ -37,7 +38,7 @@ type State = {
   detail_location: string;
   description: string;
   categoryId: any;
-  priorityId: string;
+  priorityId: number;
   categories: any;
   categoryOpen: any;
   categoryLoading: boolean;
@@ -107,7 +108,10 @@ export default class AddComplaintDetails extends Component<Props, State> {
         .then((res) => {
           const results = res.data.results;
           this.setState({
-            address: results[0].formatted_address,
+            GPSaddress: results[0].formatted_address,
+            lat: latitude.toString(),
+            long: longitude.toString(),
+            village: results[0].address_components[1].short_name,
           });
           this.setState((prevState) => ({
             errorMessage: { ...prevState.errorMessage, GPSaddress: '' },
@@ -156,13 +160,14 @@ export default class AddComplaintDetails extends Component<Props, State> {
     }
   };
 
-  validate = () => {
+  validate = async () => {
     Keyboard.dismiss();
     let valid = true;
 
     // Photos
     if (this.state.photos.length == 0) {
       valid = false;
+      console.log('invalid1');
       this.setState((prevState) => ({
         errorMessage: { ...prevState.errorMessage, photos: 'Harus ada foto bukti!' },
       }));
@@ -171,11 +176,13 @@ export default class AddComplaintDetails extends Component<Props, State> {
     // Title
     if (!this.state.title) {
       valid = false;
+      console.log('invalid2');
       this.setState((prevState) => ({
         errorMessage: { ...prevState.errorMessage, title: 'Judul harus diisi!' },
       }));
     } else if (this.state.title.length < 4) {
       valid = false;
+      console.log('invalid3');
       this.setState((prevState) => ({
         errorMessage: { ...prevState.errorMessage, title: 'Judul harus lebih dari 4 karakter!' },
       }));
@@ -184,6 +191,7 @@ export default class AddComplaintDetails extends Component<Props, State> {
     // GPS
     if (!this.state.locationReady) {
       valid = false;
+      console.log('invalid4');
       this.setState((prevState) => ({
         errorMessage: { ...prevState.errorMessage, GPSaddress: 'Lokasi GPS belum ditemukan' },
       }));
@@ -192,11 +200,13 @@ export default class AddComplaintDetails extends Component<Props, State> {
     // Detail lokasi
     if (!this.state.detail_location) {
       valid = false;
+      console.log('invalid5');
       this.setState((prevState) => ({
         errorMessage: { ...prevState.errorMessage, detail_location: 'Detail lokasi harus diisi!' },
       }));
     } else if (this.state.detail_location.length < 4) {
       valid = false;
+      console.log('invalid6');
       this.setState((prevState) => ({
         errorMessage: {
           ...prevState.errorMessage,
@@ -208,11 +218,13 @@ export default class AddComplaintDetails extends Component<Props, State> {
     // Deskripsi
     if (!this.state.description) {
       valid = false;
+      console.log('invalid7');
       this.setState((prevState) => ({
         errorMessage: { ...prevState.errorMessage, description: 'Deskripsi harus diisi!' },
       }));
     } else if (this.state.description.length < 70) {
       valid = false;
+      console.log('invalid8');
       this.setState((prevState) => ({
         errorMessage: {
           ...prevState.errorMessage,
@@ -224,6 +236,7 @@ export default class AddComplaintDetails extends Component<Props, State> {
     // Kategori
     if (!this.state.categoryId) {
       valid = false;
+      console.log('invalid9');
       this.setState((prevState) => ({
         errorMessage: { ...prevState.errorMessage, category: 'Kategori harus diisi!' },
       }));
@@ -232,12 +245,30 @@ export default class AddComplaintDetails extends Component<Props, State> {
     // Urgensi
     if (!this.state.priorityId) {
       valid = false;
+      console.log('invalid10');
       this.setState((prevState) => ({
         errorMessage: { ...prevState.errorMessage, priority: 'Urgensi harus diisi!' },
       }));
-
-      if (valid) {
-        console.log('valid');
+    }
+    if (valid) {
+      console.log('valid');
+      try {
+        const res = await createComplaint(
+          {
+            title: this.state.title,
+            categoryId: this.state.categoryId,
+            description: this.state.description,
+            detail_location: this.state.detail_location,
+            GPSaddress: this.state.GPSaddress,
+            lat: this.state.lat,
+            long: this.state.long,
+            priorityId: this.state.priorityId,
+            village: this.state.village,
+          },
+          this.state.photos
+        );
+      } catch (err) {
+        console.log(JSON.stringify(err.response));
       }
     }
   };
@@ -252,6 +283,7 @@ export default class AddComplaintDetails extends Component<Props, State> {
     this.getLocation();
     this.getCategories();
     this.getPriorities();
+    console.log(this.state.photos);
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -259,6 +291,7 @@ export default class AddComplaintDetails extends Component<Props, State> {
       this.setState({
         photos: this.props.route.params.photo,
       });
+      console.log(this.state.photos);
     }
   }
 
@@ -381,12 +414,11 @@ export default class AddComplaintDetails extends Component<Props, State> {
               <View>
                 <Input
                   icon={<LiveLocation />}
-                  onChangeText={(text) => this.setState({ GPSaddress: text })}
                   multiline={true}
                   editable={false}
                   textAlign="left"
                   color={Colors.GRAY}
-                  value={this.state.address}
+                  value={this.state.GPSaddress}
                   title="Lokasi GPS"
                   type="Text"
                   placeholder="Lokasi ditambahkan otomatis"
@@ -407,7 +439,7 @@ export default class AddComplaintDetails extends Component<Props, State> {
               {/* Detail Lokasi */}
               <View>
                 <Input
-                  maxLength={600}
+                  maxLength={200}
                   onChangeText={(text) => this.setState({ detail_location: text })}
                   icon={<Notes color={Colors.TEXT} />}
                   title="Detail Lokasi"

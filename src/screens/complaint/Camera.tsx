@@ -20,6 +20,7 @@ import { Colors } from '@/constants/colors';
 import { Pictures } from '@/constants/illustrations';
 import { StatusBar } from 'expo-status-bar';
 import { CommonActions, useIsFocused } from '@react-navigation/native';
+import { Image } from 'react-native-compressor';
 
 type Props = {
   navigation: any;
@@ -47,15 +48,17 @@ export class Camera extends Component<Props, State> {
     if (this.camera) {
       this.camera.takePictureAsync({
         quality: 0.3, // Adjust this value (0.0 - 1.0) for picture quality
+        scale: 0.5,
         skipProcessing: true, // Set to true to skip processing
         onPictureSaved: this.onPictureSaved,
       });
     }
   };
 
-  onPictureSaved = (photo) => {
+  onPictureSaved = async (photo) => {
     if (this.props.route.params?.retake) {
-      this.photos = [...this.props.route.params.photos, photo];
+      const result = await Image.compress(photo.uri);
+      this.photos = [...this.props.route.params.photos, { ...photo, uri: result }];
       this.props.navigation.dispatch(
         CommonActions.navigate({
           name: 'AddComplaintDetails',

@@ -17,6 +17,10 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 
+export const getToken = async () => {
+  return await SecureStore.getItemAsync(TOKEN_KEY);
+};
+
 export const AuthProvider = ({ children }: any) => {
   const [authState, setAuthState] = useState<{
     token: string | null;
@@ -25,12 +29,10 @@ export const AuthProvider = ({ children }: any) => {
     token: null,
     authenticated: null,
   });
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadToken = async () => {
       const token = await SecureStore.getItemAsync(TOKEN_KEY);
-      setLoading(false);
 
       if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -59,9 +61,5 @@ export const AuthProvider = ({ children }: any) => {
     logout,
     authState,
   };
-  return (
-    <AuthContext.Provider value={value}>
-      {!loading ? children : <Loader visible />}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

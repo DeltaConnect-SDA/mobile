@@ -72,7 +72,7 @@ export const TopBar = () => {
             </Skeleton>
           </View>
         </View>
-        {data?.userDetail?.isVerified ? (
+        {data?.UserDetail?.isVerified ? (
           <Skeleton colorMode="light" show={loading}>
             <View style={styles.verifiedBadge}>
               <Verified color={Colors.PRIMARY_GREEN} />
