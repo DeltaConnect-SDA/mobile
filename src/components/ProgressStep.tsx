@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Colors } from '@/constants/colors';
 import { Cancel, Done, Process, Waiting } from '@/constants/icons';
 import { scale } from 'react-native-size-matters';
@@ -12,6 +12,9 @@ type ProgressStepProps = {
 
 const ProgressStep = (props: ProgressStepProps) => {
   const [status, setStatus] = useState<String>(props.status);
+  useEffect(() => {
+    setStatus(props.status);
+  }, [props.status]);
 
   return (
     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
@@ -36,7 +39,10 @@ const ProgressStep = (props: ProgressStepProps) => {
             width: screenWidth / 3.8,
             height: 5,
             backgroundColor:
-              status == 'Proses' || status == 'Selesai' || status == 'Dibatalkan'
+              status == 'Proses' ||
+              status == 'Verifikasi' ||
+              status == 'Selesai' ||
+              status == 'Dibatalkan'
                 ? Colors.SECONDARY_GREEN
                 : Colors.LINE_STROKE,
           }}
@@ -46,14 +52,20 @@ const ProgressStep = (props: ProgressStepProps) => {
             styles.iconContainer,
             {
               backgroundColor:
-                status === 'Proses' || status === 'Selesai' || status == 'Dibatalkan'
+                status === 'Proses' ||
+                status == 'Verifikasi' ||
+                status === 'Selesai' ||
+                status == 'Dibatalkan'
                   ? Colors.SECONDARY_GREEN
                   : Colors.LINE_STROKE,
             },
           ]}>
           <Process
             color={
-              status === 'Proses' || status === 'Selesai' || status == 'Dibatalkan'
+              status === 'Proses' ||
+              status == 'Verifikasi' ||
+              status === 'Selesai' ||
+              status == 'Dibatalkan'
                 ? Colors.PRIMARY_GREEN
                 : Colors.GRAY
             }
@@ -67,7 +79,10 @@ const ProgressStep = (props: ProgressStepProps) => {
               fontFamily: 'Poppins-Medium',
               fontSize: scale(11.5),
               color:
-                status === 'Proses' || status === 'Selesai' || status == 'Dibatalkan'
+                status === 'Proses' ||
+                status == 'Verifikasi' ||
+                status === 'Selesai' ||
+                status == 'Dibatalkan'
                   ? Colors.PRIMARY_GREEN
                   : Colors.GRAY,
             }}>
