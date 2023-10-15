@@ -87,7 +87,7 @@ const RegisterPasswordStep = ({ route, navigation }) => {
         if (!success) {
           console.log({ message, data }, 'error');
         } else {
-          await authenticate(data[1].access_token);
+          await authenticate(data[1].access_token, data[0].user.id);
           navigation.navigate('RegisterPhoneVerification', { inputs });
         }
       })

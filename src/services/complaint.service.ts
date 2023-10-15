@@ -1,5 +1,5 @@
 import { getToken, useAuth } from '@/context/AuthProvider';
-import { privateAPI, publicAPI } from 'Api/backend';
+import { publicAPI } from 'Api/backend';
 import { CameraCapturedPicture } from 'expo-camera';
 import { Platform } from 'react-native';
 export const createComplaint = async (data: ComplaintDTO, images: CameraCapturedPicture[]) => {
@@ -30,8 +30,29 @@ export const createComplaint = async (data: ComplaintDTO, images: CameraCaptured
       Authorization: `Bearer ${await getToken()}`,
     },
   });
+  return response;
+};
 
-  console.log(JSON.stringify(response));
+export const saveComplaint = async (complaintId: number) => {
+  const response = await publicAPI.post(
+    'v1/complaint/save',
+    { complaintId },
+    {
+      headers: {
+        Authorization: `Bearer ${await getToken()}`,
+      },
+    }
+  );
 
-  return response.data;
+  return response;
+};
+
+export const unSaveComplaint = async (complaintId: number) => {
+  const response = await publicAPI.delete(`v1/complaint/${complaintId}/save`, {
+    headers: {
+      Authorization: `Bearer ${await getToken()}`,
+    },
+  });
+
+  return response;
 };

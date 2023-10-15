@@ -6,6 +6,7 @@ import TimeAgo from 'javascript-time-ago';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { scale, verticalScale } from 'react-native-size-matters';
+import { Skeleton } from 'moti/skeleton';
 
 type ReportCardProps = {
   id: number;
@@ -17,6 +18,7 @@ type ReportCardProps = {
   time: string;
   blurHash: string;
   place: string;
+  loading?: boolean;
 };
 
 const ReportCard: React.FC<ReportCardProps> = ({
@@ -29,44 +31,89 @@ const ReportCard: React.FC<ReportCardProps> = ({
   status,
   statusColor,
   place,
+  loading,
 }) => {
   const timeAgo = new TimeAgo('id');
   const navigation = useNavigation<NativeStackNavigationProp<any, any>>();
-  return (
-    <TouchableOpacity
-      onPress={() => navigation.navigate('ComplaintDetail', { complaintId: id })}
-      style={styles().container}>
-      <Image
-        style={styles().image}
-        source={{
-          uri: cover,
-          headers: { Accept: 'image/*' },
-        }}
-        placeholder={blurHash}
-        contentFit="cover"
-        transition={1000}
-      />
-      <View style={styles().textContainer}>
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <View style={styles().categoryContainer}>
-            <Text style={styles().category}>{category}</Text>
+  if (loading) {
+    return (
+      <TouchableOpacity style={styles().container}>
+        <Skeleton colorMode="light" show>
+          <Image
+            style={styles().image}
+            placeholder="LPEyPa~V-ps.RMxuofW=x[NFRjWB"
+            contentFit="cover"
+            transition={1000}
+          />
+        </Skeleton>
+        <View style={styles().textContainer}>
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <View style={styles().categoryContainer}>
+              <Skeleton colorMode="light" show>
+                <Text style={styles().category}>Loading</Text>
+              </Skeleton>
+            </View>
+          </View>
+          <View style={styles().titleContainer}>
+            <Skeleton colorMode="light" show>
+              <Text numberOfLines={2} style={styles().title}>
+                sedang dimuat.....
+              </Text>
+            </Skeleton>
+          </View>
+          <Skeleton colorMode="light" show>
+            <Text style={styles().category}>Loading</Text>
+          </Skeleton>
+          <View style={styles().footerContainer}>
+            <View style={styles(statusColor).statusContainer}>
+              <Skeleton colorMode="light" show>
+                <Text style={styles(statusColor).status}>Loading</Text>
+              </Skeleton>
+            </View>
+            <Skeleton colorMode="light" show>
+              <Text style={styles().time}>Loading</Text>
+            </Skeleton>
           </View>
         </View>
-        <View style={styles().titleContainer}>
-          <Text numberOfLines={2} style={styles().title}>
-            {title}
-          </Text>
-        </View>
-        <Text style={styles().category}>{place}</Text>
-        <View style={styles().footerContainer}>
-          <View style={styles(statusColor).statusContainer}>
-            <Text style={styles(statusColor).status}>{status}</Text>
+      </TouchableOpacity>
+    );
+  } else {
+    return (
+      <TouchableOpacity
+        onPress={() => navigation.navigate('ComplaintDetail', { complaintId: id })}
+        style={styles().container}>
+        <Image
+          style={styles().image}
+          source={{
+            uri: cover,
+            headers: { Accept: 'image/*' },
+          }}
+          placeholder={blurHash}
+          contentFit="cover"
+          transition={1000}
+        />
+        <View style={styles().textContainer}>
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <View style={styles().categoryContainer}>
+              <Text style={styles().category}>{category}</Text>
+            </View>
           </View>
-          <Text style={styles().time}>{timeAgo.format(new Date(time))}</Text>
+          <View style={styles().titleContainer}>
+            <Text numberOfLines={2} style={styles().title}>
+              {title}
+            </Text>
+          </View>
+          <Text style={styles().category}>{place}</Text>
+          <View style={styles().footerContainer}>
+            <View style={styles(statusColor).statusContainer}>
+              <Text style={styles(statusColor).status}>{status}</Text>
+            </View>
+            <Text style={styles().time}>{timeAgo.format(new Date(time))}</Text>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  }
 };
 
 export default ReportCard;

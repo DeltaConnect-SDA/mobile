@@ -4,18 +4,19 @@ import { Image } from 'expo-image';
 import { scale, verticalScale } from 'react-native-size-matters';
 import { Colors } from '@/constants/colors';
 import { CameraFilled, Cancel, ChevronDown, Close, LiveLocation, Notes } from '@/constants/icons';
-import { Input } from '@/components';
+import { Input, Loader } from '@/components';
 import * as ExpoLocation from 'expo-location';
 import { mapAPI, publicAPI } from 'Api/backend';
 import { ActivityIndicator } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Location } from '@/constants/illustrations';
 import { Button } from '@/components/atom';
-import { Linking } from 'react-native';
+import { Linking, Alert } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { moderateScale } from 'react-native-size-matters';
 import { Error, InputLabel } from '@/components/atom/Input';
 import { createComplaint } from '@/services';
+import { StackActions } from '@react-navigation/native';
 
 type Props = {
   route: any;
@@ -45,6 +46,7 @@ type State = {
   priorities: any;
   priorityOpen: any;
   priorityLoading: boolean;
+  storeLoading: boolean;
 };
 
 DropDownPicker.setLanguage('ID');
@@ -74,6 +76,7 @@ export default class AddComplaintDetails extends Component<Props, State> {
       priorities: [],
       priorityOpen: false,
       priorityLoading: true,
+      storeLoading: false,
     };
   }
 
@@ -251,7 +254,7 @@ export default class AddComplaintDetails extends Component<Props, State> {
       }));
     }
     if (valid) {
-      console.log('valid');
+      this.setState({ storeLoading: true });
       try {
         const res = await createComplaint(
           {
@@ -267,8 +270,38 @@ export default class AddComplaintDetails extends Component<Props, State> {
           },
           this.state.photos
         );
+
+        const { success } = res.data;
+
+        if (success) {
+          this.setState({ storeLoading: false });
+          this.props.navigation.navigate('Success', {
+            title: 'Laporan Dikirim!',
+            description:
+              'Selamat! Laporanmu kami terima dan segera kami ko-ordinasikan dengan pihak terkait!',
+            toRoute: 'Riwayat',
+            cta: 'Selesai',
+            illustration: 'send',
+          });
+        }
       } catch (err) {
-        console.log(JSON.stringify(err.response));
+        this.setState({ storeLoading: false });
+        console.log(err.response);
+        if (err.response.status === 401) {
+          Alert.alert(
+            'Error', // judul
+            err.response.data.message, // pesan
+            [
+              {
+                text: 'OK',
+                onPress: async () => {
+                  this.props.navigation.dispatch(StackActions.replace('BottomNav'));
+                },
+              },
+            ]
+          );
+        }
+        console.error('Create complaint error:', JSON.stringify(err.message));
       }
     }
   };
@@ -341,279 +374,282 @@ export default class AddComplaintDetails extends Component<Props, State> {
         );
       } else {
         return (
-          <ScrollView style={{ backgroundColor: 'white' }}>
-            <View style={styles.container}>
-              {/* Bukti Foto */}
-              <View style={{ gap: 10, paddingBottom: 20 }}>
-                <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: scale(14) }}>
-                  Bukti Foto
-                </Text>
-                <View
-                  style={[
-                    styles.photosContainer,
-                    this.state.photos.length < 4 && { justifyContent: 'flex-start', gap: 10 },
-                  ]}>
-                  {this.state.photos.map((photo, key) => (
-                    <View key={key}>
-                      <Image
-                        source={photo.uri}
-                        contentFit="cover"
-                        style={{ width: scale(70), aspectRatio: 1 / 1, borderRadius: 12 }}
-                      />
-                      <TouchableOpacity
-                        onPress={() => this.deletePhoto(key)}
-                        style={{
-                          right: 0,
-                          position: 'absolute',
-                          borderRadius: 100,
-                        }}>
-                        <Cancel color={'white'} />
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-                  {renderAddMore}
+          <>
+            {this.state.storeLoading && <Loader visible />}
+            <ScrollView style={{ backgroundColor: 'white' }}>
+              <View style={styles.container}>
+                {/* Bukti Foto */}
+                <View style={{ gap: 10, paddingBottom: 20 }}>
+                  <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: scale(14) }}>
+                    Bukti Foto
+                  </Text>
+                  <View
+                    style={[
+                      styles.photosContainer,
+                      this.state.photos.length < 4 && { justifyContent: 'flex-start', gap: 10 },
+                    ]}>
+                    {this.state.photos.map((photo, key) => (
+                      <View key={key}>
+                        <Image
+                          source={photo.uri}
+                          contentFit="cover"
+                          style={{ width: scale(70), aspectRatio: 1 / 1, borderRadius: 12 }}
+                        />
+                        <TouchableOpacity
+                          onPress={() => this.deletePhoto(key)}
+                          style={{
+                            right: 0,
+                            position: 'absolute',
+                            borderRadius: 100,
+                          }}>
+                          <Cancel color={'white'} />
+                        </TouchableOpacity>
+                      </View>
+                    ))}
+                    {renderAddMore}
+                  </View>
+                  <Text
+                    style={{
+                      fontFamily: 'Poppins-Regular',
+                      fontSize: scale(11.5),
+                      color: Colors.GRAY,
+                      alignSelf: 'flex-end',
+                    }}>
+                    {this.state.photos.length}/4 foto
+                  </Text>
+                  {this.state.photos.length == 0 && this.state.errorMessage?.photos ? (
+                    <Error title={this.state.errorMessage?.photos} />
+                  ) : null}
                 </View>
-                <Text
-                  style={{
-                    fontFamily: 'Poppins-Regular',
-                    fontSize: scale(11.5),
-                    color: Colors.GRAY,
-                    alignSelf: 'flex-end',
-                  }}>
-                  {this.state.photos.length}/4 foto
-                </Text>
-                {this.state.photos.length == 0 && this.state.errorMessage?.photos ? (
-                  <Error title={this.state.errorMessage?.photos} />
-                ) : null}
-              </View>
 
-              {/* Judul */}
-              <View>
-                <Input
-                  onChangeText={(text) => this.setState({ title: text })}
-                  maxLength={70}
-                  title="Judul"
-                  type="Text"
-                  placeholder="Tambahkan judul laporan"
-                  error={this.state.errorMessage?.title}
-                  onFocus={() => this.handleError('', 'title')}
-                />
-                <Text
-                  style={{
-                    fontFamily: 'Poppins-Regular',
-                    fontSize: scale(11.5),
-                    color: Colors.GRAY,
-                    marginTop: 5,
-                    alignSelf: 'flex-end',
-                  }}>
-                  {this.state.title?.length || 0} /70 karakter
-                </Text>
-              </View>
-
-              {/* Lokasi GPS */}
-              <View>
-                <Input
-                  icon={<LiveLocation />}
-                  multiline={true}
-                  editable={false}
-                  textAlign="left"
-                  color={Colors.GRAY}
-                  value={this.state.GPSaddress}
-                  title="Lokasi GPS"
-                  type="Text"
-                  placeholder="Lokasi ditambahkan otomatis"
-                />
-                {!this.state.locationReady && (
-                  <Button
+                {/* Judul */}
+                <View>
+                  <Input
+                    onChangeText={(text) => this.setState({ title: text })}
+                    maxLength={70}
+                    title="Judul"
                     type="Text"
-                    size="Md"
-                    title="Dapatkan Lokasi"
-                    onPress={() => this.getLocation()}
+                    placeholder="Tambahkan judul laporan"
+                    error={this.state.errorMessage?.title}
+                    onFocus={() => this.handleError('', 'title')}
                   />
-                )}
-                {!this.state.locationReady && this.state.errorMessage?.GPSaddress ? (
-                  <Error title={this.state.errorMessage?.GPSaddress} />
-                ) : null}
-              </View>
+                  <Text
+                    style={{
+                      fontFamily: 'Poppins-Regular',
+                      fontSize: scale(11.5),
+                      color: Colors.GRAY,
+                      marginTop: 5,
+                      alignSelf: 'flex-end',
+                    }}>
+                    {this.state.title?.length || 0} /70 karakter
+                  </Text>
+                </View>
 
-              {/* Detail Lokasi */}
-              <View>
-                <Input
-                  maxLength={200}
-                  onChangeText={(text) => this.setState({ detail_location: text })}
-                  icon={<Notes color={Colors.TEXT} />}
-                  title="Detail Lokasi"
-                  type="Text"
-                  placeholder="Tambahkan Detail Lokasi"
-                  error={this.state.errorMessage?.detail_location}
-                  onFocus={() => this.handleError('', 'detail_location')}
-                />
-                <Text
-                  style={{
-                    fontFamily: 'Poppins-Regular',
-                    fontSize: scale(11.5),
-                    color: Colors.GRAY,
-                    marginTop: 5,
-                    alignSelf: 'flex-end',
-                  }}>
-                  {this.state.detail_location?.length || 0} /600 karakter
-                </Text>
-              </View>
+                {/* Lokasi GPS */}
+                <View>
+                  <Input
+                    icon={<LiveLocation />}
+                    multiline={true}
+                    editable={false}
+                    textAlign="left"
+                    color={Colors.GRAY}
+                    value={this.state.GPSaddress}
+                    title="Lokasi GPS"
+                    type="Text"
+                    placeholder="Lokasi ditambahkan otomatis"
+                  />
+                  {!this.state.locationReady && (
+                    <Button
+                      type="Text"
+                      size="Md"
+                      title="Dapatkan Lokasi"
+                      onPress={() => this.getLocation()}
+                    />
+                  )}
+                  {!this.state.locationReady && this.state.errorMessage?.GPSaddress ? (
+                    <Error title={this.state.errorMessage?.GPSaddress} />
+                  ) : null}
+                </View>
 
-              {/* Deskripsi */}
-              <View>
-                <Input
-                  onChangeText={(text) => this.setState({ description: text })}
-                  maxLength={1200}
-                  multiline
-                  textAlign="left"
-                  title="Deskripsi"
-                  type="Text"
-                  style={{
-                    height: 'auto',
-                    alignItems: 'flex-start',
-                    justifyContent: 'flex-start',
-                    textAlignVertical: this.state.description ? 'top' : 'center',
-                  }}
-                  placeholder="Tambahkan deskripsi"
-                  error={this.state.errorMessage?.description}
-                  onFocus={() => this.handleError('', 'description')}
-                />
-                <Text
-                  style={{
-                    fontFamily: 'Poppins-Regular',
-                    fontSize: scale(11.5),
-                    color: Colors.GRAY,
-                    marginTop: 5,
-                    alignSelf: 'flex-end',
-                  }}>
-                  {this.state.description?.length || 0} /1200 karakter
-                </Text>
-              </View>
+                {/* Detail Lokasi */}
+                <View>
+                  <Input
+                    maxLength={200}
+                    onChangeText={(text) => this.setState({ detail_location: text })}
+                    icon={<Notes color={Colors.TEXT} />}
+                    title="Detail Lokasi"
+                    type="Text"
+                    placeholder="Tambahkan Detail Lokasi"
+                    error={this.state.errorMessage?.detail_location}
+                    onFocus={() => this.handleError('', 'detail_location')}
+                  />
+                  <Text
+                    style={{
+                      fontFamily: 'Poppins-Regular',
+                      fontSize: scale(11.5),
+                      color: Colors.GRAY,
+                      marginTop: 5,
+                      alignSelf: 'flex-end',
+                    }}>
+                    {this.state.detail_location?.length || 0} /600 karakter
+                  </Text>
+                </View>
 
-              {/* Kategori */}
-              <View>
-                <InputLabel title="Kategori" />
-                <DropDownPicker
-                  loading={this.state.categoryLoading}
-                  searchable={true}
-                  searchContainerStyle={{
-                    borderColor: Colors.LINE_STROKE,
-                  }}
-                  searchTextInputStyle={{
-                    fontFamily: 'Poppins-Regular',
-                    fontSize: scale(11.5),
-                    color: Colors.TEXT,
-                    borderColor: Colors.LINE_STROKE,
-                  }}
-                  searchPlaceholderTextColor={Colors.GRAY}
-                  modalContentContainerStyle={{
-                    backgroundColor: 'white',
-                  }}
-                  listItemContainerStyle={{
-                    paddingHorizontal: 20,
-                    height: 'auto',
-                  }}
-                  listItemLabelStyle={{
-                    padding: 20,
-                    fontFamily: 'Poppins-Medium',
-                    fontSize: scale(11.5),
-                    color: Colors.TEXT,
-                  }}
-                  selectedItemLabelStyle={{
-                    backgroundColor: Colors.LIGHT_GRAY,
-                  }}
-                  listMode="MODAL"
-                  modalProps={{
-                    animationType: 'slide',
-                  }}
-                  ArrowDownIconComponent={({ style }) => <ChevronDown style={style} />}
-                  modalTitle="Pilih Kategori"
-                  placeholder="Pilih Kategori"
-                  style={{
-                    borderWidth: 0,
-                    backgroundColor: Colors.LIGHT_GRAY,
-                    paddingHorizontal: moderateScale(18),
-                    paddingVertical: moderateScale(18),
-                    borderRadius: 14,
-                  }}
-                  textStyle={{
-                    color: Colors.TEXT,
-                    fontFamily: 'Poppins-Medium',
-                    fontSize: scale(11.5),
-                  }}
-                  CloseIconComponent={({ style }) => <Close style={style} />}
-                  open={this.state.categoryOpen}
-                  value={this.state.categoryId}
-                  items={this.state.categories}
-                  setOpen={(open) =>
-                    this.setState({
-                      categoryOpen: open,
-                    })
-                  }
-                  setValue={(callback) =>
-                    this.setState((prevState) => ({
-                      categoryId: callback(prevState),
-                    }))
-                  }
-                  setItems={(callback) => this.setState((items) => ({ categories: items }))}
-                />
-                {!this.state.categoryId && this.state.errorMessage?.category ? (
-                  <Error title={this.state.errorMessage?.category} />
-                ) : null}
-              </View>
+                {/* Deskripsi */}
+                <View>
+                  <Input
+                    onChangeText={(text) => this.setState({ description: text })}
+                    maxLength={1200}
+                    multiline
+                    textAlign="left"
+                    title="Deskripsi"
+                    type="Text"
+                    style={{
+                      height: 'auto',
+                      alignItems: 'flex-start',
+                      justifyContent: 'flex-start',
+                      textAlignVertical: this.state.description ? 'top' : 'center',
+                    }}
+                    placeholder="Tambahkan deskripsi"
+                    error={this.state.errorMessage?.description}
+                    onFocus={() => this.handleError('', 'description')}
+                  />
+                  <Text
+                    style={{
+                      fontFamily: 'Poppins-Regular',
+                      fontSize: scale(11.5),
+                      color: Colors.GRAY,
+                      marginTop: 5,
+                      alignSelf: 'flex-end',
+                    }}>
+                    {this.state.description?.length || 0} /1200 karakter
+                  </Text>
+                </View>
 
-              {/* Urgensi */}
-              <View>
-                <InputLabel title="Urgensi" />
-                <DropDownPicker
-                  loading={this.state.priorityLoading}
-                  listMode="SCROLLVIEW"
-                  ArrowDownIconComponent={({ style }) => <ChevronDown style={style} />}
-                  placeholder="Pilih Urgensi"
-                  style={{
-                    borderWidth: 0,
-                    backgroundColor: Colors.LIGHT_GRAY,
-                    paddingHorizontal: moderateScale(18),
-                    paddingVertical: moderateScale(18),
-                    borderRadius: 14,
-                  }}
-                  dropDownContainerStyle={{
-                    borderColor: Colors.LIGHT_GRAY,
-                  }}
-                  textStyle={{
-                    color: Colors.TEXT,
-                    fontFamily: 'Poppins-Medium',
-                    fontSize: scale(11.5),
-                  }}
-                  CloseIconComponent={({ style }) => <Close style={style} />}
-                  open={this.state.priorityOpen}
-                  value={this.state.priorityId}
-                  items={this.state.priorities}
-                  setOpen={(open) =>
-                    this.setState({
-                      priorityOpen: open,
-                    })
-                  }
-                  setValue={(callback) =>
-                    this.setState((prevState) => ({
-                      priorityId: callback(prevState),
-                    }))
-                  }
-                  setItems={(callback) => this.setState((items) => ({ priorities: items }))}
+                {/* Kategori */}
+                <View>
+                  <InputLabel title="Kategori" />
+                  <DropDownPicker
+                    loading={this.state.categoryLoading}
+                    searchable={true}
+                    searchContainerStyle={{
+                      borderColor: Colors.LINE_STROKE,
+                    }}
+                    searchTextInputStyle={{
+                      fontFamily: 'Poppins-Regular',
+                      fontSize: scale(11.5),
+                      color: Colors.TEXT,
+                      borderColor: Colors.LINE_STROKE,
+                    }}
+                    searchPlaceholderTextColor={Colors.GRAY}
+                    modalContentContainerStyle={{
+                      backgroundColor: 'white',
+                    }}
+                    listItemContainerStyle={{
+                      paddingHorizontal: 20,
+                      height: 'auto',
+                    }}
+                    listItemLabelStyle={{
+                      padding: 20,
+                      fontFamily: 'Poppins-Medium',
+                      fontSize: scale(11.5),
+                      color: Colors.TEXT,
+                    }}
+                    selectedItemLabelStyle={{
+                      backgroundColor: Colors.LIGHT_GRAY,
+                    }}
+                    listMode="MODAL"
+                    modalProps={{
+                      animationType: 'slide',
+                    }}
+                    ArrowDownIconComponent={({ style }) => <ChevronDown style={style} />}
+                    modalTitle="Pilih Kategori"
+                    placeholder="Pilih Kategori"
+                    style={{
+                      borderWidth: 0,
+                      backgroundColor: Colors.LIGHT_GRAY,
+                      paddingHorizontal: moderateScale(18),
+                      paddingVertical: moderateScale(18),
+                      borderRadius: 14,
+                    }}
+                    textStyle={{
+                      color: Colors.TEXT,
+                      fontFamily: 'Poppins-Medium',
+                      fontSize: scale(11.5),
+                    }}
+                    CloseIconComponent={({ style }) => <Close style={style} />}
+                    open={this.state.categoryOpen}
+                    value={this.state.categoryId}
+                    items={this.state.categories}
+                    setOpen={(open) =>
+                      this.setState({
+                        categoryOpen: open,
+                      })
+                    }
+                    setValue={(callback) =>
+                      this.setState((prevState) => ({
+                        categoryId: callback(prevState),
+                      }))
+                    }
+                    setItems={(callback) => this.setState((items) => ({ categories: items }))}
+                  />
+                  {!this.state.categoryId && this.state.errorMessage?.category ? (
+                    <Error title={this.state.errorMessage?.category} />
+                  ) : null}
+                </View>
+
+                {/* Urgensi */}
+                <View>
+                  <InputLabel title="Urgensi" />
+                  <DropDownPicker
+                    loading={this.state.priorityLoading}
+                    listMode="SCROLLVIEW"
+                    ArrowDownIconComponent={({ style }) => <ChevronDown style={style} />}
+                    placeholder="Pilih Urgensi"
+                    style={{
+                      borderWidth: 0,
+                      backgroundColor: Colors.LIGHT_GRAY,
+                      paddingHorizontal: moderateScale(18),
+                      paddingVertical: moderateScale(18),
+                      borderRadius: 14,
+                    }}
+                    dropDownContainerStyle={{
+                      borderColor: Colors.LIGHT_GRAY,
+                    }}
+                    textStyle={{
+                      color: Colors.TEXT,
+                      fontFamily: 'Poppins-Medium',
+                      fontSize: scale(11.5),
+                    }}
+                    CloseIconComponent={({ style }) => <Close style={style} />}
+                    open={this.state.priorityOpen}
+                    value={this.state.priorityId}
+                    items={this.state.priorities}
+                    setOpen={(open) =>
+                      this.setState({
+                        priorityOpen: open,
+                      })
+                    }
+                    setValue={(callback) =>
+                      this.setState((prevState) => ({
+                        priorityId: callback(prevState),
+                      }))
+                    }
+                    setItems={(callback) => this.setState((items) => ({ priorities: items }))}
+                  />
+                  {!this.state.priorityId && this.state.errorMessage?.priority ? (
+                    <Error title={this.state.errorMessage?.priority} />
+                  ) : null}
+                </View>
+                <Button
+                  type="Primary"
+                  size="Lg"
+                  title="Kirim Laporan"
+                  onPress={() => this.validate()}
                 />
-                {!this.state.priorityId && this.state.errorMessage?.priority ? (
-                  <Error title={this.state.errorMessage?.priority} />
-                ) : null}
               </View>
-              <Button
-                type="Primary"
-                size="Lg"
-                title="Kirim Laporan"
-                onPress={() => this.validate()}
-              />
-            </View>
-          </ScrollView>
+            </ScrollView>
+          </>
         );
       }
     } else {

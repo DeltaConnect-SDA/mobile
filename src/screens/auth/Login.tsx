@@ -69,8 +69,9 @@ const Login = () => {
         setLoading(false);
         const result = res.data;
         const { data, success } = result;
+
         if (success) {
-          await authenticate(data.access_token);
+          await authenticate(data[1].access_token, data[0].user.id);
           navigation.navigate('Success', {
             title: 'Selamat Datang Kembali!',
             description: 'Selamat datang! Nikmati kembali kemudahan dengan DeltaConnect.',
@@ -83,10 +84,11 @@ const Login = () => {
       })
       .catch((error) => {
         setLoading(false);
-        if (error.response.status === 400 || error.response.status === 404) {
-          handleError(error.response.data.message, 'general');
+
+        if (error?.response?.status === 400 || error?.response?.status === 404) {
+          handleError(error.response?.data?.message, 'general');
         } else {
-          console.error('Login error:', error.response.data);
+          console.error('Login error:', error);
         }
       });
   };

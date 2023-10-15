@@ -15,6 +15,7 @@ import {
 } from '@/screens';
 import { BottomTabNavigation } from '@/navigations';
 import 'react-native-gesture-handler';
+import SaveOutline from 'assets/icons/SaveOutline.svg';
 import { Colors } from '@/constants/colors';
 import TimeAgo from 'javascript-time-ago';
 import id from 'javascript-time-ago/locale/id';
@@ -22,11 +23,11 @@ import Test from '@/components/test';
 import SuccessState from '@/screens/SuccessState';
 import AddComplaintDetails from '@/screens/complaint/AddComplaintDetails';
 import Camera from '@/screens/complaint/Camera';
-import { ChevronLeft } from '@/constants/icons';
-import { Text, TouchableOpacity } from 'react-native';
 import { AuthProvider, useAuth } from '@/context/AuthProvider';
 import 'react-native-reanimated';
 import 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
+import { SaveFilled } from '@/constants/icons';
 
 TimeAgo.addDefaultLocale(id);
 

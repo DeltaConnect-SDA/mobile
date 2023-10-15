@@ -33,6 +33,8 @@ import Close from 'assets/icons/Close.svg';
 import UserEdit from 'assets/icons/UserEdit.svg';
 import Password from 'assets/icons/Password.svg';
 import Logout from 'assets/icons/Logout.svg';
+import SaveOutline from 'assets/icons/SaveOutline.svg';
+import SaveFilled from 'assets/icons/SaveFilled.svg';
 
 export {
   Back,
@@ -70,4 +72,5 @@ export {
   UserEdit,
   Password,
   Logout,
+  SaveFilled,
 };

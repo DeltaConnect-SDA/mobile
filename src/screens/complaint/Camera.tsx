@@ -56,8 +56,13 @@ export class Camera extends Component<Props, State> {
   };
 
   onPictureSaved = async (photo) => {
+    const result = await Image.compress(photo.uri, {
+      compressionMethod: 'manual',
+      maxWidth: 600,
+      quality: 0.5,
+    });
     if (this.props.route.params?.retake) {
-      const result = await Image.compress(photo.uri);
+      console.log(result, 'result');
       this.photos = [...this.props.route.params.photos, { ...photo, uri: result }];
       this.props.navigation.dispatch(
         CommonActions.navigate({
@@ -66,7 +71,7 @@ export class Camera extends Component<Props, State> {
         })
       );
     } else {
-      this.props.navigation.navigate('AddComplaintDetails', { photo: [photo] });
+      this.props.navigation.navigate('AddComplaintDetails', { photo: [{ ...photo, uri: result }] });
     }
   };
 

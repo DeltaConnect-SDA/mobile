@@ -21,10 +21,10 @@ const renderItem = ({ item }) => {
         style={{ aspectRatio: 3 / 4, height: screenWidth }}
         contentFit="cover"
         source={{
-          uri: item.url,
+          uri: item.path,
           headers: { Accept: 'image/*' },
         }}
-        placeholder={item.blurHash}
+        placeholder={item.placeholder}
       />
     </View>
   );
