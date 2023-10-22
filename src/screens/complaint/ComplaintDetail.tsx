@@ -352,7 +352,7 @@ const ComplaintDetail = ({ route, navigation }) => {
                   type="Outline"
                   size="Md"
                   title="Lihat Detail Status"
-                  onPress={() => navigation.navigate('Beranda')}
+                  onPress={() => navigation.navigate('ComplaintStatus', { complaintId })}
                 />
               </View>
             </View>
