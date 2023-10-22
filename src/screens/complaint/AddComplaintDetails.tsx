@@ -91,7 +91,7 @@ export default class AddComplaintDetails extends Component<Props, State> {
     this.setState({ granted: true });
     this.setState({ loading: false });
     let location = await ExpoLocation.getCurrentPositionAsync({
-      accuracy: ExpoLocation.Accuracy.Highest,
+      accuracy: ExpoLocation.Accuracy.BestForNavigation,
     });
     console.log(location);
 

@@ -5,6 +5,7 @@ import { scale } from 'react-native-size-matters';
 import { Colors } from '@/constants/colors';
 import { Button } from '@/components/atom';
 import { useEffect } from 'react';
+import { Error } from '@/components/atom/Input';
 
 type State = {
   email: string;
@@ -27,6 +28,12 @@ const Register = ({ route, navigation }) => {
   useEffect(() => {
     if (params?.errors) {
       params.errors.map((err, key) => {
+        if (err.field == 'email' || err.field == 'phone') {
+          return setErrors((prevState) => ({
+            ...prevState,
+            general: 'Email atau nomor telepon telah terdaftar, silahkan masuk!',
+          }));
+        }
         return setErrors((prevState) => ({ ...prevState, [err.field]: err.error[0] }));
       });
     }
@@ -109,6 +116,7 @@ const Register = ({ route, navigation }) => {
       <TopNav title="Kembali" onPress={() => navigation.goBack()} />
       <Text style={styles.heading}>Mulai Sekarang!</Text>
       <Text style={styles.textBody}>Daftar dan mulai menikmati kemudahan!!</Text>
+      {errors?.general && <Error title={errors?.general} />}
       <View style={styles.InputWrapper}>
         <Input
           enterKeyHint="next"

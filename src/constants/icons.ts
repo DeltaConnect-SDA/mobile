@@ -35,6 +35,9 @@ import Password from 'assets/icons/Password.svg';
 import Logout from 'assets/icons/Logout.svg';
 import SaveOutline from 'assets/icons/SaveOutline.svg';
 import SaveFilled from 'assets/icons/SaveFilled.svg';
+import Search from 'assets/icons/Search.svg';
+import Sort from 'assets/icons/Sort.svg';
+import Filter from 'assets/icons/Filter.svg';
 
 export {
   Back,
@@ -73,4 +76,8 @@ export {
   Password,
   Logout,
   SaveFilled,
+  SaveOutline,
+  Search,
+  Sort,
+  Filter
 };

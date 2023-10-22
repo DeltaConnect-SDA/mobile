@@ -7,111 +7,20 @@ import {
   RefreshControl,
   TouchableOpacity,
 } from 'react-native';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { ComplaintPhotos, ProgressStep } from '@/components';
 import { Colors } from '@/constants/colors';
-import { Button } from '@/components/atom';
-import { scale } from 'react-native-size-matters';
+import { Button, Input } from '@/components/atom';
+import { scale, verticalScale } from 'react-native-size-matters';
 import { publicAPI } from 'Api/backend';
 import { useAuth } from '@/context/AuthProvider';
-import { SaveFilled } from '@/constants/icons';
+import { Cancel, SaveFilled } from '@/constants/icons';
 import SaveOutline from 'assets/icons/SaveOutline.svg';
 import { saveComplaint, unSaveComplaint } from '@/services';
-
-const data = [
-  {
-    id: 1,
-    title: 'Mohon perbaiki saluran air depan SMAN 1 TAMAN',
-    photos: [
-      {
-        url: 'https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/report1.jpg',
-        blurHash: 'LcKd_5t7xuRj~qazt7WUM|ayofay',
-      },
-      {
-        url: 'https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/1696769817201%20(1).jpg',
-        blurHash: 'LcKd_5t7xuRj~qazt7WUM|ayofay',
-      },
-      {
-        url: 'https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/report2.jpg',
-        blurHash: 'LcKd_5t7xuRj~qazt7WUM|ayofay',
-      },
-    ],
-    category: 'Drainase',
-    burHash: 'LPEyPa~V-ps.RMxuofW=x[NFRjWB',
-    time: '2023-10-08T11:24:09.319Z',
-    refId: 'DC-LP-170923-00027',
-    status: 'Menunggu',
-    statusColor: 'ORANGE',
-    place: 'Jemundo',
-    detail_location:
-      'Jl. Raya Sawunggaling No.2, Jemundo, Kec. Taman, Kabupaten Sidoarjo, Jawa Timur 61257',
-    priority: {
-      title: '!!! Tinggi',
-      color: 'RED',
-    },
-    description:
-      'Mohon dengan hormat untuk segera menindaklanjuti perbaikan saluran air di depan SMAN 1 TAMAN. Saat ini, saluran air tersebut terlihat tersumbat, menyebabkan genangan air di sekitarnya. Keadaan ini tidak hanya mengganggu, tetapi juga berpotensi menjadi masalah keselamatan bagi para siswa yang melintas dan warga sekitar.\n\nKami memahami betapa pentingnya lingkungan yang aman dan terjaga. Oleh karena itu, perbaikan segera diperlukan untuk mengatasi masalah ini. Bila dibiarkan, genangan air dapat menyebabkan berbagai masalah, termasuk risiko kecelakaan dan kerusakan lebih lanjut pada infrastruktur sekitar.\n\nKami berharap pihak terkait dapat segera melakukan inspeksi mendalam dan menanggapi permasalahan ini dengan segera. Kontribusi dan kerjasama Anda dalam menjaga keamanan dan kenyamanan lingkungan sangat dihargai. Terima kasih atas perhatian dan respons cepatnya dalam menangani laporan ini.',
-  },
-  {
-    id: 2,
-    title: 'Pohon tumbang di pasar wage menyebabkan kemacetan yang sangat parah',
-    photos: [
-      {
-        url: 'https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/report2.jpg',
-        blurHash: 'LcKd_5t7xuRj~qazt7WUM|ayofay',
-      },
-      {
-        url: 'https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/report3.jpg',
-        blurHash: 'LcKd_5t7xuRj~qazt7WUM|ayofay',
-      },
-    ],
-    category: 'Pohon',
-    burHash: 'LPEyPa~V-ps.RMxuofW=x[NFRjWB',
-    time: '2023-10-08T11:24:09.319Z',
-    refId: 'DC-LP-170923-00027',
-    status: 'Dibatalkan',
-    statusColor: 'TOSCA',
-    activity: {},
-    place: 'Jemundo',
-    detail_location:
-      'Jl. Raya Sawunggaling No.2, Jemundo, Kec. Taman, Kabupaten Sidoarjo, Jawa Timur 61257',
-    priority: {
-      title: '!!! Tinggi',
-      color: 'RED',
-    },
-    description:
-      'Mohon dengan hormat untuk segera menindaklanjuti perbaikan saluran air di depan SMAN 1 TAMAN. Saat ini, saluran air tersebut terlihat tersumbat, menyebabkan genangan air di sekitarnya. Keadaan ini tidak hanya mengganggu, tetapi juga berpotensi menjadi masalah keselamatan bagi para siswa yang melintas dan warga sekitar.\n\nKami memahami betapa pentingnya lingkungan yang aman dan terjaga. Oleh karena itu, perbaikan segera diperlukan untuk mengatasi masalah ini. Bila dibiarkan, genangan air dapat menyebabkan berbagai masalah, termasuk risiko kecelakaan dan kerusakan lebih lanjut pada infrastruktur sekitar.\n\nKami berharap pihak terkait dapat segera melakukan inspeksi mendalam dan menanggapi permasalahan ini dengan segera. Kontribusi dan kerjasama Anda dalam menjaga keamanan dan kenyamanan lingkungan sangat dihargai. Terima kasih atas perhatian dan respons cepatnya dalam menangani laporan ini.',
-  },
-  {
-    id: 3,
-    title: 'Lampu jalan di jalan raya kletek mati, sudah 1 minggu belum ada tindak lanjut.',
-    photos: [
-      {
-        url: 'https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/1696769817201%20(1).jpg',
-        blurHash: 'LcKd_5t7xuRj~qazt7WUM|ayofay',
-      },
-      {
-        url: 'https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/1696769817201%20(1).jpg',
-        blurHash: 'LcKd_5t7xuRj~qazt7WUM|ayofay',
-      },
-    ],
-    category: 'Lampu',
-    burHash: 'LPEyPa~V-ps.RMxuofW=x[NFRjWB',
-    time: '2023-10-08T11:24:09.319Z',
-    refId: 'DC-LP-170923-00027',
-    status: 'Proses',
-    statusColor: 'TOSCA',
-    place: 'Jemundo',
-    detail_location:
-      'Jl. Raya Sawunggaling No.2, Jemundo, Kec. Taman, Kabupaten Sidoarjo, Jawa Timur 61257',
-    priority: {
-      title: '!!! Tinggi',
-      color: 'RED',
-    },
-    description:
-      'Mohon dengan hormat untuk segera menindaklanjuti perbaikan saluran air di depan SMAN 1 TAMAN. Saat ini, saluran air tersebut terlihat tersumbat, menyebabkan genangan air di sekitarnya. Keadaan ini tidak hanya mengganggu, tetapi juga berpotensi menjadi masalah keselamatan bagi para siswa yang melintas dan warga sekitar.\n\nKami memahami betapa pentingnya lingkungan yang aman dan terjaga. Oleh karena itu, perbaikan segera diperlukan untuk mengatasi masalah ini. Bila dibiarkan, genangan air dapat menyebabkan berbagai masalah, termasuk risiko kecelakaan dan kerusakan lebih lanjut pada infrastruktur sekitar.\n\nKami berharap pihak terkait dapat segera melakukan inspeksi mendalam dan menanggapi permasalahan ini dengan segera. Kontribusi dan kerjasama Anda dalam menjaga keamanan dan kenyamanan lingkungan sangat dihargai. Terima kasih atas perhatian dan respons cepatnya dalam menangani laporan ini.',
-  },
-];
+import { Status } from '@/constants/status';
+import { Rating } from '@kolking/react-native-rating';
+import UserAvatar from '@muhzi/react-native-user-avatar';
+import { StackActions } from '@react-navigation/native';
 
 const SaveButton = ({ navigation, saved, handleSave }) => {
   navigation.setOptions({
@@ -128,68 +37,161 @@ const ComplaintDetail = ({ route, navigation }) => {
   const [readMore, setReadMore] = useState<Boolean>(false);
   const [complaint, setComplaint] = useState<any>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [numberOfLines, setNumberOfLines] = useState(1);
   const [saved, setSaved] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [ratingText, setRatingText] = useState(null);
+  const [ratingError, setRatingError] = useState(null);
   const { authState } = useAuth();
 
   const handleData = async () => {
     if (authState.authenticated) {
       try {
-        const complaint = await publicAPI.get(`v1/complaint/${complaintId}/auth`, {
+        const complaint = await publicAPI.get(`v1/complaints/${complaintId}/auth`, {
           headers: { Authorization: `Bearer ${authState.token}` },
         });
-        setIsLoading(false);
+
         const { data } = complaint.data;
+        console.log(data);
+
+        setComplaint(data);
+        setIsLoading(false);
+
         if (data.ComplaintSaved.length !== 0) {
           setSaved(true);
         } else {
           setSaved(false);
         }
-        setComplaint(data);
       } catch (err) {
         setIsLoading(false);
 
-        if (err.response.status === 404) {
+        if (err.response?.status === 404) {
           navigation.goBack();
         }
-        console.error(err.response);
+        console.error(err?.response || err, 'catch fetch');
       }
     } else {
       try {
-        const complaint = await publicAPI.get(`v1/complaint/${complaintId}`);
+        const complaint = await publicAPI.get(`v1/complaints/${complaintId}`);
         setIsLoading(false);
         const { data } = complaint.data;
         setComplaint(data);
       } catch (err) {
         setIsLoading(false);
 
-        if (err.response.status === 404) {
+        if (err.response?.status === 404) {
           navigation.goBack();
         }
-        console.error(err.response);
+        console.error(err?.response || err, 'catch fetch');
       }
     }
   };
 
   const handleSave = async (prevSaved) => {
-    setSaved(!saved);
-    if (saved) {
-      setSaved(false);
-      try {
-        await unSaveComplaint(complaint.id);
-      } catch (err) {
-        console.error(err.response);
+    if (authState.authenticated) {
+      setSaved(!saved);
+      if (saved) {
+        setSaved(false);
+        try {
+          await unSaveComplaint(complaint.id);
+        } catch (err) {
+          console.error(err.response, 'catch save');
 
-        setSaved(true);
+          setSaved(true);
+        }
+      } else {
+        try {
+          await saveComplaint(complaint.id);
+        } catch (err) {
+          console.error(err.response, 'catch save');
+          setSaved(false);
+        }
       }
     } else {
+      navigation.navigate('Onboarding');
+    }
+  };
+
+  const handleChangeRating = useCallback((value: number) => setRating(Math.round(value)), [rating]);
+
+  const validateRating = () => {
+    let valid = true;
+
+    if (isLoading) {
+      valid = false;
+    }
+
+    if (rating === 0) {
+      valid = false;
+    }
+
+    if (!ratingText) {
+      valid = false;
+      setRatingError('Mohon berikan penilaian dahulu!');
+    } else if (ratingText.length < 8) {
+      valid = false;
+      setRatingError('Penilaian minimal 8 karakter!');
+    }
+
+    if (valid) {
+      handleRateComplaint();
+    }
+  };
+
+  const handleCancelComplaint = async () => {
+    if (authState.authenticated) {
+      setIsLoading(true);
       try {
-        await saveComplaint(complaint.id);
+        await publicAPI.patch(
+          `v1/complaints/${complaintId}/cancel`,
+          {},
+          {
+            headers: { Authorization: `Bearer ${authState.token}` },
+          }
+        );
+
+        navigation.navigate('Riwayat');
+        setIsLoading(false);
       } catch (err) {
-        console.error(err.response);
-        setSaved(false);
+        setIsLoading(false);
+
+        if (err.response?.status === 404) {
+          navigation.goBack();
+        }
+        console.error(err?.response || err, 'catch fetch');
       }
     }
   };
+
+  const handleRateComplaint = async () => {
+    setIsLoading(true);
+    try {
+      const response = await publicAPI.post(
+        `v1/complaints/${complaintId}/rating`,
+        {
+          rate: rating,
+          rateText: ratingText,
+        },
+        {
+          headers: { Authorization: `Bearer ${authState.token}` },
+        }
+      );
+      setIsLoading(false);
+      navigation.dispatch(
+        StackActions.replace('ComplaintDetail', {
+          complaintId,
+        })
+      );
+    } catch (err) {
+      console.log(err.response);
+      setIsLoading(false);
+    }
+    console.log('rating : ', rating, 'text : ', ratingText);
+  };
+
+  const onTextLayout = useCallback((e) => {
+    setNumberOfLines(e.nativeEvent?.lines.length);
+  }, []);
 
   useLayoutEffect(() => {
     SaveButton({ navigation, saved, handleSave });
@@ -199,12 +201,11 @@ const ComplaintDetail = ({ route, navigation }) => {
     handleData();
   }, [complaintId]);
 
-  const descriptionLength = complaint.description?.length;
   return (
     <ScrollView
       style={{ backgroundColor: 'white' }}
       refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleData} />}>
-      {isLoading && !complaint?.title ? (
+      {isLoading && !complaint?.status ? (
         <ActivityIndicator style={{ marginTop: 100 }} size={'large'} color={Colors.PRIMARY_GREEN} />
       ) : (
         <>
@@ -214,11 +215,11 @@ const ComplaintDetail = ({ route, navigation }) => {
             <View style={styles().titleSection}>
               <View
                 style={[
-                  styles(complaint.status?.color).statusContainer,
-                  { borderRadius: complaint.status?.title && 8 },
+                  styles(complaint?.status?.color).statusContainer,
+                  { borderRadius: complaint?.status?.title && 8 },
                 ]}>
-                <Text style={styles(complaint.status?.color).status}>
-                  {complaint.status?.title}
+                <Text style={styles(complaint?.status?.color).status}>
+                  {complaint?.status?.title}
                 </Text>
               </View>
               <Text numberOfLines={3} style={styles().title}>
@@ -320,6 +321,7 @@ const ComplaintDetail = ({ route, navigation }) => {
               <Text style={styles().heading}>Deskripsi Laporan</Text>
               <View>
                 <Text
+                  onTextLayout={onTextLayout}
                   numberOfLines={!readMore ? 3 : undefined}
                   style={{
                     fontFamily: 'Poppins-Regular',
@@ -329,7 +331,7 @@ const ComplaintDetail = ({ route, navigation }) => {
                   }}>
                   {complaint?.description}
                 </Text>
-                {descriptionLength >= 50 && (
+                {numberOfLines >= 3 && (
                   <Button
                     onPress={() => setReadMore(!readMore)}
                     type="Text"
@@ -345,7 +347,7 @@ const ComplaintDetail = ({ route, navigation }) => {
             <View style={styles().descriptionSection}>
               <Text style={styles().heading}>Status Laporan</Text>
               <View style={{ gap: 48, marginTop: 18 }}>
-                <ProgressStep status={complaint.status?.title} />
+                <ProgressStep status={complaint?.status?.title} />
                 <Button
                   type="Outline"
                   size="Md"
@@ -354,6 +356,123 @@ const ComplaintDetail = ({ route, navigation }) => {
                 />
               </View>
             </View>
+
+            {/* Action Section */}
+            {complaint?.user?.id === authState.userId && authState.authenticated ? (
+              complaint?.status?.id !== Status.CANCELED &&
+              complaint?.status?.id !== Status.COMPLETE ? (
+                <View style={styles().descriptionSection}>
+                  <Text style={styles().heading}>Aksi</Text>
+                  <View style={{ gap: 48, marginTop: 18 }}>
+                    <Button
+                      color={Colors.PRIMARY_RED}
+                      backgroundColor={Colors.PRIMARY_RED}
+                      type="Primary"
+                      size="Md"
+                      title="Batalkan Laporan"
+                      onPress={() => handleCancelComplaint()}
+                    />
+                  </View>
+                </View>
+              ) : null
+            ) : null}
+
+            {complaint?.user?.id === authState.userId &&
+            complaint?.status?.id === Status.COMPLETE &&
+            complaint?.ComplaintFeedBack.length === 0 ? (
+              <View style={styles().descriptionSection}>
+                <Text style={styles().heading}>Berikan Penilaian</Text>
+                <View style={{ gap: 48, marginTop: 18, alignItems: 'center' }}>
+                  <Rating
+                    fillColor={Colors.PRIMARY_YELLOW}
+                    baseColor={Colors.LINE_STROKE}
+                    size={40}
+                    rating={rating}
+                    onChange={handleChangeRating}
+                  />
+                </View>
+                <Input
+                  onChangeText={(text) => setRatingText(text)}
+                  title=""
+                  maxLength={300}
+                  multiline
+                  textAlign="left"
+                  type="Text"
+                  style={{
+                    height: 'auto',
+                    alignItems: 'flex-start',
+                    justifyContent: 'flex-start',
+                    textAlignVertical: ratingText ? 'top' : 'center',
+                  }}
+                  placeholder="Masukkan penilaian mu.."
+                  onFocus={() => setRatingError(null)}
+                  error={ratingError}
+                />
+                <Text
+                  style={{
+                    fontFamily: 'Poppins-Regular',
+                    fontSize: scale(11.5),
+                    color: Colors.GRAY,
+                    marginTop: 5,
+                    alignSelf: 'flex-end',
+                  }}>
+                  {ratingText?.length || 0} /300 karakter
+                </Text>
+                <Button
+                  onPress={() => validateRating()}
+                  type={isLoading ? 'Disabled' : 'Primary'}
+                  title="Kirim Penilaian"
+                  size="Lg"
+                  style={{ marginTop: verticalScale(16) }}
+                />
+              </View>
+            ) : complaint?.status?.id === Status.COMPLETE ? (
+              <View style={[styles().descriptionSection, { borderBottomWidth: 0 }]}>
+                <Text style={styles().heading}>Penilaian Pelapor</Text>
+                <View
+                  style={{
+                    marginTop: 18,
+                    flexDirection: 'row',
+                    alignItems: 'flex-start',
+                    gap: 10,
+                  }}>
+                  <UserAvatar
+                    userName={
+                      !isLoading
+                        ? complaint?.user?.firstName + ' ' + complaint?.user?.LastName
+                        : 'Guest'
+                    }
+                    size={48}
+                    fontSize={18}
+                    backgroundColor={Colors.PRIMARY_GREEN}
+                  />
+                  <View style={{ alignItems: 'flex-start', flex: 1, flexWrap: 'wrap' }}>
+                    <Text style={{ fontFamily: 'Poppins-SemiBold' }}>
+                      {complaint?.user?.firstName + ' ' + complaint?.user?.LastName}
+                    </Text>
+                    <View style={{ flexDirection: 'row-reverse', gap: 5 }}>
+                      <Rating
+                        fillColor={Colors.PRIMARY_YELLOW}
+                        baseColor={Colors.LINE_STROKE}
+                        size={20}
+                        rating={complaint?.ComplaintFeedBack[0]?.feedackScore}
+                        disabled
+                      />
+                      <Text style={{ fontFamily: 'Poppins-medium' }}>
+                        (
+                        {(
+                          Math.round(complaint?.ComplaintFeedBack[0]?.feedackScore * 100) / 100
+                        ).toFixed(1)}
+                        )
+                      </Text>
+                    </View>
+                    <Text style={{ marginTop: 20 }}>
+                      {complaint?.ComplaintFeedBack[0]?.feedbackNote}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            ) : null}
           </View>
         </>
       )}

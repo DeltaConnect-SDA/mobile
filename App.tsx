@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   ComplaintDetail,
+  Complaints,
   Login,
   Onboarding,
   Register,
@@ -28,6 +29,8 @@ import 'react-native-reanimated';
 import 'react-native-gesture-handler';
 import { TouchableOpacity } from 'react-native';
 import { SaveFilled } from '@/constants/icons';
+import Saved from '@/screens/Saved';
+import { scale } from 'react-native-size-matters';
 
 TimeAgo.addDefaultLocale(id);
 
@@ -100,11 +103,6 @@ export const Layout = () => {
               options={{ headerShown: false, animation: 'slide_from_right' }}
             />
             <Stack.Screen
-              name="RegisterPhoneVerification"
-              component={RegisterPhoneVerification}
-              options={{ headerShown: false, animation: 'slide_from_right' }}
-            />
-            <Stack.Screen
               name="Success"
               component={SuccessState}
               options={{ headerShown: false }}
@@ -124,20 +122,63 @@ export const Layout = () => {
               component={AddComplaintDetails}
               options={{ title: 'Lapor Masalah', animation: 'slide_from_right' }}
             />
-            <Stack.Screen
-              name="ComplaintDetail"
-              component={ComplaintDetail}
-              options={{
-                title: 'Detail Laporan',
-                animation: 'simple_push',
-              }}
-            />
           </>
         )}
+        <Stack.Screen
+          name="ComplaintDetail"
+          component={ComplaintDetail}
+          options={{
+            title: 'Detail Laporan',
+            animation: 'simple_push',
+          }}
+        />
+        <Stack.Screen
+          name="LaporanMasyarakat"
+          component={Complaints}
+          options={{
+            title: 'Laporan Masyarakat',
+            animation: 'simple_push',
+          }}
+        />
+        <Stack.Screen
+          name="UsulanMasyarakat"
+          component={Test}
+          options={{
+            title: 'Detail Laporan',
+            animation: 'simple_push',
+          }}
+        />
+        <Stack.Screen
+          name="SemuaInformasi"
+          component={Test}
+          options={{
+            title: 'Semua Informasi',
+            animation: 'simple_push',
+          }}
+        />
+        <Stack.Screen
+          name="Disimpan"
+          component={Saved}
+          options={{
+            title: 'Disimpan',
+            animation: 'simple_push',
+            headerShadowVisible: false,
+            contentStyle: {
+              backgroundColor: 'white',
+              paddingHorizontal: scale(18),
+              paddingVertical: scale(30),
+            },
+          }}
+        />
         <Stack.Screen
           name="BottomNav"
           component={BottomTabNavigation}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="RegisterPhoneVerification"
+          component={RegisterPhoneVerification}
+          options={{ headerShown: false, animation: 'slide_from_right' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -5,33 +5,34 @@ import { Colors } from '@/constants/colors';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { scale } from 'react-native-size-matters';
+import { useAuth } from '@/context/AuthProvider';
 
 const { width } = Dimensions.get('window');
 
-export const menu = [
+export const menu = (authenticated) => [
   {
     title: 'Laporan\nMasyarakat',
     icon: 'Laporan',
     color: 'SECONDARY_ORANGE',
-    route: 'Onboarding',
+    route: 'LaporanMasyarakat',
   },
   {
     title: 'Usulan\nMasyarakat',
     icon: 'Usulan',
     color: 'SECONDARY_GREEN',
-    route: 'Onboarding',
+    route: 'UsulanMasyarakat',
   },
   {
     title: 'Semua\nInformasi',
     icon: 'Informasi',
     color: 'SECONDARY_PURPLE',
-    route: 'Onboarding',
+    route: 'SemuaInformasi',
   },
   {
     title: 'Disimpan',
     icon: 'Saved',
     color: 'SECONDARY_TOSCA',
-    route: 'Onboarding',
+    route: authenticated ? 'Disimpan' : 'Onboarding',
   },
 ];
 
@@ -93,9 +94,10 @@ export const MenuItem: React.FC<MenuItemProps> = ({ title, icon, color, route })
 };
 
 const MainMenu = () => {
+  const { authState } = useAuth();
   return (
     <View style={styles.container}>
-      {menu.map((item, index) => (
+      {menu(authState.authenticated).map((item, index) => (
         <MenuItem
           title={item.title}
           icon={item.icon}

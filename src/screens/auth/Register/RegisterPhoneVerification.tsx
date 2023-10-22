@@ -12,11 +12,13 @@ import {
 } from 'react-native-confirmation-code-field';
 import { authAPI } from 'Api/backend';
 import CountDownTimer from 'react-native-countdown-timer-hooks';
+import { useAuth } from '@/context/AuthProvider';
 
 const CELL_COUNT = 4;
 
 const RegisterPhoneVerification = ({ route, navigation }) => {
-  const { inputs } = route.params;
+  const { authenticate } = useAuth();
+  const { inputs, creds } = route.params;
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -60,8 +62,6 @@ const RegisterPhoneVerification = ({ route, navigation }) => {
         email: inputs.email,
       });
 
-      console.log(response);
-
       if (response.data.success) {
         setLoading(false);
         console.log('OTP requested successfully');
@@ -92,6 +92,7 @@ const RegisterPhoneVerification = ({ route, navigation }) => {
       });
 
       if (response.data.success) {
+        await authenticate(creds.token, creds.userId, 'true');
         console.log('OTP verified successfully');
         navigation.navigate('Success', {
           title: 'Pendaftaran Berhasil!',

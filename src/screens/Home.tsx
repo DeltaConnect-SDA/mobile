@@ -54,7 +54,7 @@ export const TopBar = () => {
         <View style={styles.topBarProfile}>
           <Skeleton colorMode="light" show={loading} radius="round">
             <UserAvatar
-              userName={!loading ? data?.firstName + ' ' + data?.lastName : 'Guest'}
+              userName={!loading ? data?.firstName + ' ' + data?.LastName : 'Guest'}
               size={48}
               fontSize={18}
               // src="https://pub-de80d0c9acec4ada87a412796cb5a13f.r2.dev/profile/7d75dbdcfca17e31cd16b5b3adda06611dec175347ca553da64c52960daa5325.jpg"

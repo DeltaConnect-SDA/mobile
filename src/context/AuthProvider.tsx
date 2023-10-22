@@ -1,17 +1,22 @@
 import { createContext, useContext, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import axios from 'axios';
 import { useEffect } from 'react';
 
 interface AuthProps {
-  authState?: { token: string | null; authenticated: boolean | null; userId: string | null };
-  authenticate?: (token: string, userId: string) => any;
+  authState?: {
+    token: string | null;
+    authenticated: boolean | null;
+    userId: string | null;
+    phoneVerified: string | null;
+  };
+  authenticate?: (token: string, userId: string, phoneVerified: string) => any;
   logout?: () => any;
 }
 
 const AuthContext = createContext<AuthProps>({});
 const TOKEN_KEY = 'dcses_id';
 const USER_ID_KEY = 'dcusr_id';
+const PHONE_VERIFIED_KEY = 'dcpvr';
 
 export const useAuth = () => {
   return useContext(AuthContext);
@@ -26,38 +31,40 @@ export const AuthProvider = ({ children }: any) => {
     token: string | null;
     authenticated: boolean | null;
     userId: string | null;
+    phoneVerified: string | null;
   }>({
     token: null,
     authenticated: null,
     userId: null,
+    phoneVerified: null,
   });
 
   useEffect(() => {
     const loadToken = async () => {
       const token = await SecureStore.getItemAsync(TOKEN_KEY);
       const userId = await SecureStore.getItemAsync(USER_ID_KEY);
+      const phoneVerified = await SecureStore.getItemAsync(USER_ID_KEY);
 
       if (token) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        setAuthState({ token, authenticated: true, userId });
+        setAuthState({ token, authenticated: true, userId, phoneVerified });
       }
     };
 
     loadToken();
   }, []);
 
-  const authenticate = async (token: string, userId: string) => {
+  const authenticate = async (token: string, userId: string, phoneVerified: string) => {
     await SecureStore.setItemAsync(TOKEN_KEY, token);
     await SecureStore.setItemAsync(USER_ID_KEY, userId);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    setAuthState({ token, authenticated: true, userId });
+    await SecureStore.setItemAsync(PHONE_VERIFIED_KEY, phoneVerified.toString());
+
+    setAuthState({ token, authenticated: true, userId, phoneVerified });
   };
 
   const logout = async () => {
     await SecureStore.deleteItemAsync(TOKEN_KEY);
-    axios.defaults.headers.common['Authorization'] = '';
 
-    setAuthState({ token: null, authenticated: false, userId: null });
+    setAuthState({ token: null, authenticated: false, userId: null, phoneVerified: null });
   };
 
   const value = {

@@ -1,4 +1,4 @@
-import { Keyboard, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Keyboard, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { Input, Loader, TopNav } from '@/components';
 import { scale } from 'react-native-size-matters';
@@ -6,6 +6,7 @@ import { Colors } from '@/constants/colors';
 import { Button } from '@/components/atom';
 import { authAPI } from 'Api/backend';
 import { useAuth } from '@/context/AuthProvider';
+import { StackActions } from '@react-navigation/native';
 
 type PasswordsType = {
   password: string;
@@ -19,8 +20,6 @@ const RegisterPasswordStep = ({ route, navigation }) => {
     password: '',
     passwordConfirm: '',
   });
-  const { authState, authenticate } = useAuth();
-
   const [errors, setErrors] = useState<any>();
 
   const validate = () => {
@@ -87,8 +86,10 @@ const RegisterPasswordStep = ({ route, navigation }) => {
         if (!success) {
           console.log({ message, data }, 'error');
         } else {
-          await authenticate(data[1].access_token, data[0].user.id);
-          navigation.navigate('RegisterPhoneVerification', { inputs });
+          navigation.navigate('RegisterPhoneVerification', {
+            inputs,
+            creds: { token: data[1].access_token, userId: data[0].user.id },
+          });
         }
       })
       .catch((error) => {
@@ -96,6 +97,19 @@ const RegisterPasswordStep = ({ route, navigation }) => {
         console.log(JSON.stringify(error.response.data));
         if (error.response.data.error === 'Bad Request') {
           navigation.navigate('Register', { errors: error.response.data.message });
+        } else if (error.response.data.error === 'Contacts Not Verified') {
+          Alert.alert(
+            'Akun telah terdafar',
+            'Akun telah terdaftar sebelumnya! Silahkan masuk dan verifikasi nomor telepon!',
+            [
+              {
+                text: 'OK',
+                onPress: async () => {
+                  navigation.dispatch(StackActions.replace('Login'));
+                },
+              },
+            ]
+          );
         } else {
           console.log(error);
         }

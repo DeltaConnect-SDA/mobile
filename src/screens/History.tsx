@@ -53,7 +53,7 @@ export const RiwayatLaporan = () => {
 
   const handleData = async () => {
     try {
-      const complaints = await publicAPI.get('v1/complaint/user', {
+      const complaints = await publicAPI.get('v1/user/complaints', {
         headers: { Authorization: `Bearer ${await getToken()}` },
       });
       setLoading(false);
@@ -82,61 +82,75 @@ export const RiwayatLaporan = () => {
     <ScrollView
       style={{ paddingTop: 32, paddingHorizontal: 20, minHeight: '100%' }}
       refreshControl={<RefreshControl refreshing={loading} onRefresh={handleData} />}>
-      {!loading ? (
-        data.map((complaint) => (
-          <ReportCard
-            blurHash={complaint?.ComplaintImages[0].placeholder}
-            title={complaint?.title}
-            category={complaint?.category.title}
-            cover={complaint?.ComplaintImages[0].path}
-            id={complaint?.id}
-            place={complaint?.village}
-            status={complaint?.status.title}
-            statusColor={complaint?.status.color}
-            time={complaint?.createdAt}
-            key={complaint?.id}
-          />
-        ))
-      ) : (
-        <>
-          <ReportCard
-            blurHash="LPEyPa~V-ps.RMxuofW=x[NFRjWB"
-            title="Mohon perbaiki saluran air depan SMAN 1 TAMAN"
-            category="Loading"
-            cover="https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/report1.jpg"
-            id={1}
-            place="Loading"
-            status="Loading"
-            statusColor={Colors.LINE_STROKE}
-            time="loading"
-            loading
-          />
-          <ReportCard
-            blurHash="LPEyPa~V-ps.RMxuofW=x[NFRjWB"
-            title="Mohon perbaiki saluran air depan SMAN 1 TAMAN"
-            category="Loading"
-            cover="https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/report1.jpg"
-            id={1}
-            place="Loading"
-            status="Loading"
-            statusColor={Colors.LINE_STROKE}
-            time="loading"
-            loading
-          />
-          <ReportCard
-            blurHash="LPEyPa~V-ps.RMxuofW=x[NFRjWB"
-            title="Mohon perbaiki saluran air depan SMAN 1 TAMAN"
-            category="Loading"
-            cover="https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/report1.jpg"
-            id={1}
-            place="Loading"
-            status="Loading"
-            statusColor={Colors.LINE_STROKE}
-            time="loading"
-            loading
-          />
-        </>
-      )}
+      <View style={{ marginBottom: 100 }}>
+        {!loading ? (
+          data.map((complaint) => (
+            <ReportCard
+              blurHash={complaint?.ComplaintImages[0].placeholder}
+              title={complaint?.title}
+              category={complaint?.category.title}
+              cover={complaint?.ComplaintImages[0].path}
+              id={complaint?.id}
+              place={complaint?.village}
+              status={complaint?.status.title}
+              statusColor={complaint?.status.color}
+              time={complaint?.createdAt}
+              key={complaint?.id}
+            />
+          ))
+        ) : (
+          <>
+            <ReportCard
+              blurHash="LPEyPa~V-ps.RMxuofW=x[NFRjWB"
+              title="Mohon perbaiki saluran air depan SMAN 1 TAMAN"
+              category="Loading"
+              cover="https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/report1.jpg"
+              id={1}
+              place="Loading"
+              status="Loading"
+              statusColor={Colors.LINE_STROKE}
+              time="loading"
+              loading
+            />
+            <ReportCard
+              blurHash="LPEyPa~V-ps.RMxuofW=x[NFRjWB"
+              title="Mohon perbaiki saluran air depan SMAN 1 TAMAN"
+              category="Loading"
+              cover="https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/report1.jpg"
+              id={1}
+              place="Loading"
+              status="Loading"
+              statusColor={Colors.LINE_STROKE}
+              time="loading"
+              loading
+            />
+            <ReportCard
+              blurHash="LPEyPa~V-ps.RMxuofW=x[NFRjWB"
+              title="Mohon perbaiki saluran air depan SMAN 1 TAMAN"
+              category="Loading"
+              cover="https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/report1.jpg"
+              id={1}
+              place="Loading"
+              status="Loading"
+              statusColor={Colors.LINE_STROKE}
+              time="loading"
+              loading
+            />
+            <ReportCard
+              blurHash="LPEyPa~V-ps.RMxuofW=x[NFRjWB"
+              title="Mohon perbaiki saluran air depan SMAN 1 TAMAN"
+              category="Loading"
+              cover="https://r2.deltaconnect.yukebrillianth.my.id/assets/report/photo/report1.jpg"
+              id={1}
+              place="Loading"
+              status="Loading"
+              statusColor={Colors.LINE_STROKE}
+              time="loading"
+              loading
+            />
+          </>
+        )}
+      </View>
     </ScrollView>
   );
 };

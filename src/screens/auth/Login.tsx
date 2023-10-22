@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import TopNav from '@/components/TopNav';
 import { Colors } from '@/constants/colors';
 import { Input } from '@/components/atom/';
@@ -7,7 +7,6 @@ import { Button } from '@/components/atom';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { scale } from 'react-native-size-matters';
-import { Password } from '@/constants/icons';
 import { Keyboard } from 'react-native';
 import { useAuth } from '@/context/AuthProvider';
 import { authAPI } from 'Api/backend';
@@ -19,7 +18,7 @@ type State = {
   password: string;
 };
 
-const Login = () => {
+const Login = ({ route }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [loading, setLoading] = useState<boolean>(false);
   const [inputs, setInputs] = useState<State>({
@@ -71,13 +70,22 @@ const Login = () => {
         const { data, success } = result;
 
         if (success) {
-          await authenticate(data[1].access_token, data[0].user.id);
-          navigation.navigate('Success', {
-            title: 'Selamat Datang Kembali!',
-            description: 'Selamat datang! Nikmati kembali kemudahan dengan DeltaConnect.',
-            toRoute: 'BottomNav',
-            cta: 'Selesai',
-          });
+          console.log(data);
+
+          if (data[0].user.UserDetail.isPhoneVerified) {
+            await authenticate(data[1].access_token, data[0].user.id, 'true');
+            navigation.navigate('Success', {
+              title: 'Selamat Datang Kembali!',
+              description: 'Selamat datang! Nikmati kembali kemudahan dengan DeltaConnect.',
+              toRoute: 'BottomNav',
+              cta: 'Selesai',
+            });
+          } else {
+            navigation.navigate('RegisterPhoneVerification', {
+              inputs: { phone: data[0].user.phone, email: inputs.email },
+              creds: { token: data[1].access_token, userId: data[0].user.id },
+            });
+          }
         } else {
           handleError(result.message, 'general');
         }

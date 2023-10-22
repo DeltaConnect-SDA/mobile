@@ -25,6 +25,8 @@ interface PropTypes {
   titleStyle?: StyleProp<TextStyle>;
   icon?: any;
   isLoading?: false | boolean;
+  backgroundColor?: string;
+  color?: string;
 }
 
 export class Button extends Component<PropTypes> {
@@ -32,19 +34,31 @@ export class Button extends Component<PropTypes> {
     super(props);
   }
   render() {
-    const { type, size, icon, style, onPress, isLoading, titleStyle } = this.props;
+    const { type, size, icon, style, onPress, isLoading, titleStyle, color, backgroundColor } =
+      this.props;
     const buttonStyles: any = [styles.container];
     const textStyles: any = [styles.text];
 
     if (type === 'Primary') {
       buttonStyles.push(styles.primary);
       textStyles.push(styles.primaryText);
+      if (color) {
+        buttonStyles.push({ backgroundColor: backgroundColor });
+      }
     } else if (type === 'Secondary') {
       buttonStyles.push(styles.secondary);
       textStyles.push(styles.secondaryText);
+      if (color) {
+        buttonStyles.push({ backgroundColor });
+        textStyles.push({ color });
+      }
     } else if (type === 'Outline') {
       buttonStyles.push(styles.outline);
       textStyles.push(styles.outlineText);
+      if (color) {
+        buttonStyles.push({ borderColor: color });
+        textStyles.push({ color });
+      }
     } else if (type === 'Disabled') {
       buttonStyles.push(styles.disabled);
       textStyles.push(styles.disabledText);
