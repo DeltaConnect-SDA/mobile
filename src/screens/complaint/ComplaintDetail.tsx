@@ -358,6 +358,7 @@ const ComplaintDetail = ({ route, navigation }) => {
             {/* Action Section */}
             {complaint?.user?.id === authState.userId && authState.authenticated ? (
               complaint?.status?.id !== Status.CANCELED &&
+              complaint?.status?.id !== Status.DECLINED &&
               complaint?.status?.id !== Status.COMPLETE ? (
                 <View style={styles().descriptionSection}>
                   <Text style={styles().heading}>Aksi</Text>

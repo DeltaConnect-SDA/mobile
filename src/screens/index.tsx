@@ -10,6 +10,7 @@ import RegisterPasswordStep from './auth/Register/RegisterPasswordStep';
 import RegisterSendEmail from './auth/Register/RegisterSendEmail';
 import RegisterPhoneVerification from './auth/Register/RegisterPhoneVerification';
 import Complaints from './complaint/Complaints';
+import ComplaintStatus from './complaint/ComplaintStatus';
 
 export {
   Onboarding,
@@ -24,4 +25,5 @@ export {
   RegisterSendEmail,
   RegisterPhoneVerification,
   Complaints,
+  ComplaintStatus,
 };

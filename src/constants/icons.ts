@@ -38,6 +38,7 @@ import SaveFilled from 'assets/icons/SaveFilled.svg';
 import Search from 'assets/icons/Search.svg';
 import Sort from 'assets/icons/Sort.svg';
 import Filter from 'assets/icons/Filter.svg';
+import Verification from 'assets/icons/Verification.svg';
 
 export {
   Back,
@@ -79,5 +80,6 @@ export {
   SaveOutline,
   Search,
   Sort,
-  Filter
+  Filter,
+  Verification
 };

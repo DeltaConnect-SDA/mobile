@@ -42,7 +42,8 @@ const ProgressStep = (props: ProgressStepProps) => {
               status == 'Proses' ||
               status == 'Verifikasi' ||
               status == 'Selesai' ||
-              status == 'Dibatalkan'
+              status == 'Dibatalkan' ||
+              status == 'Ditolak'
                 ? Colors.SECONDARY_GREEN
                 : Colors.LINE_STROKE,
           }}
@@ -55,7 +56,8 @@ const ProgressStep = (props: ProgressStepProps) => {
                 status === 'Proses' ||
                 status == 'Verifikasi' ||
                 status === 'Selesai' ||
-                status == 'Dibatalkan'
+                status == 'Dibatalkan' ||
+                status == 'Ditolak'
                   ? Colors.SECONDARY_GREEN
                   : Colors.LINE_STROKE,
             },
@@ -65,7 +67,8 @@ const ProgressStep = (props: ProgressStepProps) => {
               status === 'Proses' ||
               status == 'Verifikasi' ||
               status === 'Selesai' ||
-              status == 'Dibatalkan'
+              status == 'Dibatalkan' ||
+              status == 'Ditolak'
                 ? Colors.PRIMARY_GREEN
                 : Colors.GRAY
             }
@@ -82,7 +85,8 @@ const ProgressStep = (props: ProgressStepProps) => {
                 status === 'Proses' ||
                 status == 'Verifikasi' ||
                 status === 'Selesai' ||
-                status == 'Dibatalkan'
+                status == 'Dibatalkan' ||
+                status == 'Ditolak'
                   ? Colors.PRIMARY_GREEN
                   : Colors.GRAY,
             }}>
@@ -96,7 +100,7 @@ const ProgressStep = (props: ProgressStepProps) => {
             backgroundColor:
               status === 'Selesai'
                 ? Colors.SECONDARY_GREEN
-                : status === 'Dibatalkan'
+                : status === 'Dibatalkan' || status === 'Ditolak'
                 ? Colors.SECONDARY_RED
                 : Colors.LINE_STROKE,
           }}
@@ -108,12 +112,12 @@ const ProgressStep = (props: ProgressStepProps) => {
               backgroundColor:
                 status === 'Selesai'
                   ? Colors.SECONDARY_GREEN
-                  : status === 'Dibatalkan'
+                  : status === 'Dibatalkan' || status === 'Ditolak'
                   ? Colors.SECONDARY_RED
                   : Colors.LINE_STROKE,
             },
           ]}>
-          {status === 'Dibatalkan' ? (
+          {status === 'Dibatalkan' || status === 'Ditolak' ? (
             <Cancel color={Colors.PRIMARY_RED} />
           ) : (
             <Done color={status === 'Selesai' ? Colors.PRIMARY_GREEN : Colors.GRAY} />
@@ -129,11 +133,11 @@ const ProgressStep = (props: ProgressStepProps) => {
               color:
                 status === 'Selesai'
                   ? Colors.PRIMARY_GREEN
-                  : status === 'Dibatalkan'
+                  : status === 'Dibatalkan' || status === 'Ditolak'
                   ? Colors.PRIMARY_RED
                   : Colors.GRAY,
             }}>
-            {status === 'Dibatalkan' ? 'Dibatalkan' : 'Selesai'}
+            {status === 'Dibatalkan' ? 'Dibatalkan' : status === 'Ditolak' ? 'Ditolak' : 'Selesai'}
           </Text>
         </View>
       </View>

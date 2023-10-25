@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   ComplaintDetail,
+  ComplaintStatus,
   Complaints,
   Login,
   Onboarding,
@@ -130,6 +131,15 @@ export const Layout = () => {
           options={{
             title: 'Detail Laporan',
             animation: 'simple_push',
+          }}
+        />
+        <Stack.Screen
+          name="ComplaintStatus"
+          component={ComplaintStatus}
+          options={{
+            title: 'Status Laporan',
+            animation: 'simple_push',
+            headerShadowVisible: false,
           }}
         />
         <Stack.Screen
