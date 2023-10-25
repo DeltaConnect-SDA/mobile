@@ -90,9 +90,8 @@ export default class AddComplaintDetails extends Component<Props, State> {
     }
     this.setState({ granted: true });
     this.setState({ loading: false });
-    let location = await ExpoLocation.getCurrentPositionAsync({
-      accuracy: ExpoLocation.Accuracy.BestForNavigation,
-    });
+    let location = await ExpoLocation.getCurrentPositionAsync();
+    console.log('location');
     console.log(location);
 
     const { latitude, longitude } = location.coords;
@@ -129,7 +128,7 @@ export default class AddComplaintDetails extends Component<Props, State> {
 
   getPriorities = async () => {
     try {
-      const response = await publicAPI.get('v1/priority');
+      const response = await publicAPI.get('v1/priorities');
       const { data } = response.data;
       this.setState({ categoryLoading: false });
       const priorities = data.map((priority) => ({
@@ -148,7 +147,7 @@ export default class AddComplaintDetails extends Component<Props, State> {
   };
   getCategories = async () => {
     try {
-      const response = await publicAPI.get('v1/category');
+      const response = await publicAPI.get('v1/categories');
       const { data } = response.data;
       this.setState({ categoryLoading: false });
       const categories = data.map((category) => ({
@@ -311,6 +310,10 @@ export default class AddComplaintDetails extends Component<Props, State> {
       errorMessage: { ...prevState.errorMessage, [input]: message },
     }));
   };
+
+  UNSAFE_componentWillMount(): void {
+    this.getLocation();
+  }
 
   componentDidMount(): void {
     this.getLocation();

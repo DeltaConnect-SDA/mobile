@@ -52,7 +52,6 @@ const ComplaintDetail = ({ route, navigation }) => {
         });
 
         const { data } = complaint.data;
-        console.log(data);
 
         setComplaint(data);
         setIsLoading(false);
@@ -73,9 +72,9 @@ const ComplaintDetail = ({ route, navigation }) => {
     } else {
       try {
         const complaint = await publicAPI.get(`v1/complaints/${complaintId}`);
-        setIsLoading(false);
         const { data } = complaint.data;
         setComplaint(data);
+        setIsLoading(false);
       } catch (err) {
         setIsLoading(false);
 
@@ -186,7 +185,6 @@ const ComplaintDetail = ({ route, navigation }) => {
       console.log(err.response);
       setIsLoading(false);
     }
-    console.log('rating : ', rating, 'text : ', ratingText);
   };
 
   const onTextLayout = useCallback((e) => {
@@ -426,7 +424,10 @@ const ComplaintDetail = ({ route, navigation }) => {
                   style={{ marginTop: verticalScale(16) }}
                 />
               </View>
-            ) : complaint?.status?.id === Status.COMPLETE ? (
+            ) : null}
+
+            {complaint?.status?.id === Status.COMPLETE &&
+            complaint?.ComplaintFeedBack.length !== 0 ? (
               <View style={[styles().descriptionSection, { borderBottomWidth: 0 }]}>
                 <Text style={styles().heading}>Penilaian Pelapor</Text>
                 <View
