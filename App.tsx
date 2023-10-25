@@ -1,12 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import { NavigationContainer, DefaultTheme, useNavigation } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { useEffect, useRef, useState } from 'react';
-import {
-  NativeStackNavigationProp,
-  createNativeStackNavigator,
-} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   ComplaintDetail,
   ComplaintStatus,
@@ -70,7 +67,6 @@ export default function App() {
 
   const notificationListener = useRef<any>();
   const responseListener = useRef<any>();
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   useEffect(() => {
     const loadApp = async () => {
@@ -99,9 +95,9 @@ export default function App() {
       } = response;
 
       // When the user taps on the notification, this line checks if they //are suppose to be taken to a particular screen
-      if (screen) {
-        navigation.navigate(screen);
-      }
+      // if (screen) {
+      //   navigation.navigate(screen);
+      // }
     });
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
@@ -261,10 +257,12 @@ async function registerForPushNotificationsAsync() {
 
     // Project ID can be found in app.json | app.config.js; extra > eas > projectId
     // token = (await Notifications.getExpoPushTokenAsync({ projectId: "YOUR_PROJECT_ID" })).data;
-    token = // await Notifications.getExpoPushTokenAsync({
-    //   projectId: '5f0d2680-2056-4bde-b0e8-bbbdb09c310b',
-    // })
-    (await Notifications.getExpoPushTokenAsync()).data;
+    token = (
+      await Notifications.getExpoPushTokenAsync({
+        projectId: '5f0d2680-2056-4bde-b0e8-bbbdb09c310b',
+      })
+    ).data;
+    // (await Notifications.getExpoPushTokenAsync()).data;
 
     // The token should be sent to the server so that it can be used to send push notifications to the device
     console.log(token);
