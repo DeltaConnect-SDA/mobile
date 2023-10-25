@@ -2,8 +2,11 @@ import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer, DefaultTheme, useNavigation } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
-import { useEffect } from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useEffect, useRef, useState } from 'react';
+import {
+  NativeStackNavigationProp,
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack';
 import {
   ComplaintDetail,
   ComplaintStatus,
@@ -17,7 +20,6 @@ import {
 } from '@/screens';
 import { BottomTabNavigation } from '@/navigations';
 import 'react-native-gesture-handler';
-import SaveOutline from 'assets/icons/SaveOutline.svg';
 import { Colors } from '@/constants/colors';
 import TimeAgo from 'javascript-time-ago';
 import id from 'javascript-time-ago/locale/id';
@@ -28,10 +30,11 @@ import Camera from '@/screens/complaint/Camera';
 import { AuthProvider, useAuth } from '@/context/AuthProvider';
 import 'react-native-reanimated';
 import 'react-native-gesture-handler';
-import { TouchableOpacity } from 'react-native';
-import { SaveFilled } from '@/constants/icons';
+import { Platform } from 'react-native';
 import Saved from '@/screens/Saved';
 import { scale } from 'react-native-size-matters';
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
 
 TimeAgo.addDefaultLocale(id);
 
@@ -46,6 +49,14 @@ const MyTheme = {
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync(); // prevent splash screen from auto-hiding
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
     'Poppins-Regular': require('./assets/fonts/Poppins-Regular.ttf'),
@@ -54,14 +65,48 @@ export default function App() {
     'Poppins-Bold': require('./assets/fonts/Poppins-Bold.ttf'),
   });
 
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState<any>(false);
+
+  const notificationListener = useRef<any>();
+  const responseListener = useRef<any>();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
   useEffect(() => {
     const loadApp = async () => {
       if (fontsLoaded || fontError) {
         await SplashScreen.hideAsync();
       } // hide the splash screen after tasks are done
     };
-
     loadApp();
+    registerForPushNotificationsAsync().then((token) => setExpoPushToken(token));
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+      setNotification(notification);
+    });
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
+      const {
+        notification: {
+          request: {
+            content: {
+              data: { screen },
+            },
+          },
+        },
+      } = response;
+
+      // When the user taps on the notification, this line checks if they //are suppose to be taken to a particular screen
+      if (screen) {
+        navigation.navigate(screen);
+      }
+    });
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
   }, [fontsLoaded, fontError]);
 
   if (!fontsLoaded && !fontError) {
@@ -194,3 +239,48 @@ export const Layout = () => {
     </NavigationContainer>
   );
 };
+
+async function registerForPushNotificationsAsync() {
+  let token;
+
+  if (Device.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+      console.log('existingStatus', existingStatus);
+    }
+
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      console.log('finalStatus', finalStatus);
+      return;
+    }
+
+    // Project ID can be found in app.json | app.config.js; extra > eas > projectId
+    // token = (await Notifications.getExpoPushTokenAsync({ projectId: "YOUR_PROJECT_ID" })).data;
+    token = // await Notifications.getExpoPushTokenAsync({
+    //   projectId: '5f0d2680-2056-4bde-b0e8-bbbdb09c310b',
+    // })
+    (await Notifications.getExpoPushTokenAsync()).data;
+
+    // The token should be sent to the server so that it can be used to send push notifications to the device
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    await Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      showBadge: true,
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 100, 250],
+      lightColor: '#219653',
+    });
+  }
+
+  return token;
+}
