@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const publicAPI = axios.create({
-    baseURL: 'https://porto.morph.my.id/',
+    baseURL: 'https://porto.morph.my.id/v1/',
     timeout: 30000
 })
 

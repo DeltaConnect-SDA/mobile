@@ -92,7 +92,9 @@ const RegisterPhoneVerification = ({ route, navigation }) => {
       });
 
       if (response.data.success) {
+        setLoading(true);
         await authenticate(creds.token, creds.userId, 'true');
+        setLoading(false);
         console.log('OTP verified successfully');
         navigation.navigate('Success', {
           title: 'Pendaftaran Berhasil!',

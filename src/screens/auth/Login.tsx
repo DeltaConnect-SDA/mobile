@@ -73,7 +73,9 @@ const Login = ({ route }) => {
           console.log(data);
 
           if (data[0].user.UserDetail.isPhoneVerified) {
+            setLoading(true);
             await authenticate(data[1].access_token, data[0].user.id, 'true');
+            setLoading(false);
             navigation.navigate('Success', {
               title: 'Selamat Datang Kembali!',
               description: 'Selamat datang! Nikmati kembali kemudahan dengan DeltaConnect.',

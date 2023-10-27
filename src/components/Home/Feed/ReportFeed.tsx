@@ -11,7 +11,7 @@ const ReportFeed = () => {
 
   const handleData = async () => {
     try {
-      const complaints = await publicAPI.get('v1/complaints/latest');
+      const complaints = await publicAPI.get('complaints/latest');
       setLoading(false);
       const { data } = complaints.data;
 

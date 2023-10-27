@@ -1,6 +1,8 @@
 import { createContext, useContext, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { useEffect } from 'react';
+import { authAPI } from 'Api/backend';
+import { Platform } from 'react-native';
 
 interface AuthProps {
   authState?: {
@@ -57,6 +59,21 @@ export const AuthProvider = ({ children }: any) => {
     await SecureStore.setItemAsync(TOKEN_KEY, token);
     await SecureStore.setItemAsync(USER_ID_KEY, userId);
     await SecureStore.setItemAsync(PHONE_VERIFIED_KEY, phoneVerified.toString());
+    const DeviceToken = await SecureStore.getItemAsync('deviceToken');
+
+    await authAPI.post(
+      '/device',
+      {
+        userId,
+        DeviceToken,
+        DeviceType: Platform.OS,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     setAuthState({ token, authenticated: true, userId, phoneVerified });
   };

@@ -17,7 +17,7 @@ const Complaints = () => {
 
   const handleSaved = async () => {
     try {
-      const response = await publicAPI.get(`v1/complaints/saved`, {
+      const response = await publicAPI.get(`complaints/saved`, {
         headers: {
           Authorization: `Bearer ${authState.token}`,
         },

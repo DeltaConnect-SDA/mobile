@@ -47,7 +47,7 @@ const ComplaintDetail = ({ route, navigation }) => {
   const handleData = async () => {
     if (authState.authenticated) {
       try {
-        const complaint = await publicAPI.get(`v1/complaints/${complaintId}/auth`, {
+        const complaint = await publicAPI.get(`complaints/${complaintId}/auth`, {
           headers: { Authorization: `Bearer ${authState.token}` },
         });
 
@@ -71,7 +71,7 @@ const ComplaintDetail = ({ route, navigation }) => {
       }
     } else {
       try {
-        const complaint = await publicAPI.get(`v1/complaints/${complaintId}`);
+        const complaint = await publicAPI.get(`complaints/${complaintId}`);
         const { data } = complaint.data;
         setComplaint(data);
         setIsLoading(false);
@@ -142,7 +142,7 @@ const ComplaintDetail = ({ route, navigation }) => {
       setIsLoading(true);
       try {
         await publicAPI.patch(
-          `v1/complaints/${complaintId}/cancel`,
+          `complaints/${complaintId}/cancel`,
           {},
           {
             headers: { Authorization: `Bearer ${authState.token}` },
@@ -166,7 +166,7 @@ const ComplaintDetail = ({ route, navigation }) => {
     setIsLoading(true);
     try {
       const response = await publicAPI.post(
-        `v1/complaints/${complaintId}/rating`,
+        `complaints/${complaintId}/rating`,
         {
           rate: rating,
           rateText: ratingText,

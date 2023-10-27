@@ -38,6 +38,10 @@
     "experiments": {
       "tsconfigPaths": true
     },
+    "notification": {
+      "icon": "./assets/notif-icon.png",
+      "color": "#FFFFFF"
+    },
     "plugins": [
       [
         "expo-camera",
@@ -49,6 +53,13 @@
         "expo-location",
         {
           "locationAlwaysAndWhenInUsePermission": "Izin $(PRODUCT_NAME) untuk mengakses lokasi anda."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notif-icon.png",
+          "color": "#ffffff"
         }
       ],
       "react-native-compressor"

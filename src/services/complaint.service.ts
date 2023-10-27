@@ -25,7 +25,7 @@ export const createComplaint = async (data: ComplaintDTO, images: CameraCaptured
     formData.append(key, data[key]);
   });
 
-  const response = await publicAPI.post('v1/complaints', formData, {
+  const response = await publicAPI.post('complaints', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
       Authorization: `Bearer ${await getToken()}`,
@@ -36,7 +36,7 @@ export const createComplaint = async (data: ComplaintDTO, images: CameraCaptured
 
 export const saveComplaint = async (complaintId: number) => {
   const response = await publicAPI.post(
-    'v1/complaints/saved',
+    'complaints/saved',
     { complaintId },
     {
       headers: {
@@ -49,7 +49,7 @@ export const saveComplaint = async (complaintId: number) => {
 };
 
 export const unSaveComplaint = async (complaintId: number) => {
-  const response = await publicAPI.delete(`v1/complaints/saved/${complaintId}`, {
+  const response = await publicAPI.delete(`complaints/saved/${complaintId}`, {
     headers: {
       Authorization: `Bearer ${await getToken()}`,
     },

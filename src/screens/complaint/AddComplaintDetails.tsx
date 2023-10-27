@@ -128,7 +128,7 @@ export default class AddComplaintDetails extends Component<Props, State> {
 
   getPriorities = async () => {
     try {
-      const response = await publicAPI.get('v1/priorities');
+      const response = await publicAPI.get('priorities');
       const { data } = response.data;
       this.setState({ categoryLoading: false });
       const priorities = data.map((priority) => ({
@@ -147,7 +147,7 @@ export default class AddComplaintDetails extends Component<Props, State> {
   };
   getCategories = async () => {
     try {
-      const response = await publicAPI.get('v1/categories');
+      const response = await publicAPI.get('categories');
       const { data } = response.data;
       this.setState({ categoryLoading: false });
       const categories = data.map((category) => ({

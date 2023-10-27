@@ -53,7 +53,7 @@ export const RiwayatLaporan = () => {
 
   const handleData = async () => {
     try {
-      const complaints = await publicAPI.get('v1/user/complaints', {
+      const complaints = await publicAPI.get('user/complaints', {
         headers: { Authorization: `Bearer ${await getToken()}` },
       });
       setLoading(false);
