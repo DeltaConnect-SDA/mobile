@@ -1,5 +1,5 @@
 import { Text, View, TouchableOpacity } from 'react-native';
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   CameraFilled,
@@ -19,7 +19,10 @@ import Camera from '@/screens/complaint/Camera';
 import { useNavigation } from '@react-navigation/native';
 import { scale } from 'react-native-size-matters';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AuthProvider, useAuth } from '@/context/AuthProvider';
+import { getToken, useAuth } from '@/context/AuthProvider';
+import { publicAPI } from 'Api/backend';
+import * as ExpoNotifications from 'expo-notifications';
+import { useNotification } from '@/context/NotificationProvider';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,6 +35,37 @@ export class BottomTabNavigation extends Component {
 const Layout = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { authState } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const { setBadge, notificationState } = useNotification();
+
+  const token = getToken();
+  const handleNotifBadge = async () => {
+    try {
+      const res = await publicAPI.get('users/notifications', {
+        headers: {
+          Authorization: `Bearer ${await token}`,
+        },
+      });
+
+      const { data } = res.data;
+
+      if (data) {
+        setBadge(data.length);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
+    }
+  };
+
+  ExpoNotifications.addNotificationReceivedListener(() => {
+    setBadge(notificationState.badge + 1);
+  });
+
+  useEffect(() => {
+    handleNotifBadge();
+  }, []);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -173,10 +207,12 @@ const Layout = () => {
               }
             : null
         }
-        options={{
-          tabBarBadge: 3,
-          tabBarBadgeStyle: { backgroundColor: Colors.PRIMARY_RED, fontSize: 12 },
-        }}
+        options={
+          token && {
+            tabBarBadge: (!loading && notificationState.badge) || null,
+            tabBarBadgeStyle: { backgroundColor: Colors.PRIMARY_RED, fontSize: 12 },
+          }
+        }
         component={Notifications}
       />
       <Tab.Screen

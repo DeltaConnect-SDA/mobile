@@ -37,6 +37,7 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { authAPI } from 'Api/backend';
 import * as SecureStore from 'expo-secure-store';
+import { NotificationProvider } from '@/context/NotificationProvider';
 
 TimeAgo.addDefaultLocale(id);
 
@@ -91,120 +92,122 @@ export const Layout = () => {
 
   return (
     <NavigationContainer theme={MyTheme}>
-      <PushNotification />
-      <StatusBar translucent={false} backgroundColor="transparent" style="auto" />
-      <Stack.Navigator initialRouteName="BottomNav">
-        <Stack.Screen name="Test" component={Test} options={{ headerShown: false }} />
-        {!authState?.authenticated ? (
-          <>
-            <Stack.Screen
-              name="Onboarding"
-              component={Onboarding}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-            <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
-            <Stack.Screen
-              name="RegisterPasswordStep"
-              component={RegisterPasswordStep}
-              options={{ headerShown: false, animation: 'slide_from_right' }}
-            />
-          </>
-        ) : (
-          <>
-            <Stack.Screen
-              name="RegisterSendEmail"
-              component={RegisterSendEmail}
-              options={{ headerShown: false, animation: 'slide_from_right' }}
-            />
-            <Stack.Screen
-              name="Success"
-              component={SuccessState}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Camera"
-              component={Camera}
-              options={{
-                headerStyle: { backgroundColor: '#000000' },
-                headerShadowVisible: false,
-                headerTintColor: '#fff',
-                animation: 'slide_from_right',
-              }}
-            />
-            <Stack.Screen
-              name="AddComplaintDetails"
-              component={AddComplaintDetails}
-              options={{ title: 'Lapor Masalah', animation: 'slide_from_right' }}
-            />
-          </>
-        )}
-        <Stack.Screen
-          name="ComplaintDetail"
-          component={ComplaintDetail}
-          options={{
-            title: 'Detail Laporan',
-            animation: 'simple_push',
-          }}
-        />
-        <Stack.Screen
-          name="ComplaintStatus"
-          component={ComplaintStatus}
-          options={{
-            title: 'Status Laporan',
-            animation: 'simple_push',
-            headerShadowVisible: false,
-          }}
-        />
-        <Stack.Screen
-          name="LaporanMasyarakat"
-          component={Complaints}
-          options={{
-            title: 'Laporan Masyarakat',
-            animation: 'simple_push',
-          }}
-        />
-        <Stack.Screen
-          name="UsulanMasyarakat"
-          component={Test}
-          options={{
-            title: 'Detail Laporan',
-            animation: 'simple_push',
-          }}
-        />
-        <Stack.Screen
-          name="SemuaInformasi"
-          component={Test}
-          options={{
-            title: 'Semua Informasi',
-            animation: 'simple_push',
-          }}
-        />
-        <Stack.Screen
-          name="Disimpan"
-          component={Saved}
-          options={{
-            title: 'Disimpan',
-            animation: 'simple_push',
-            headerShadowVisible: false,
-            contentStyle: {
-              backgroundColor: 'white',
-              paddingHorizontal: scale(18),
-              paddingVertical: scale(30),
-            },
-          }}
-        />
-        <Stack.Screen
-          name="BottomNav"
-          component={BottomTabNavigation}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="RegisterPhoneVerification"
-          component={RegisterPhoneVerification}
-          options={{ headerShown: false, animation: 'slide_from_right' }}
-        />
-      </Stack.Navigator>
+      <NotificationProvider>
+        <PushNotification />
+        <StatusBar translucent={false} backgroundColor="transparent" style="auto" />
+        <Stack.Navigator initialRouteName="BottomNav">
+          <Stack.Screen name="Test" component={Test} options={{ headerShown: false }} />
+          {!authState?.authenticated ? (
+            <>
+              <Stack.Screen
+                name="Onboarding"
+                component={Onboarding}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+              <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
+              <Stack.Screen
+                name="RegisterPasswordStep"
+                component={RegisterPasswordStep}
+                options={{ headerShown: false, animation: 'slide_from_right' }}
+              />
+            </>
+          ) : (
+            <>
+              <Stack.Screen
+                name="RegisterSendEmail"
+                component={RegisterSendEmail}
+                options={{ headerShown: false, animation: 'slide_from_right' }}
+              />
+              <Stack.Screen
+                name="Success"
+                component={SuccessState}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Camera"
+                component={Camera}
+                options={{
+                  headerStyle: { backgroundColor: '#000000' },
+                  headerShadowVisible: false,
+                  headerTintColor: '#fff',
+                  animation: 'slide_from_right',
+                }}
+              />
+              <Stack.Screen
+                name="AddComplaintDetails"
+                component={AddComplaintDetails}
+                options={{ title: 'Lapor Masalah', animation: 'slide_from_right' }}
+              />
+            </>
+          )}
+          <Stack.Screen
+            name="ComplaintDetail"
+            component={ComplaintDetail}
+            options={{
+              title: 'Detail Laporan',
+              animation: 'simple_push',
+            }}
+          />
+          <Stack.Screen
+            name="ComplaintStatus"
+            component={ComplaintStatus}
+            options={{
+              title: 'Status Laporan',
+              animation: 'simple_push',
+              headerShadowVisible: false,
+            }}
+          />
+          <Stack.Screen
+            name="LaporanMasyarakat"
+            component={Complaints}
+            options={{
+              title: 'Laporan Masyarakat',
+              animation: 'simple_push',
+            }}
+          />
+          <Stack.Screen
+            name="UsulanMasyarakat"
+            component={Test}
+            options={{
+              title: 'Detail Laporan',
+              animation: 'simple_push',
+            }}
+          />
+          <Stack.Screen
+            name="SemuaInformasi"
+            component={Test}
+            options={{
+              title: 'Semua Informasi',
+              animation: 'simple_push',
+            }}
+          />
+          <Stack.Screen
+            name="Disimpan"
+            component={Saved}
+            options={{
+              title: 'Disimpan',
+              animation: 'simple_push',
+              headerShadowVisible: false,
+              contentStyle: {
+                backgroundColor: 'white',
+                paddingHorizontal: scale(18),
+                paddingVertical: scale(30),
+              },
+            }}
+          />
+          <Stack.Screen
+            name="BottomNav"
+            component={BottomTabNavigation}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="RegisterPhoneVerification"
+            component={RegisterPhoneVerification}
+            options={{ headerShown: false, animation: 'slide_from_right' }}
+          />
+        </Stack.Navigator>
+      </NotificationProvider>
     </NavigationContainer>
   );
 };
@@ -239,24 +242,26 @@ function PushNotification() {
     });
 
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-      const {
-        notification: {
-          request: {
-            content: {
-              data: { type, id, route },
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      async (response) => {
+        const {
+          notification: {
+            request: {
+              content: {
+                data: { type, id, route },
+              },
             },
           },
-        },
-      } = response;
+        } = response;
 
-      // When the user taps on the notification, this line checks if they //are suppose to be taken to a particular screen
-      if (type) {
-        if (type === 'complaint') {
-          navigation.navigate(route, { complaintId: id });
+        // When the user taps on the notification, this line checks if they //are suppose to be taken to a particular screen
+        if (type) {
+          if (type === 'complaint') {
+            navigation.navigate(route, { complaintId: id });
+          }
         }
       }
-    });
+    );
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);

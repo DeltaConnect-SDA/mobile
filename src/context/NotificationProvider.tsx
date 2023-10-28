@@ -1,17 +1,11 @@
 import { createContext, useContext, useState } from 'react';
-import * as SecureStore from 'expo-secure-store';
-import { useEffect } from 'react';
-import { publicAPI } from 'Api/backend';
 
 interface NotificationProps {
-  notificationState?: {
-    badge: number | null;
-  };
-  getNotification?: () => any;
+  notificationState?: { badge: number | null };
+  setBadge?: (count: number) => any;
 }
 
-const NotificationContext = createContext<NotificationProps>({});
-// const TOKEN_KEY = 'dcses_id';
+export const NotificationContext = createContext<NotificationProps>({});
 
 export const useNotification = () => {
   return useContext(NotificationContext);
@@ -24,15 +18,14 @@ export const NotificationProvider = ({ children }: any) => {
     badge: null,
   });
 
-  useEffect(() => {}, []);
-
-  const getNotification = async () => {
-    publicAPI.get('/users/notifications');
+  const setBadge = (count: number) => {
+    setNotificationState({ badge: count });
   };
 
   const value = {
-    getNotification,
+    setBadge,
     notificationState,
   };
+
   return <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>;
 };

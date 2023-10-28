@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "858061635866",
+    "project_id": "deltaconnect-c13d3",
+    "storage_bucket": "deltaconnect-c13d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:858061635866:android:49adebfea46c98bf97eca3",
+        "android_client_info": {
+          "package_name": "com.navaweb.deltaconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXFRXfb5kYNIdpVp46xRRehM4KROk8DKQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

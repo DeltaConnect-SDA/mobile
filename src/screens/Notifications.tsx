@@ -1,8 +1,14 @@
-import { Text, View, FlatList, StyleSheet, Pressable } from 'react-native';
-import React, { Component, useState } from 'react';
+import { Text, View, FlatList, StyleSheet, Pressable, RefreshControl } from 'react-native';
+import React, { Component, useEffect, useState } from 'react';
 import { Colors } from '@/constants/colors';
 import TimeAgo from 'javascript-time-ago';
 import { Laporan } from '@/constants/icons';
+import { getNotifications, readNotification } from '@/services';
+import { EmptyState } from './History';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import * as ExpoNotifications from 'expo-notifications';
+import { useNotification } from '@/context/NotificationProvider';
 
 const DATA = [
   {
@@ -34,12 +40,16 @@ interface ItemProps {
   description: string;
   time: string;
   type: string;
+  id: number;
+  route: string;
+  param: string;
 }
 
-export const Item = ({ title, description, time, type }: ItemProps) => {
+export const Item = ({ title, description, time, type, id, route, param }: ItemProps) => {
   const [clippedText, setClippedText] = useState(String);
   const timeAgo = new TimeAgo('id');
-
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const { notificationState, setBadge } = useNotification();
   return (
     <Pressable
       style={({ pressed }) => [
@@ -47,10 +57,18 @@ export const Item = ({ title, description, time, type }: ItemProps) => {
           backgroundColor: pressed ? '#EEEEEE' : 'white',
         },
         styles.item,
-      ]}>
+      ]}
+      onPress={async () => {
+        console.log('route:', route, 'complaintId:', param, type);
+        setBadge(notificationState.badge ? notificationState.badge - 1 : null);
+        if (type === 'complaint') {
+          await navigation.navigate(route, { complaintId: param });
+        }
+        readNotification(id);
+      }}>
       <View>
         <View style={styles.itemType}>
-          <Text>{type === 'report' ? <Laporan /> : ''}</Text>
+          <Text>{type === 'complaint' ? <Laporan /> : ''}</Text>
         </View>
       </View>
       <View style={styles.itemTextContainer}>
@@ -65,17 +83,71 @@ export const Item = ({ title, description, time, type }: ItemProps) => {
 };
 
 export class Notifications extends Component {
+  state = {
+    notifications: [],
+    isLoading: true,
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      notifications: [],
+      isLoading: true,
+    };
+  }
+
+  async __handleNotification() {
+    console.log('refresh');
+
+    try {
+      const res = await getNotifications();
+      const notifications = res.data;
+      this.setState({
+        notifications,
+        isLoading: false,
+      });
+    } catch (err) {}
+  }
+
+  componentDidMount(): void {
+    this.__handleNotification();
+  }
   render() {
+    ExpoNotifications.addNotificationReceivedListener(() => this.__handleNotification());
     return (
       <View>
         <FlatList
-          data={DATA}
+          ListEmptyComponent={
+            <View
+              style={{
+                display: 'flex',
+                height: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginVertical: 'auto',
+              }}>
+              <EmptyState
+                title="Belum Ada Notifikasi."
+                description="Anda belum memiliki notifikasi yang belum dibaca."
+              />
+            </View>
+          }
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isLoading}
+              onRefresh={() => this.__handleNotification()}
+            />
+          }
+          data={this.state.notifications}
           renderItem={({ item }) => (
             <Item
+              id={item.id}
               title={item.title}
-              description={item.description}
-              type={item.type}
-              time={item.time}
+              description={item.content}
+              type={'complaint'}
+              route={item.route}
+              param={item.param}
+              time={item.createdAt}
             />
           )}
           keyExtractor={(item) => item.id}
