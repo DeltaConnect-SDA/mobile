@@ -1,64 +1,15 @@
-import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, View, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { scale, verticalScale } from 'react-native-size-matters';
 import { Colors } from '@/constants/colors';
 import { Cancel, Done, Notes, Process, Verification, Waiting } from '@/constants/icons';
 import { Image } from 'expo-image';
+import { publicAPI } from 'Api/backend';
 
-const data = [
-  {
-    id: 1,
-    label: 'Menunggu',
-    status: 'Laporan anda menunggu respon petugas',
-    notes: null,
-    images: [],
-    date: '2023-10-15T09:47:49.429Z',
-  },
-  {
-    id: 2,
-    label: 'Diverifikasi',
-    status: 'Laporan anda sedang diverifikasi oleh petugas',
-    notes: 'Mohon ditunggu.',
-    images: [],
-    date: '2023-10-15T09:47:49.429Z',
-  },
-  {
-    id: 3,
-    label: 'Proses',
-    status: 'Laporan diteruskan ke Dinas Pekerjaan Umum',
-    notes: null,
-    images: [],
-    date: '2023-10-15T09:47:49.429Z',
-  },
-  {
-    id: 4,
-    label: 'Proses',
-    status: 'Laporan sedang ditindaklanjuti oleh Dinas Pekerjaan Umum',
-    notes: null,
-    images: [
-      {
-        path: 'https://r2.deltaconnect.yukebrillianth.my.id/complaint/DC-LP-231015-00002_image0.jpg',
-        placeholder: 'T,GlYRM{t7_4Rkofx]ogRjRjofRj',
-      },
-    ],
-    date: '2023-10-15T09:47:49.429Z',
-  },
-  {
-    id: 5,
-    label: 'Dibatalkan',
-    status: 'Laporan dibatalkan oleh Dinas Pekerjaan Umum',
-    notes: 'Laporan dibatalkan karena saluran air telah diperbaiki.',
-    images: [
-      {
-        path: 'https://r2.deltaconnect.yukebrillianth.my.id/complaint/DC-LP-231015-00002_image0.jpg',
-        placeholder: 'T,GlYRM{t7_4Rkofx]ogRjRjofRj',
-      },
-    ],
-    date: '2023-10-15T09:47:49.429Z',
-  },
-];
-
-const ComplaintStatus = () => {
+const ComplaintStatus = ({ route, navigation }) => {
+  const { complaintId } = route.params;
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState([]);
   const getIcon = (label, index) => {
     const isLastStep = index === 0;
     const color = isLastStep ? Colors.PRIMARY_GREEN : Colors.GRAY;
@@ -68,7 +19,9 @@ const ComplaintStatus = () => {
         return <Waiting color={color} />;
       case 'Diverifikasi':
         return <Verification color={color} />;
-      case 'Proses':
+      case 'Diteruskan':
+        return <Process color={color} />;
+      case 'Diproses':
         return <Process color={color} />;
       case 'Selesai':
         return <Done color={color} />;
@@ -79,15 +32,34 @@ const ComplaintStatus = () => {
     }
   };
 
+  const handleData = async () => {
+    try {
+      const res = await publicAPI.get(`complaints/${complaintId}/status`);
+      const { data } = res.data;
+      console.log(data);
+
+      setData(data);
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    handleData();
+  }, []);
+
   return (
     <FlatList
+      refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleData} />}
       contentContainerStyle={{ paddingBottom: 100 }}
       style={{
         paddingHorizontal: scale(20),
         paddingVertical: 32,
         backgroundColor: 'white',
       }}
-      data={data.reverse()}
+      data={data}
       renderItem={({ item, index }) => {
         const isLastStep = index === 0;
         const color = isLastStep
@@ -124,7 +96,7 @@ const ComplaintStatus = () => {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text style={{ color: 'white' }}>{getIcon(item.label, index)}</Text>
+                <Text style={{ color: 'white' }}>{getIcon(item.title, index)}</Text>
               </View>
               {index < data.reverse().length - 1 && (
                 <View
@@ -147,7 +119,7 @@ const ComplaintStatus = () => {
                   fontSize: scale(13.5),
                   color,
                 }}>
-                {item.label}
+                {item.title}
               </Text>
               <Text
                 style={{
@@ -155,22 +127,53 @@ const ComplaintStatus = () => {
                   fontSize: scale(12),
                   color: Colors.TEXT,
                 }}>
-                {item.status}
+                {item.descripiton}
               </Text>
-              {item.images.map((image) => (
-                <Image
-                  key={image.path}
-                  source={{ uri: image.path }}
-                  style={{ width: scale(72), aspectRatio: 1 / 1, borderRadius: 8 }}
-                />
-              ))}
+              {item.images.length !== 0 && (
+                <View>
+                  <Image
+                    key={item.images[0].path}
+                    source={{ uri: item.images[0].path }}
+                    placeholder={item.images[0].placeholder}
+                    style={{
+                      width: scale(72),
+                      aspectRatio: 1 / 1,
+                      borderRadius: 8,
+                    }}
+                  />
+
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('StatusGallery', { images: item.images })}
+                    style={{
+                      ...StyleSheet.absoluteFillObject,
+                      backgroundColor: item.images.length > 1 && 'rgba(0,0,0,0.5)',
+                      width: scale(72),
+                      aspectRatio: 1 / 1,
+                      borderRadius: 8,
+                    }}>
+                    {item.images.length > 1 && (
+                      <Text
+                        style={{
+                          position: 'absolute',
+                          fontFamily: 'Poppins-Medium',
+                          color: 'white',
+                          fontSize: scale(18),
+                          right: '35%',
+                          bottom: '30%',
+                        }}>
+                        +{item.images.length - 1}
+                      </Text>
+                    )}
+                  </TouchableOpacity>
+                </View>
+              )}
               <Text
                 style={{
                   fontFamily: 'Poppins-Regular',
                   fontSize: scale(11),
                   color: Colors.GRAY,
                 }}>
-                {new Date(item.date).toLocaleString('id-ID', {
+                {new Date(item.createdAt).toLocaleString('id-ID', {
                   day: '2-digit',
                   month: 'long',
                   year: 'numeric',

@@ -87,7 +87,9 @@ const Profile = ({ navigation }) => {
           </View>
         </View>
         <Skeleton colorMode="light" show={loading}>
-          <TouchableOpacity style={styles.editBtn}>
+          <TouchableOpacity
+            style={styles.editBtn}
+            onPress={() => (!loading ? navigation.navigate('EditProfile', { data }) : undefined)}>
             <UserEdit />
           </TouchableOpacity>
         </Skeleton>

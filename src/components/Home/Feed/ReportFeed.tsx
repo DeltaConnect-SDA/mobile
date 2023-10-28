@@ -31,7 +31,7 @@ const ReportFeed = () => {
         title="Laporan Masyarakat"
         description="Semua laporan masyarakat"
         ctaTitle="Semua"
-        ctaRoute="Onboarding"
+        ctaRoute="LaporanMasyarakat"
         color={Colors.PRIMARY_ORANGE}
       />
       <View style={styles.cardContainer}>

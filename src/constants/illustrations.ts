@@ -4,5 +4,6 @@ import Pictures from 'assets/illustrations/Pictures.svg';
 import Send from 'assets/illustrations/Send.svg';
 import Success from 'assets/illustrations/Success.svg';
 import Location from 'assets/illustrations/Location.svg';
+import Notification from 'assets/illustrations/Notification.svg';
 
-export { ConnectIllustration, Empty, Pictures, Send, Success, Location };
+export { ConnectIllustration, Empty, Pictures, Send, Success, Location, Notification };

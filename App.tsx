@@ -11,12 +11,14 @@ import {
   ComplaintDetail,
   ComplaintStatus,
   Complaints,
+  EditProfile,
   Login,
   Onboarding,
   Register,
   RegisterPasswordStep,
   RegisterPhoneVerification,
   RegisterSendEmail,
+  StatusGallery,
 } from '@/screens';
 import { BottomTabNavigation } from '@/navigations';
 import 'react-native-gesture-handler';
@@ -30,7 +32,7 @@ import Camera from '@/screens/complaint/Camera';
 import { AuthProvider, getToken, useAuth } from '@/context/AuthProvider';
 import 'react-native-reanimated';
 import 'react-native-gesture-handler';
-import { Platform } from 'react-native';
+import { Platform, Text, TouchableOpacity } from 'react-native';
 import Saved from '@/screens/Saved';
 import { scale } from 'react-native-size-matters';
 import * as Notifications from 'expo-notifications';
@@ -139,6 +141,26 @@ export const Layout = () => {
                 component={AddComplaintDetails}
                 options={{ title: 'Lapor Masalah', animation: 'slide_from_right' }}
               />
+              <Stack.Screen
+                name="EditProfile"
+                component={EditProfile}
+                options={{
+                  title: 'Ubah Profil',
+                  animation: 'slide_from_right',
+                  headerRight: (props) => (
+                    <TouchableOpacity>
+                      <Text
+                        style={{
+                          fontFamily: 'Poppins-SemiBold',
+                          fontSize: scale(14),
+                          color: Colors.PRIMARY_GREEN,
+                        }}>
+                        Simpan
+                      </Text>
+                    </TouchableOpacity>
+                  ),
+                }}
+              />
             </>
           )}
           <Stack.Screen
@@ -164,6 +186,18 @@ export const Layout = () => {
             options={{
               title: 'Laporan Masyarakat',
               animation: 'simple_push',
+            }}
+          />
+          <Stack.Screen
+            name="StatusGallery"
+            component={StatusGallery}
+            options={{
+              headerShadowVisible: false,
+              animation: 'fade',
+              headerBlurEffect: 'dark',
+              headerTransparent: true,
+              headerTintColor: 'white',
+              headerTitle: 'Foto',
             }}
           />
           <Stack.Screen

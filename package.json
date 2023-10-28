@@ -11,6 +11,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@akumzy/react-native-animated-gallery": "^1.2.0",
     "@kolking/react-native-rating": "^1.1.2",
     "@muhzi/react-native-user-avatar": "^1.0.7",
     "@react-native-masked-view/masked-view": "0.2.9",

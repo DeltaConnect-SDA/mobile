@@ -2,7 +2,7 @@ import { Text, View, ScrollView, RefreshControl } from 'react-native';
 import React, { Component, useState, useEffect } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Colors } from '@/constants/colors';
-import { Empty } from '@/constants/illustrations';
+import { Empty, Notification } from '@/constants/illustrations';
 import { getToken } from '../context/AuthProvider';
 import { publicAPI } from 'Api/backend';
 import { Loader, ReportCard } from '@/components';
@@ -12,6 +12,7 @@ const Tab = createMaterialTopTabNavigator();
 interface EmptyStateProps {
   title: string;
   description: string;
+  illustration?: string | 'Empty';
 }
 
 export const EmptyState = (props: EmptyStateProps) => {
@@ -24,7 +25,11 @@ export const EmptyState = (props: EmptyStateProps) => {
         width: '100%',
         marginBottom: 100,
       }}>
-      <Empty />
+      {!props.illustration || props.illustration === 'Empty' ? (
+        <Empty />
+      ) : props.illustration === 'Notification' ? (
+        <Notification />
+      ) : null}
       <Text
         style={{
           fontFamily: 'Poppins-SemiBold',

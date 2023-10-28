@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { ComplaintPhotos, ProgressStep } from '@/components';
@@ -271,7 +272,9 @@ const ComplaintDetail = ({ route, navigation }) => {
                   </View>
                   <View style={styles().cellValue}>
                     <View>
-                      <Text style={styles().detailValueText}>{complaint?.ref_id}</Text>
+                      <Pressable>
+                        <Text style={styles().detailValueText}>{complaint?.ref_id}</Text>
+                      </Pressable>
                     </View>
                   </View>
                 </View>

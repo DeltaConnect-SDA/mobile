@@ -1,4 +1,12 @@
-import { Text, View, FlatList, StyleSheet, Pressable, RefreshControl } from 'react-native';
+import {
+  Text,
+  View,
+  FlatList,
+  StyleSheet,
+  Pressable,
+  RefreshControl,
+  Dimensions,
+} from 'react-native';
 import React, { Component, useEffect, useState } from 'react';
 import { Colors } from '@/constants/colors';
 import TimeAgo from 'javascript-time-ago';
@@ -9,6 +17,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import * as ExpoNotifications from 'expo-notifications';
 import { useNotification } from '@/context/NotificationProvider';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const DATA = [
   {
@@ -73,7 +83,7 @@ export const Item = ({ title, description, time, type, id, route, param }: ItemP
       </View>
       <View style={styles.itemTextContainer}>
         <Text style={styles.itemTitle}>{title}</Text>
-        <Text numberOfLines={2} style={styles.itemDescription}>
+        <Text numberOfLines={3} style={styles.itemDescription}>
           {description}
         </Text>
         <Text style={styles.itemTime}>{timeAgo.format(new Date(time))}</Text>
@@ -117,20 +127,21 @@ export class Notifications extends Component {
     return (
       <View>
         <FlatList
+          contentContainerStyle={
+            this.state.notifications.length === 0 && {
+              height: SCREEN_HEIGHT - 170,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginVertical: 'auto',
+            }
+          }
           ListEmptyComponent={
-            <View
-              style={{
-                display: 'flex',
-                height: '100%',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginVertical: 'auto',
-              }}>
-              <EmptyState
-                title="Belum Ada Notifikasi."
-                description="Anda belum memiliki notifikasi yang belum dibaca."
-              />
-            </View>
+            <EmptyState
+              illustration="Notification"
+              title="Belum Ada Notifikasi."
+              description="Anda belum memiliki notifikasi yang belum dibaca."
+            />
           }
           refreshControl={
             <RefreshControl
@@ -144,7 +155,7 @@ export class Notifications extends Component {
               id={item.id}
               title={item.title}
               description={item.content}
-              type={'complaint'}
+              type={item.type}
               route={item.route}
               param={item.param}
               time={item.createdAt}

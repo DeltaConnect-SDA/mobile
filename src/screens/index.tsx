@@ -11,6 +11,8 @@ import RegisterSendEmail from './auth/Register/RegisterSendEmail';
 import RegisterPhoneVerification from './auth/Register/RegisterPhoneVerification';
 import Complaints from './complaint/Complaints';
 import ComplaintStatus from './complaint/ComplaintStatus';
+import EditProfile from './auth/EditProfile';
+import StatusGallery from './StatusGallery';
 
 export {
   Onboarding,
@@ -26,4 +28,6 @@ export {
   RegisterPhoneVerification,
   Complaints,
   ComplaintStatus,
+  EditProfile,
+  StatusGallery,
 };
