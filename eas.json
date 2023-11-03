@@ -10,12 +10,31 @@
       },
       "ios": {
         "buildConfiguration": "Debug"
+      },
+      "env": {
+        "PUBLIC_API_URL": "https://porto.morph.my.id/v1/",
+        "AUTH_API_URL": "https://porto.morph.my.id/v1/auth",
+        "GOOGLE_MAPS_API_KEY": "AIzaSyAdpjwXdSXfUZOb6ztlzGhpBJqcphZQZYw"
       }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "PUBLIC_API_URL": "https://porto.morph.my.id/v1/",
+        "AUTH_API_URL": "https://porto.morph.my.id/v1/auth",
+        "GOOGLE_MAPS_API_KEY": "AIzaSyAdpjwXdSXfUZOb6ztlzGhpBJqcphZQZYw"
+      }
     },
-    "production": {}
+    "production": {
+      "env": {
+        "PUBLIC_API_URL": "https://deltaconnect.morph.my.id/v1/",
+        "AUTH_API_URL": "https://deltaconnect.morph.my.id/v1/auth",
+        "GOOGLE_MAPS_API_KEY": "AIzaSyAdpjwXdSXfUZOb6ztlzGhpBJqcphZQZYw"
+      }
+    }
   },
   "submit": {
     "production": {}

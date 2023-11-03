@@ -27,6 +27,8 @@ const ComplaintStatus = ({ route, navigation }) => {
         return <Done color={color} />;
       case 'Dibatalkan':
         return <Cancel color={isLastStep ? Colors.PRIMARY_RED : Colors.GRAY} />;
+      case 'Ditolak':
+        return <Cancel color={isLastStep ? Colors.PRIMARY_RED : Colors.GRAY} />;
       default:
         return null;
     }
@@ -63,7 +65,7 @@ const ComplaintStatus = ({ route, navigation }) => {
       renderItem={({ item, index }) => {
         const isLastStep = index === 0;
         const color = isLastStep
-          ? item.label === 'Dibatalkan'
+          ? item.label === 'Dibatalkan' || item.label === 'Ditolak'
             ? Colors.PRIMARY_RED
             : Colors.PRIMARY_GREEN
           : Colors.GRAY;
