@@ -21,11 +21,13 @@ import { publicAPI } from 'Api/backend';
 import { EmptyState } from '../History';
 import { ReportCard } from '@/components';
 
+DropDownPicker.setMode('BADGE');
+
 const Complaints = () => {
   const [query, setQuery] = useState(null);
-  const [category, setCategory] = useState([]);
-  const [priority, setPriority] = useState([]);
-  const [status, setStatus] = useState([]);
+  // const [category, setCategory] = useState([]);
+  // const [priority, setPriority] = useState([]);
+  // const [status, setStatus] = useState([]);
   const [orderBy, setOrderBy] = useState('desc');
   const [perPage, setPerPage] = useState(10);
   const [page, setPage] = useState(1);
@@ -34,12 +36,78 @@ const Complaints = () => {
   const [categories, setCategories] = useState([]);
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [categoryLoading, setCategoryLoading] = useState(true);
+  const [categoryId, setCategoryId] = useState([]);
   const [priorities, setPriorities] = useState([]);
   const [priorityOpen, setPriorityOpen] = useState(false);
   const [priorityLoading, setPriorityLoading] = useState(true);
+  const [priorityId, setPriorityId] = useState([]);
+  const [statuses, setStatuses] = useState([]);
+  const [statusesOpen, setStatusesOpen] = useState(false);
+  const [statusesLoading, setStatusesLoading] = useState(true);
+  const [statusesId, setStatusesId] = useState([]);
+  const [sortOpen, setSortOpen] = useState(false);
+  const [sort, setSort] = useState('desc');
+  const [sorts, setSorts] = useState([
+    { label: 'Terbaru', value: 'desc' },
+    { label: 'Terlama', value: 'asc' },
+  ]);
   const [complaints, setComplaints] = useState<any>([]);
   const [meta, setMeta] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const getPriorities = async () => {
+    try {
+      const response = await publicAPI.get('priorities');
+      const { data } = response.data;
+      const priorities = data.map((priority) => ({
+        label: priority.title,
+        value: priority.id.toString(),
+        labelStyle: {
+          color: Colors[`PRIMARY_${priority.color}`],
+        },
+      }));
+
+      setPriorities(priorities);
+      setPriorityLoading(false);
+    } catch (error) {
+      setPriorityLoading(false);
+      console.error('An error occurred while fetching priorities:', error.response.data);
+    }
+  };
+
+  const getCategories = async () => {
+    try {
+      const response = await publicAPI.get('categories');
+      const { data } = response.data;
+      const categories = data.map((category) => ({
+        label: category.title,
+        value: category.id.toString(),
+      }));
+
+      setCategories(categories);
+      setCategoryLoading(false);
+    } catch (error) {
+      setCategoryLoading(false);
+      console.error('An error occurred while fetching categories:', error.response.data);
+    }
+  };
+
+  const getStatuses = async () => {
+    try {
+      const response = await publicAPI.get('statuses');
+      const { data } = response.data;
+      const statuses = data.map((status) => ({
+        label: status.title,
+        value: status.id.toString(),
+      }));
+
+      setStatuses(statuses);
+      setStatusesLoading(false);
+    } catch (error) {
+      setStatusesLoading(false);
+      console.error('An error occurred while fetching statuses:', error.response.data);
+    }
+  };
 
   const handleData = async () => {
     setIsLoading(true);
@@ -47,11 +115,11 @@ const Complaints = () => {
       const params = {
         page,
         perPage,
-        orderByDate: orderBy,
-        status: status.join(',') || null,
+        orderByDate: sort,
+        status: statusesId.join(',') || null,
         query: query,
-        category: category.join(',') || null,
-        priority: priority.join(',') || null,
+        category: categoryId.join(',') || null,
+        priority: priorityId.join(',') || null,
       };
       console.log(params);
 
@@ -77,11 +145,11 @@ const Complaints = () => {
       const params = {
         page,
         perPage,
-        orderByDate: orderBy,
-        status: status.join(',') || null,
+        orderByDate: sort,
+        status: statusesId.join(',') || null,
         query: query,
-        category: category.join(',') || null,
-        priority: priority.join(',') || null,
+        category: categoryId.join(',') || null,
+        priority: priorityId.join(',') || null,
       };
       console.log(params);
 
@@ -106,11 +174,11 @@ const Complaints = () => {
       const params = {
         page: meta.next,
         perPage,
-        orderByDate: orderBy,
-        status: status.join(',') || null,
+        orderByDate: sort,
+        status: statusesId.join(',') || null,
         query: query,
-        category: category.join(',') || null,
-        priority: priority.join(',') || null,
+        category: categoryId.join(',') || null,
+        priority: priorityId.join(',') || null,
       };
       console.log(params, 'params');
 
@@ -131,6 +199,9 @@ const Complaints = () => {
 
   useEffect(() => {
     handleData();
+    getPriorities();
+    getCategories();
+    getStatuses();
   }, []);
 
   return (
@@ -174,44 +245,148 @@ const Complaints = () => {
             </View>
             {modalType === 'filter' ? (
               <View>
-                <InputLabel title="Urgensi" />
-                {/* <DropDownPicker
-                loading={priorityLoading}
-                listMode="SCROLLVIEW"
-                ArrowDownIconComponent={({ style }) => <ChevronDown style={style} />}
-                placeholder="Pilih Urgensi"
-                style={{
-                  borderWidth: 0,
-                  backgroundColor: Colors.LIGHT_GRAY,
-                  paddingHorizontal: moderateScale(18),
-                  paddingVertical: moderateScale(18),
-                  borderRadius: 14,
-                }}
-                dropDownContainerStyle={{
-                  borderColor: Colors.LIGHT_GRAY,
-                }}
-                textStyle={{
-                  color: Colors.TEXT,
-                  fontFamily: 'Poppins-Medium',
-                  fontSize: scale(11.5),
-                }}
-                CloseIconComponent={({ style }) => <Close style={style} />}
-                open={priorityOpen}
-                value={priorityId}
-                items={priorities}
-                setOpen={(open) =>
-                  setPriorityOpen(open)
-                }
-                setValue={(callback) =>
-                  this.setState((prevState) => ({
-                    priorityId: callback(prevState),
-                  }))
-                }
-                setItems={(callback) => this.setState((items) => ({ priorities: items }))}
-              /> */}
+                <InputLabel title="Skala Prioritas" />
+                <DropDownPicker
+                  multiple
+                  min={0}
+                  loading={priorityLoading}
+                  listMode="SCROLLVIEW"
+                  ArrowDownIconComponent={({ style }) => <ChevronDown style={style} />}
+                  placeholder="Pilih Prioritas"
+                  dropDownDirection="TOP"
+                  style={{
+                    borderWidth: 0,
+                    backgroundColor: Colors.LIGHT_GRAY,
+                    paddingHorizontal: moderateScale(18),
+                    paddingVertical: moderateScale(18),
+                    borderRadius: 14,
+                    marginBottom: 12,
+                    zIndex: 100,
+                  }}
+                  dropDownContainerStyle={{
+                    borderColor: Colors.LIGHT_GRAY,
+                    zIndex: 100,
+                  }}
+                  textStyle={{
+                    color: Colors.TEXT,
+                    fontFamily: 'Poppins-Medium',
+                    fontSize: scale(11.5),
+                  }}
+                  CloseIconComponent={({ style }) => <Close style={style} />}
+                  open={priorityOpen}
+                  value={priorityId}
+                  items={priorities}
+                  setOpen={setPriorityOpen}
+                  setValue={setPriorityId}
+                  setItems={setPriorities}
+                  showBadgeDot={true}
+                  badgeDotColors={[
+                    Colors.PRIMARY_YELLOW,
+                    Colors.PRIMARY_RED,
+                    Colors.PRIMARY_ORANGE,
+                  ]}
+                />
+
+                <InputLabel title="Kategori" />
+                <DropDownPicker
+                  multiple
+                  min={0}
+                  loading={categoryLoading}
+                  listMode="SCROLLVIEW"
+                  ArrowDownIconComponent={({ style }) => <ChevronDown style={style} />}
+                  placeholder="Pilih Kategori"
+                  style={{
+                    borderWidth: 0,
+                    backgroundColor: Colors.LIGHT_GRAY,
+                    paddingHorizontal: moderateScale(18),
+                    paddingVertical: moderateScale(18),
+                    borderRadius: 14,
+                    marginBottom: 12,
+                  }}
+                  dropDownContainerStyle={{
+                    borderColor: Colors.LIGHT_GRAY,
+                  }}
+                  textStyle={{
+                    color: Colors.TEXT,
+                    fontFamily: 'Poppins-Medium',
+                    fontSize: scale(11.5),
+                  }}
+                  CloseIconComponent={({ style }) => <Close style={style} />}
+                  open={categoryOpen}
+                  value={categoryId}
+                  items={categories}
+                  setOpen={setCategoryOpen}
+                  setValue={setCategoryId}
+                  setItems={setCategories}
+                  showBadgeDot={true}
+                />
+
+                <InputLabel title="Status" />
+                <DropDownPicker
+                  multiple
+                  min={0}
+                  loading={statusesLoading}
+                  listMode="SCROLLVIEW"
+                  ArrowDownIconComponent={({ style }) => <ChevronDown style={style} />}
+                  placeholder="Pilih Status"
+                  style={{
+                    borderWidth: 0,
+                    backgroundColor: Colors.LIGHT_GRAY,
+                    paddingHorizontal: moderateScale(18),
+                    paddingVertical: moderateScale(18),
+                    borderRadius: 14,
+                    marginBottom: 12,
+                  }}
+                  dropDownContainerStyle={{
+                    borderColor: Colors.LIGHT_GRAY,
+                  }}
+                  textStyle={{
+                    color: Colors.TEXT,
+                    fontFamily: 'Poppins-Medium',
+                    fontSize: scale(11.5),
+                  }}
+                  CloseIconComponent={({ style }) => <Close style={style} />}
+                  open={statusesOpen}
+                  value={statusesId}
+                  items={statuses}
+                  setOpen={setStatusesOpen}
+                  setValue={setStatusesId}
+                  setItems={setStatuses}
+                  showBadgeDot={true}
+                />
               </View>
             ) : (
-              <Text>Sort</Text>
+              <>
+                <InputLabel title="Urutkan" />
+                <DropDownPicker
+                  listMode="SCROLLVIEW"
+                  ArrowDownIconComponent={({ style }) => <ChevronDown style={style} />}
+                  placeholder="Pilih Urutan"
+                  style={{
+                    borderWidth: 0,
+                    backgroundColor: Colors.LIGHT_GRAY,
+                    paddingHorizontal: moderateScale(18),
+                    paddingVertical: moderateScale(18),
+                    borderRadius: 14,
+                    marginBottom: 12,
+                  }}
+                  dropDownContainerStyle={{
+                    borderColor: Colors.LIGHT_GRAY,
+                  }}
+                  textStyle={{
+                    color: Colors.TEXT,
+                    fontFamily: 'Poppins-Medium',
+                    fontSize: scale(11.5),
+                  }}
+                  CloseIconComponent={({ style }) => <Close style={style} />}
+                  open={sortOpen}
+                  value={sort}
+                  items={sorts}
+                  setOpen={setSortOpen}
+                  setValue={setSort}
+                  setItems={setSorts}
+                />
+              </>
             )}
           </View>
         </Modal>
@@ -362,7 +537,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(32),
   },
   modalContent: {
-    height: '30%',
+    height: '55%',
     width: '100%',
     backgroundColor: 'white',
     borderTopRightRadius: 18,
@@ -370,7 +545,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingVertical: 5,
   },
   titleContainer: {
     height: '16%',
