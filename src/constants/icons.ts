@@ -39,6 +39,8 @@ import Search from 'assets/icons/Search.svg';
 import Sort from 'assets/icons/Sort.svg';
 import Filter from 'assets/icons/Filter.svg';
 import Verification from 'assets/icons/Verification.svg';
+import UpVote from 'assets/icons/upVote.svg';
+import DownVote from 'assets/icons/downVote.svg';
 
 export {
   Back,
@@ -81,5 +83,7 @@ export {
   Search,
   Sort,
   Filter,
-  Verification
+  Verification,
+  UpVote,
+  DownVote
 };

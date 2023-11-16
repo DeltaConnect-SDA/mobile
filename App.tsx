@@ -209,7 +209,7 @@ export const Layout = () => {
           />
           <Stack.Screen
             name="UsulanMasyarakat"
-            component={Test}
+            component={Suggestions}
             options={{
               title: 'Usulan Masyarakat',
               animation: 'simple_push',

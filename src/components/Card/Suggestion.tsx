@@ -7,17 +7,18 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { scale, verticalScale } from 'react-native-size-matters';
 import { Skeleton } from 'moti/skeleton';
+import { DownVote, UpVote } from '@/constants/icons';
 
 type SuggestionCardProps = {
   id: number;
   title: string;
-  cover: string;
   category: string;
   status: string;
   statusColor: string;
+  upVote: number;
+  downVote: number;
   time: string;
-  blurHash: string;
-  place: string;
+  location: string;
   loading?: boolean;
 };
 
@@ -25,12 +26,12 @@ const SuggestionCard: React.FC<SuggestionCardProps> = ({
   id,
   title,
   category,
-  time,
-  cover,
-  blurHash,
   status,
   statusColor,
-  place,
+  time,
+  upVote,
+  downVote,
+  location,
   loading,
 }) => {
   const timeAgo = new TimeAgo('id');
@@ -39,12 +40,16 @@ const SuggestionCard: React.FC<SuggestionCardProps> = ({
     return (
       <TouchableOpacity style={styles().container}>
         <Skeleton colorMode="light" show>
-          <Image
-            style={styles().image}
-            placeholder="LPEyPa~V-ps.RMxuofW=x[NFRjWB"
-            contentFit="cover"
-            transition={1000}
-          />
+          <View style={styles().voteContainer}>
+            <View style={styles().voteButton}>
+              <UpVote color={Colors.GRAY} />
+              <Text style={styles().voteButtonText}>50</Text>
+            </View>
+            <View style={styles().voteButton}>
+              <DownVote color={Colors.GRAY} />
+              <Text style={styles().voteButtonText}>50</Text>
+            </View>
+          </View>
         </Skeleton>
         <View style={styles().textContainer}>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
@@ -80,18 +85,18 @@ const SuggestionCard: React.FC<SuggestionCardProps> = ({
   } else {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('ComplaintDetail', { complaintId: id })}
+        onPress={() => navigation.navigate('SuggestionDetail', { complaintId: id })}
         style={styles().container}>
-        <Image
-          style={styles().image}
-          source={{
-            uri: cover,
-            headers: { Accept: 'image/*' },
-          }}
-          placeholder={blurHash}
-          contentFit="cover"
-          transition={1000}
-        />
+        <View style={styles().voteContainer}>
+          <View style={styles().voteButton}>
+            <UpVote color={Colors.GRAY} />
+            <Text style={styles().voteButtonText}>{upVote}</Text>
+          </View>
+          <View style={styles().voteButton}>
+            <DownVote color={Colors.GRAY} />
+            <Text style={styles().voteButtonText}>{downVote}</Text>
+          </View>
+        </View>
         <View style={styles().textContainer}>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
             <View style={styles().categoryContainer}>
@@ -103,7 +108,7 @@ const SuggestionCard: React.FC<SuggestionCardProps> = ({
               {title}
             </Text>
           </View>
-          <Text style={styles().category}>{place}</Text>
+          <Text style={styles().category}>{location}</Text>
           <View style={styles().footerContainer}>
             <View style={styles(statusColor).statusContainer}>
               <Text style={styles(statusColor).status}>{status}</Text>
@@ -130,14 +135,8 @@ const styles = (props?: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      gap: 10,
+      gap: 12,
       marginBottom: 8,
-    },
-    image: {
-      width: scale(105),
-      aspectRatio: 1 / 1,
-      backgroundColor: '#0553',
-      borderRadius: 12,
     },
     textContainer: {
       display: 'flex',
@@ -191,5 +190,21 @@ const styles = (props?: any) =>
       fontFamily: 'Poppins-Regular',
       fontSize: scale(10.5),
       color: Colors.DARK_GRAY,
+    },
+    voteContainer: {
+      flexDirection: 'column',
+      gap: verticalScale(12),
+    },
+    voteButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: scale(5),
+      backgroundColor: Colors.LIGHT_GRAY,
+      paddingVertical: verticalScale(10),
+      paddingHorizontal: scale(5),
+      borderRadius: scale(8),
+    },
+    voteButtonText: {
+      color: Colors.GRAY,
     },
   });

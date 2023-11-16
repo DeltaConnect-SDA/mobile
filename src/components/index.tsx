@@ -3,6 +3,7 @@ import TopNav from './TopNav';
 import Carousel from './Carousel';
 import MainMenu from './MainMenu';
 import InfoFeed from './Home/Feed/InfoFeed';
+import SuggestionFeed from './Home/Feed/SuggestionFeed';
 import FeedCard from './Card/Feed';
 import SuggestionCard from './Card/Suggestion';
 import ReportCard from './Card/Report';
@@ -22,4 +23,5 @@ export {
   ComplaintPhotos,
   ProgressStep,
   Loader,
+  SuggestionFeed,
 };
