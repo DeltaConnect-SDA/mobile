@@ -5,7 +5,7 @@ import FeedHeader from './FeedHeader';
 import ReportCard from '../../Card/Report';
 import { publicAPI } from 'Api/backend';
 
-const ReportFeed = () => {
+const ReportFeed = ({ refreshing }) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
@@ -25,6 +25,13 @@ const ReportFeed = () => {
   useEffect(() => {
     handleData();
   }, []);
+
+  useEffect(() => {
+    if (refreshing) {
+      handleData();
+    }
+  }, [refreshing]);
+
   return (
     <View style={styles.container}>
       <FeedHeader

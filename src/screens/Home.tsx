@@ -1,9 +1,17 @@
-import { Text, View, StyleSheet, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import React, { Component, useEffect, useState } from 'react';
 import UserAvatar from '@muhzi/react-native-user-avatar';
 import { Colors } from '@/constants/colors';
 import { AlertFilled, Verified } from '@/constants/icons';
-import { Carousel, InfoFeed, MainMenu } from '@/components';
+import { Carousel, InfoFeed, MainMenu, SuggestionFeed } from '@/components';
 import ReportFeed from '@/components/Home/Feed/ReportFeed';
 import { scale, moderateScale } from 'react-native-size-matters';
 import { useAuth } from '@/context/AuthProvider';
@@ -17,9 +25,10 @@ type HomeProps = {};
 
 type HomeState = {
   complaintCount: number;
+  refreshing: boolean;
 };
 
-export const TopBar = () => {
+export const TopBar = ({ refreshing }) => {
   const { authState } = useAuth();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>();
@@ -49,6 +58,12 @@ export const TopBar = () => {
       getUserProfile();
     } else setLoading(false);
   }, [authState.token]);
+
+  useEffect(() => {
+    if (refreshing && authState.token) {
+      getUserProfile();
+    }
+  }, [refreshing, authState.token]);
 
   if (authState?.authenticated) {
     return (
@@ -125,7 +140,7 @@ export const TopBar = () => {
 export class Home extends Component<HomeProps, HomeState> {
   constructor(props) {
     super(props);
-    this.state = { complaintCount: 0 };
+    this.state = { complaintCount: 0, refreshing: false };
   }
 
   async __handleComplaintCount() {
@@ -133,21 +148,30 @@ export class Home extends Component<HomeProps, HomeState> {
       const response = await publicAPI.get('complaints/count/day');
       const { data, success } = response.data;
       if (success) {
-        this.setState({ complaintCount: data });
+        this.setState({ complaintCount: data, refreshing: false });
       }
     } catch (error) {
       console.error(error.request, 'handle-complaint-count');
     }
   }
 
+  _onRefresh = () => {
+    this.setState({ refreshing: true });
+    this.__handleComplaintCount();
+  };
+
   componentDidMount(): void {
     this.__handleComplaintCount();
   }
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} />
+        }>
         {/* Top Bar */}
-        <TopBar />
+        <TopBar refreshing={this.state.refreshing} />
 
         {/* User report count card */}
         <View style={{ paddingHorizontal: 20, marginBottom: 20 }}>
@@ -203,7 +227,8 @@ export class Home extends Component<HomeProps, HomeState> {
         <View style={styles.feedSection}>
           {/* Info feed */}
           <InfoFeed />
-          <ReportFeed />
+          <ReportFeed refreshing={this.state.refreshing} />
+          <SuggestionFeed refreshing={this.state.refreshing}/>
         </View>
       </ScrollView>
     );
