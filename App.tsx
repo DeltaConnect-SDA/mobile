@@ -19,6 +19,7 @@ import {
   RegisterPhoneVerification,
   RegisterSendEmail,
   StatusGallery,
+  Suggestions,
 } from '@/screens';
 import { BottomTabNavigation } from '@/navigations';
 import 'react-native-gesture-handler';
@@ -40,6 +41,7 @@ import * as Device from 'expo-device';
 import { authAPI } from 'Api/backend';
 import * as SecureStore from 'expo-secure-store';
 import { NotificationProvider } from '@/context/NotificationProvider';
+import VerificationRequest from '@/screens/verification/VerificationRequest';
 
 TimeAgo.addDefaultLocale(id);
 
@@ -142,6 +144,11 @@ export const Layout = () => {
                 options={{ title: 'Lapor Masalah', animation: 'slide_from_right' }}
               />
               <Stack.Screen
+                name="VerificationRequest"
+                component={VerificationRequest}
+                options={{ title: 'Verifikasi Penduduk', animation: 'slide_from_right' }}
+              />
+              <Stack.Screen
                 name="EditProfile"
                 component={EditProfile}
                 options={{
@@ -204,7 +211,7 @@ export const Layout = () => {
             name="UsulanMasyarakat"
             component={Test}
             options={{
-              title: 'Detail Laporan',
+              title: 'Usulan Masyarakat',
               animation: 'simple_push',
             }}
           />

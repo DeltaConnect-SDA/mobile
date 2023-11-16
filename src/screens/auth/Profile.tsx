@@ -66,7 +66,7 @@ const Profile = ({ navigation }) => {
                 onPress={
                   !loading && data?.UserDetail.isVerified
                     ? () => console.log('sudah')
-                    : () => console.log('Verifikasi')
+                    : () => navigation.navigate('VerificationRequest')
                 }>
                 <Text style={styles.badgeText}>
                   {loading

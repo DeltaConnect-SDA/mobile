@@ -21,7 +21,7 @@ import { publicAPI } from 'Api/backend';
 import { EmptyState } from '../History';
 import { ReportCard } from '@/components';
 
-const Complaints = () => {
+const Suggestions = () => {
   const [query, setQuery] = useState(null);
   const [category, setCategory] = useState([]);
   const [priority, setPriority] = useState([]);
@@ -176,39 +176,39 @@ const Complaints = () => {
               <View>
                 <InputLabel title="Urgensi" />
                 {/* <DropDownPicker
-                loading={priorityLoading}
-                listMode="SCROLLVIEW"
-                ArrowDownIconComponent={({ style }) => <ChevronDown style={style} />}
-                placeholder="Pilih Urgensi"
-                style={{
-                  borderWidth: 0,
-                  backgroundColor: Colors.LIGHT_GRAY,
-                  paddingHorizontal: moderateScale(18),
-                  paddingVertical: moderateScale(18),
-                  borderRadius: 14,
-                }}
-                dropDownContainerStyle={{
-                  borderColor: Colors.LIGHT_GRAY,
-                }}
-                textStyle={{
-                  color: Colors.TEXT,
-                  fontFamily: 'Poppins-Medium',
-                  fontSize: scale(11.5),
-                }}
-                CloseIconComponent={({ style }) => <Close style={style} />}
-                open={priorityOpen}
-                value={priorityId}
-                items={priorities}
-                setOpen={(open) =>
-                  setPriorityOpen(open)
-                }
-                setValue={(callback) =>
-                  this.setState((prevState) => ({
-                    priorityId: callback(prevState),
-                  }))
-                }
-                setItems={(callback) => this.setState((items) => ({ priorities: items }))}
-              /> */}
+                  loading={priorityLoading}
+                  listMode="SCROLLVIEW"
+                  ArrowDownIconComponent={({ style }) => <ChevronDown style={style} />}
+                  placeholder="Pilih Urgensi"
+                  style={{
+                    borderWidth: 0,
+                    backgroundColor: Colors.LIGHT_GRAY,
+                    paddingHorizontal: moderateScale(18),
+                    paddingVertical: moderateScale(18),
+                    borderRadius: 14,
+                  }}
+                  dropDownContainerStyle={{
+                    borderColor: Colors.LIGHT_GRAY,
+                  }}
+                  textStyle={{
+                    color: Colors.TEXT,
+                    fontFamily: 'Poppins-Medium',
+                    fontSize: scale(11.5),
+                  }}
+                  CloseIconComponent={({ style }) => <Close style={style} />}
+                  open={priorityOpen}
+                  value={priorityId}
+                  items={priorities}
+                  setOpen={(open) =>
+                    setPriorityOpen(open)
+                  }
+                  setValue={(callback) =>
+                    this.setState((prevState) => ({
+                      priorityId: callback(prevState),
+                    }))
+                  }
+                  setItems={(callback) => this.setState((items) => ({ priorities: items }))}
+                /> */}
               </View>
             ) : (
               <Text>Sort</Text>
@@ -354,7 +354,7 @@ const Complaints = () => {
   );
 };
 
-export default Complaints;
+export default Suggestions;
 
 const styles = StyleSheet.create({
   container: {

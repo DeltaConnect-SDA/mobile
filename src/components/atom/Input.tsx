@@ -9,7 +9,7 @@ import {
 import React, { Component } from 'react';
 import { Colors } from '@/constants/colors';
 import { EyeHide, EyeOpen } from '@/constants/icons';
-import { scale, moderateScale } from 'react-native-size-matters';
+import { scale, moderateScale, verticalScale } from 'react-native-size-matters';
 
 interface InputPasswordPorps extends TextInputProps {
   placeholder: string;
@@ -104,7 +104,7 @@ interface InputProps extends TextInputProps {
   title: string;
   error?: undefined | string;
   placeholder: string;
-  type: 'Text' | 'Password' | 'Phone' | 'Email';
+  type: 'Text' | 'Password' | 'Phone' | 'Email' | 'Number';
   enterKeyHint?: undefined | EnterKeyHintTypeOptions;
   onSubmitEditing?: () => void;
   onChangeText?: ((text: string) => void) | undefined;
@@ -170,6 +170,19 @@ export class Input extends Component<InputProps> {
           />
         </View>
       );
+    } else if (this.props.type === 'Number') {
+      input = (
+        <TextInput
+          {...this.props}
+          onSubmitEditing={this.props.onSubmitEditing}
+          enterKeyHint={this.props.enterKeyHint}
+          style={[inputStyles, { color: this.props.color || Colors.TEXT }, this.props.style]}
+          placeholder={this.props.placeholder}
+          keyboardType={'numeric'}
+          selectionColor={Colors.PRIMARY_GREEN}
+          cursorColor={Colors.PRIMARY_GREEN}
+        />
+      );
     } else {
       input = (
         <TextInput
@@ -218,6 +231,7 @@ const styles = StyleSheet.create({
   },
   TextInput: {
     padding: moderateScale(18),
+    minHeight: verticalScale(50),
     flex: 1,
     backgroundColor: Colors.LIGHT_GRAY,
     borderRadius: 14,

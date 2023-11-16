@@ -13,6 +13,7 @@ import Complaints from './complaint/Complaints';
 import ComplaintStatus from './complaint/ComplaintStatus';
 import EditProfile from './auth/EditProfile';
 import StatusGallery from './StatusGallery';
+import Suggestions from './suggestion/Suggestions';
 
 export {
   Onboarding,
@@ -30,4 +31,5 @@ export {
   ComplaintStatus,
   EditProfile,
   StatusGallery,
+  Suggestions,
 };

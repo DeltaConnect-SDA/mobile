@@ -4,6 +4,7 @@ import Carousel from './Carousel';
 import MainMenu from './MainMenu';
 import InfoFeed from './Home/Feed/InfoFeed';
 import FeedCard from './Card/Feed';
+import SuggestionCard from './Card/Suggestion';
 import ReportCard from './Card/Report';
 import ComplaintPhotos from './Complaint/Detail/ComplaintPhotos';
 import ProgressStep from './ProgressStep';
@@ -17,6 +18,7 @@ export {
   InfoFeed,
   FeedCard,
   ReportCard,
+  SuggestionCard,
   ComplaintPhotos,
   ProgressStep,
   Loader,

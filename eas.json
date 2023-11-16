@@ -12,9 +12,9 @@
         "buildConfiguration": "Debug"
       },
       "env": {
-        "PUBLIC_API_URL": "https://porto.morph.my.id/v1/",
-        "AUTH_API_URL": "https://porto.morph.my.id/v1/auth",
-        "GOOGLE_MAPS_API_KEY": "AIzaSyAdpjwXdSXfUZOb6ztlzGhpBJqcphZQZYw"
+        "EXPO_PUBLIC_API_URL": "https://porto.morph.my.id/v1/",
+        "EXPO_PUBLIC_AUTH_API_URL": "https://porto.morph.my.id/v1/auth",
+        "EXPO_PUBLIC_GOOGLE_MAPS_API_KEY": "AIzaSyAdpjwXdSXfUZOb6ztlzGhpBJqcphZQZYw"
       }
     },
     "preview": {
@@ -23,16 +23,16 @@
         "buildType": "apk"
       },
       "env": {
-        "PUBLIC_API_URL": "https://porto.morph.my.id/v1/",
-        "AUTH_API_URL": "https://porto.morph.my.id/v1/auth",
-        "GOOGLE_MAPS_API_KEY": "AIzaSyAdpjwXdSXfUZOb6ztlzGhpBJqcphZQZYw"
+        "EXPO_PUBLIC_API_URL": "https://deltaconnect.morph.my.id/v1/",
+        "EXPO_PUBLIC_AUTH_API_URL": "https://deltaconnect.morph.my.id/v1/auth",
+        "EXPO_PUBLIC_GOOGLE_MAPS_API_KEY": "AIzaSyAdpjwXdSXfUZOb6ztlzGhpBJqcphZQZYw"
       }
     },
     "production": {
       "env": {
-        "PUBLIC_API_URL": "https://deltaconnect.morph.my.id/v1/",
-        "AUTH_API_URL": "https://deltaconnect.morph.my.id/v1/auth",
-        "GOOGLE_MAPS_API_KEY": "AIzaSyAdpjwXdSXfUZOb6ztlzGhpBJqcphZQZYw"
+        "EXPO_PUBLIC_API_URL": "https://deltaconnect.morph.my.id/v1/",
+        "EXPO_PUBLIC_AUTH_API_URL": "https://deltaconnect.morph.my.id/v1/auth",
+        "EXPO_PUBLIC_GOOGLE_MAPS_API_KEY": "AIzaSyAdpjwXdSXfUZOb6ztlzGhpBJqcphZQZYw"
       }
     }
   },

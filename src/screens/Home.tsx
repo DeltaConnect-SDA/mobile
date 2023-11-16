@@ -7,7 +7,7 @@ import { Carousel, InfoFeed, MainMenu } from '@/components';
 import ReportFeed from '@/components/Home/Feed/ReportFeed';
 import { scale, moderateScale } from 'react-native-size-matters';
 import { useAuth } from '@/context/AuthProvider';
-import { authAPI } from 'Api/backend';
+import { authAPI, publicAPI } from 'Api/backend';
 import { Skeleton } from 'moti/skeleton';
 import { Button } from '@/components/atom';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -15,7 +15,9 @@ import { useNavigation } from '@react-navigation/native';
 
 type HomeProps = {};
 
-type HomeState = {};
+type HomeState = {
+  complaintCount: number;
+};
 
 export const TopBar = () => {
   const { authState } = useAuth();
@@ -120,7 +122,27 @@ export const TopBar = () => {
     );
   }
 };
-export class Home extends Component<HomeProps> {
+export class Home extends Component<HomeProps, HomeState> {
+  constructor(props) {
+    super(props);
+    this.state = { complaintCount: 0 };
+  }
+
+  async __handleComplaintCount() {
+    try {
+      const response = await publicAPI.get('complaints/count/day');
+      const { data, success } = response.data;
+      if (success) {
+        this.setState({ complaintCount: data });
+      }
+    } catch (error) {
+      console.error(error.request, 'handle-complaint-count');
+    }
+  }
+
+  componentDidMount(): void {
+    this.__handleComplaintCount();
+  }
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -167,7 +189,7 @@ export class Home extends Component<HomeProps> {
                   fontSize: scale(11),
                   lineHeight: 21,
                 }}>
-                38 Laporan
+                {this.state.complaintCount} Laporan
               </Text>
             </View>
           </View>

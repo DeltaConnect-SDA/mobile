@@ -11,11 +11,14 @@ import { Button } from './atom';
 import { HomeOutline } from '@/constants/icons';
 import InfoFeed from './Home/Feed/InfoFeed';
 import ReportFeed from './Home/Feed/ReportFeed';
-import { Login } from '@/screens';
+import SuggestionCard from './Card/Suggestion';
 
 const Test = () => {
   return (
-    <Login />
+    // <SuggestionCard
+
+    // />
+    <Text>Belum diimplementasikan</Text>
     // <ScrollView>
     //   <View style={styles.container}>
     //     <Button title="Daftar Sekarang!" size="Sm" type="Secondary" />
